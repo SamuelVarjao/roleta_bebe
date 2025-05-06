@@ -154,3 +154,63 @@ body, #root, .App {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
   }
+
+  /* Quadro branco com sombra e scroll */
+.name-list-box {
+  max-height: 400px;          /* altura fixa */
+  overflow-y: auto;           /* scroll vertical */
+  padding: 16px;
+  margin: 0 auto 24px;
+  max-width: 500px;           /* largura máxima */
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Cada item continua flexível dentro do quadro */
+.name-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.name-item:hover {
+  background-color: #f9f9f9;
+}
+
+.name-item input[type="checkbox"] {
+  margin-right: 10px;
+  accent-color: #88c0ff;
+}
+
+.name-item span {
+  flex: 1;
+}
+
+/* Botão de peso mais discreto */
+.weight-btn {
+  padding: 4px 8px;
+  margin-left: 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  background: #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.weight-btn:hover {
+  background: #88c0ff;
+  color: white;
+}
+
+/* Mensagem “nenhum nome” centralizada */
+.empty {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
