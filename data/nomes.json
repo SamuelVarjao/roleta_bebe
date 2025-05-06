@@ -1,0 +1,39 @@
+{
+    "nomes": {
+      "masculinos": [
+        { "nome": "Lorenzo", "significado": "Vitorioso", "nacionalidade": "Italiana" },
+        { "nome": "Enzo", "significado": "Senhor do lar", "nacionalidade": "Italiana" },
+        { "nome": "Marcos", "significado": "Guerreiro", "nacionalidade": "Latina" },
+        { "nome": "Noah", "significado": "Descanso, conforto", "nacionalidade": "Hebraica" },
+        { "nome": "Gael", "significado": "Generoso", "nacionalidade": "Celta" },
+        { "nome": "Iago", "significado": "Aquele que vem do calcanhar (Jacó)", "nacionalidade": "Hebraica/Espanhola" },
+        { "nome": "Ravi", "significado": "Sol", "nacionalidade": "Sânscrita/Indiana" },
+        { "nome": "Davi", "significado": "Amado", "nacionalidade": "Hebraica" },
+        { "nome": "João", "significado": "Deus é gracioso", "nacionalidade": "Hebraica" },
+        { "nome": "Henrique", "significado": "Gorvernador da Casa", "nacionalidade": "Germânica" },
+        { "nome": "Theo", "significado": "Presente de Deus", "nacionalidade": "Grega" },
+        { "nome": "Dante", "significado": "Duradouro, constante", "nacionalidade": "Italiana" },
+        { "nome": "Otávio", "significado": "Oitavo", "nacionalidade": "Latina" },
+        { "nome": "Mateus", "significado": "Dádiva de Deus", "nacionalidade": "Hebráico" },
+        { "nome": "Pedro", "significado": "Rocha", "nacionalidade": "Grega" }
+      ],
+      "femininos": [
+        { "nome": "Ana", "significado": "Graça", "nacionalidade": "Hebraica" },
+        { "nome": "Ayla", "significado": "Luz da lua", "nacionalidade": "Turca" },
+        { "nome": "Luna", "significado": "Lua", "nacionalidade": "Latina" },
+        { "nome": "Amanda", "significado": "Digna de Amor", "nacionalidade": "Latina" },
+        { "nome": "Kiara", "significado": "Brilhante, clara", "nacionalidade": "Italiana/Irlandesa" },
+        { "nome": "Leila", "significado": "Noite", "nacionalidade": "Árabe" },
+        { "nome": "Maia", "significado": "Mãe, deusa da primavera", "nacionalidade": "Grega" },
+        { "nome": "Clara", "significado": "Ilustre, brilhante", "nacionalidade": "Latina" },
+        { "nome": "Anahi", "significado": "Flor do céu (ou coragem)", "nacionalidade": "Indígena guarani" },
+        { "nome": "Zahra", "significado": "Flor, bela", "nacionalidade": "Árabe" },
+        { "nome": "Suri", "significado": "Princesa", "nacionalidade": "Hebraica" },
+        { "nome": "Aurora", "significado": "Amanhecer", "nacionalidade": "Latina" },
+        { "nome": "Chloe", "significado": "Verde, fértil", "nacionalidade": "Grega" },
+        { "nome": "Inaya", "significado": "Cuidado, proteção", "nacionalidade": "Árabe" },
+        { "nome": "Isis", "significado": "Deusa da fertilidade", "nacionalidade": "Egípcia" }
+      ]
+    }
+  }
+  
