@@ -14,14 +14,13 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterInitial, setFilterInitial] = useState("");
   const [filterNat, setFilterNat] = useState("");
-  const [weights, setWeights] = useState({}); // pesos de cada nome
+  const [weights, setWeights] = useState({}); 
 
   useEffect(() => {
-    fetch("/data/nomes.json")
+    fetch(".data/nomes.json")
       .then(res => res.json())
       .then(data => {
         setNomesData(data);
-        // inicializa todos os pesos com 1
         const inicial = {};
         data.nomes.masculinos.concat(data.nomes.femininos)
           .forEach(item => { inicial[item.nome] = 1; });
@@ -57,8 +56,6 @@ function App() {
       for (let i = 0; i < w; i++) pool.push(name);
     });
     const randomName = pool[Math.floor(Math.random() * pool.length)];
-    // calcular ângulo baseado no índice na roleta (fatia proporcional)
-    // primeiro montamos ângulos
     const totalWeight = selectedNames.reduce((sum, n) => sum + (weights[n] || 1), 0);
     let cumulative = 0;
     let targetIdx = -1;
@@ -141,6 +138,37 @@ function App() {
               Limpar filtros
             </button>
           </div>
+
+          {/* QUADRO COM SCROLL PARA LISTA DE NOMES */}
+<div className="name-list-box">
+  {availableNames.length > 0 ? (
+    availableNames.map((item, idx) => (
+      <label key={idx} className="name-item">
+        <input
+          type="checkbox"
+          checked={selectedNames.includes(item.nome)}
+          onChange={() => handleSelectName(item.nome)}
+        />
+        <span title={`${item.significado} (${item.nacionalidade})`}>
+          {item.nome}
+        </span>
+        <button
+          onClick={() =>
+            setWeights(ws => ({
+              ...ws,
+              [item.nome]: ws[item.nome] === 1 ? 2 : 1
+            }))
+          }
+          className="weight-btn"
+        >
+          {weights[item.nome] === 2 ? "×2" : "×1"}
+        </button>
+      </label>
+    ))
+  ) : (
+    <p className="empty">Nenhum nome encontrado.</p>
+  )}
+</div>
 
           {/* lista com peso */}
           <div className="name-list-container">
