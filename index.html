@@ -3,10 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Roleta Bebê</title>
+    <link rel="shortcut icon" href="favicon.ico" />
+    <title>Roleta Baby</title>
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Polyfill mínimo para `process` no navegador -->
+    <script>
+      window.process = {
+        env: {}
+      };
+    </script>
+
+    <!-- Seu bundle React -->
     <script src="bundle.js"></script>
   </body>
 </html>
+
