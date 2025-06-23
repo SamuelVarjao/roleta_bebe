@@ -1,6 +1,6 @@
 {
   "name": "roleta_bebe",
-  "homepage": "https://SamuelVarjao.github.io/roleta_bebe",
+  "homepage": "https://www.nomebebe.com.br",
   "version": "1.0.0",
   "description": "App para escolher nomes de bebes com roleta",
   "main": "src/index.js",
@@ -14,6 +14,7 @@
     "nome-baby-react-app": "file:",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
     "roleta_bebe": "file:"
   },
   "devDependencies": {
@@ -21,8 +22,10 @@
     "@babel/preset-env": "^7.23.3",
     "@babel/preset-react": "^7.22.15",
     "babel-loader": "^9.1.3",
+    "copy-webpack-plugin": "^13.0.0",
     "css-loader": "^7.1.2",
     "gh-pages": "^6.3.0",
+    "html-webpack-plugin": "^5.6.3",
     "style-loader": "^4.0.0",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
