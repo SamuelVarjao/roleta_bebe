@@ -1,44 +1,109 @@
 import React, { useState, useRef, useEffect } from "react";
+import nomesJson from "./data/nomes.json";
+import "./App.css";
 
-console.log("App carregado");
+function NameItem({ item, selected, onToggle, weight, onWeightToggle }) {
+  return (
+    <label className="name-item">
+      <input type="checkbox" checked={selected} onChange={onToggle} />
+      <span title={`${item.significado} (${item.nacionalidade})`}>{item.nome}</span>
+      <button onClick={onWeightToggle} className="weight-btn">
+        {weight === 2 ? "×2" : "×1"}
+      </button>
+    </label>
+  );
+}
 
 function App() {
-  const [nomesData, setNomesData] = useState({});
   const [gender, setGender] = useState("");
   const [selectedNames, setSelectedNames] = useState([]);
-  const [spinning, setSpinning] = useState(false);
-  const [rotation, setRotation] = useState(0);
-  const [winner, setWinner] = useState("");
-  const wheelRef = useRef();
-
+  const [weights, setWeights] = useState(() => {
+    const inicial = {};
+    nomesJson.nomes.masculinos
+      .concat(nomesJson.nomes.femininos)
+      .forEach((item) => {
+        inicial[item.nome] = 1;
+      });
+    return inicial;
+  });
   const [searchTerm, setSearchTerm] = useState("");
   const [filterInitial, setFilterInitial] = useState("");
   const [filterNat, setFilterNat] = useState("");
-  const [weights, setWeights] = useState({}); 
+  const [spinning, setSpinning] = useState(false);
+  const [rotation, setRotation] = useState(0);
+  const [noTransition, setNoTransition] = useState(false);
+  const [winner, setWinner] = useState("");
+  const [spinSpeed, setSpinSpeed] = useState(1);
+
+  const spinSound1 = useRef(null);
+  const spinSound2 = useRef(null);
+  const spinSound3 = useRef(null);
+
+  const allItems = nomesJson.nomes.masculinos.concat(nomesJson.nomes.femininos);
+  const chosenItem = allItems.find((item) => item.nome === winner);
+  const meaning = chosenItem ? chosenItem.significado : "";
+
+  const allNames = gender
+    ? nomesJson.nomes[gender === "menino" ? "masculinos" : "femininos"]
+    : [];
+
+  const availableNames = Array.from(
+    new Map(allNames.map((item) => [item.nome, item])).values()
+  )
+    .filter(({ nome, nacionalidade }) => {
+      if (searchTerm.trim() && !nome.toLowerCase().includes(searchTerm.trim().toLowerCase()))
+        return false;
+      if (filterInitial && nome[0].toUpperCase() !== filterInitial) return false;
+      if (filterNat && nacionalidade !== filterNat) return false;
+      return true;
+    })
+    .sort((a, b) => a.nome.localeCompare(b.nome));
 
   useEffect(() => {
-    fetch(".data/nomes.json")
-      .then(res => res.json())
-      .then(data => {
-        setNomesData(data);
-        const inicial = {};
-        data.nomes.masculinos.concat(data.nomes.femininos)
-          .forEach(item => { inicial[item.nome] = 1; });
-        setWeights(inicial);
-      })
-      .catch(err => console.error("Erro ao carregar nomes:", err));
+    try {
+      spinSound1.current = new Audio("spinning.mp3");
+      spinSound1.current.loop = true;
+      spinSound1.current.load();
+
+      spinSound2.current = new Audio("spinning2.mp3");
+      spinSound2.current.loop = true;
+      spinSound2.current.load();
+
+      spinSound3.current = new Audio("spinning3.mp3");
+      spinSound3.current.loop = true;
+      spinSound3.current.load();
+    } catch (e) {
+      console.error("Erro ao carregar sons de roleta:", e);
+    }
   }, []);
 
   const handleSelectName = (name) => {
-    if (selectedNames.includes(name)) {
-      setSelectedNames(selectedNames.filter(n => n !== name));
-    } else {
-      if (selectedNames.length < 10) {
-        setSelectedNames([...selectedNames, name]);
-      } else {
-        alert("Você pode selecionar no máximo 10 nomes.");
-      }
-    }
+    setSelectedNames((prev) =>
+      prev.includes(name)
+        ? prev.filter((n) => n !== name)
+        : prev.length < 10
+        ? [...prev, name]
+        : (alert("Você pode selecionar no máximo 10 nomes."), prev)
+    );
+  };
+
+  const handleWeightToggle = (name) => {
+    setWeights((ws) => ({
+      ...ws,
+      [name]: ws[name] === 1 ? 2 : 1,
+    }));
+  };
+
+  const handleSpinAgain = () => {
+    setWinner("");
+    setRotation(0);
+    setTimeout(handleSpin, 50);
+  };
+
+  const handleClosePopup = () => {
+    setWinner("");
+    setRotation(0);
+    setSelectedNames([]);
   };
 
   const handleSpin = () => {
@@ -46,218 +111,273 @@ function App() {
       alert("Por favor, selecione pelo menos um nome.");
       return;
     }
+
+    [spinSound1, spinSound2, spinSound3].forEach((ref) => {
+      if (ref.current) {
+        ref.current.pause();
+        ref.current.currentTime = 0;
+      }
+    });
+
+    const currentSoundRef =
+      spinSpeed === 1
+        ? spinSound1
+        : spinSpeed === 2
+        ? spinSound2
+        : spinSound3;
+
+    currentSoundRef.current.currentTime = 0;
+    currentSoundRef.current.play();
+
     setSpinning(true);
     setWinner("");
 
-    // sorteio ponderado
     const pool = [];
-    selectedNames.forEach(name => {
+    selectedNames.forEach((name) => {
       const w = weights[name] || 1;
       for (let i = 0; i < w; i++) pool.push(name);
     });
+
     const randomName = pool[Math.floor(Math.random() * pool.length)];
     const totalWeight = selectedNames.reduce((sum, n) => sum + (weights[n] || 1), 0);
-    let cumulative = 0;
-    let targetIdx = -1;
-    for (let i = 0; i < selectedNames.length; i++) {
-      const w = weights[selectedNames[i]] || 1;
-      cumulative += w;
-      if (randomName === selectedNames[i]) {
-        targetIdx = i;
-        break;
-      }
-    }
-    const sliceAngle = 360 / totalWeight;
-    const centerAngle = (cumulative - ((weights[randomName]||1)/2)) * sliceAngle;
-    const spins = 5;
-    const targetRotation = 360 * spins + (270 - centerAngle);
+    let cum = 0;
+    let targetAngle = 0;
 
-    setRotation(prev => prev + targetRotation);
+    selectedNames.forEach((n) => {
+      cum += weights[n] || 1;
+      if (n === randomName) {
+        const sliceAngle = ((weights[n] || 1) / totalWeight) * 360;
+        const centerAngle = (cum / totalWeight) * 360 - sliceAngle / 2;
+        const spins = 5;
+        targetAngle = 360 * spins + (270 - centerAngle);
+      }
+    });
+
+    setNoTransition(true);
+    setRotation(0);
+
+    setTimeout(() => {
+      setNoTransition(false);
+      setRotation(targetAngle);
+    }, 50);
+
+    const duration = 5000 / spinSpeed;
 
     setTimeout(() => {
       setWinner(randomName);
       setSpinning(false);
-    }, 5000);
+      currentSoundRef.current.pause();
+      currentSoundRef.current.currentTime = 0;
+    }, duration);
   };
 
-  const handleReset = () => {
+  const switchGender = () => {
     setSelectedNames([]);
-    setWinner("");
+    setFilterInitial("");
+    setFilterNat("");
+    setSearchTerm("");
     setRotation(0);
+    setWinner("");
+    setGender((prev) => (prev === "menino" ? "menina" : "menino"));
   };
-
-  // filtros + ordenação
-  const availableNames =
-    nomesData.nomes?.[gender === "menino" ? "masculinos" : "femininos"]
-      ?.filter(({ nome, nacionalidade }) => {
-        if (searchTerm && !nome.toLowerCase().includes(searchTerm.toLowerCase())) return false;
-        if (filterInitial && nome[0].toUpperCase() !== filterInitial) return false;
-        if (filterNat && nacionalidade !== filterNat) return false;
-        return true;
-      })
-      .sort((a, b) => a.nome.localeCompare(b.nome)) || [];
 
   return (
-    <div className="App">
-      <h1 style={{ color: "#FF69B4" }}>👶 Roleta Baby</h1>
-      <p style={{ color: "#6495ED" }}>Escolha um nome para seu bebê!</p>
+    <div className={`App container ${gender === "menina" ? "female" : ""}`}>
+      <img src="./logo_nomebebe.png" alt="Logo" className="logo" />
+      <p className="subtitle">Escolha um nome de forma simples e divertida!</p>
 
-      {!gender && (
-        <div style={{ margin: "20px" }}>
-          <button onClick={() => setGender("menino")} className="btn">Menino</button>
-          <button onClick={() => setGender("menina")} className="btn">Menina</button>
+      {!gender ? (
+        <div className="gender-buttons">
+          <button onClick={() => setGender("menino")} className="btn blue-btn">
+            Menino
+          </button>
+          <button onClick={() => setGender("menina")} className="btn pink-btn">
+            Menina
+          </button>
         </div>
-      )}
+      ) : (
+        <div className="main-content">
+          <h3 className="section-title">Nomes para {gender}</h3>
+          <p className="label-info">Escolha até 10 nomes e gire a roleta!</p>
 
-      {gender && (
-        <div style={{ marginTop: "30px" }}>
-          <h3 style={{ color: "#FF69B4" }}>Nomes para {gender}</h3>
-
-          {/* filtros */}
-          <div className="controls">
-            <input type="text" placeholder="Buscar nome..."
-              value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
-              style={{ padding: "6px 8px", borderRadius: "4px", border: "1px solid #ccc" }} />
-            <select value={filterInitial} onChange={e => setFilterInitial(e.target.value)}
-              style={{ padding: "6px 8px", borderRadius: "4px", border: "1px solid #ccc" }}>
-              <option value="">Todas as iniciais</option>
-              {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(L =>
-                <option key={L} value={L}>{L}</option>
-              )}
-            </select>
-            <select value={filterNat} onChange={e => setFilterNat(e.target.value)}
-              style={{ padding: "6px 8px", borderRadius: "4px", border: "1px solid #ccc" }}>
-              <option value="">Todas nacionalidades</option>
-              {[...new Set((nomesData.nomes?.[gender==="menino"?"masculinos":"femininos"]||[])
-                .map(n=>n.nacionalidade))].sort().map(nat=>
-                <option key={nat} value={nat}>{nat}</option>
-              )}
-            </select>
-            <button onClick={()=>{setSearchTerm("");setFilterInitial("");setFilterNat("");}}
-              style={{ padding:"6px 12px",borderRadius:"4px",backgroundColor:"#eee",cursor:"pointer" }}>
-              Limpar filtros
-            </button>
-          </div>
-
-          {/* QUADRO COM SCROLL PARA LISTA DE NOMES */}
-<div className="name-list-box">
-  {availableNames.length > 0 ? (
-    availableNames.map((item, idx) => (
-      <label key={idx} className="name-item">
-        <input
-          type="checkbox"
-          checked={selectedNames.includes(item.nome)}
-          onChange={() => handleSelectName(item.nome)}
-        />
-        <span title={`${item.significado} (${item.nacionalidade})`}>
-          {item.nome}
-        </span>
-        <button
-          onClick={() =>
-            setWeights(ws => ({
-              ...ws,
-              [item.nome]: ws[item.nome] === 1 ? 2 : 1
-            }))
-          }
-          className="weight-btn"
-        >
-          {weights[item.nome] === 2 ? "×2" : "×1"}
-        </button>
-      </label>
-    ))
-  ) : (
-    <p className="empty">Nenhum nome encontrado.</p>
-  )}
+<div className="controls">
+  <input
+    type="text"
+    placeholder="Buscar nome..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className="input-search"
+  />
+  <select value={filterInitial} onChange={(e) => setFilterInitial(e.target.value)} className="select-filter">
+    <option value="">Todas iniciais</option>
+    {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((L) => (
+      <option key={L} value={L}>
+        {L}
+      </option>
+    ))}
+  </select>
+  <select value={filterNat} onChange={(e) => setFilterNat(e.target.value)} className="select-filter">
+    <option value="">Todas nacionalidades</option>
+    {[...new Set(allNames.map((n) => n.nacionalidade))].sort().map((nat) => (
+      <option key={nat} value={nat}>
+        {nat}
+      </option>
+    ))}
+  </select>
+  <button
+    onClick={() => {
+      setSearchTerm("");
+      setFilterInitial("");
+      setFilterNat("");
+    }}
+    className="btn-clear"
+    disabled={!searchTerm && !filterInitial && !filterNat}
+  >
+    Limpar
+  </button>
 </div>
 
-          {/* lista com peso */}
-          <div className="name-list-container">
-            {availableNames.map((item,idx)=>(
-              <label key={idx} className="name-item"
-                     style={{ display:"flex",alignItems:"center",margin:"4px 0",textAlign:"left" }}>
-                <input type="checkbox"
-                  checked={selectedNames.includes(item.nome)}
-                  onChange={()=>handleSelectName(item.nome)} />
-                <span title={`${item.significado} (${item.nacionalidade})`}
-                      style={{ margin:"0 8px",flex:"1" }}>
-                  {item.nome}
-                </span>
-                <button onClick={()=>
-                    setWeights(ws=>({
-                      ...ws,
-                      [item.nome]: ws[item.nome]===1?2:1
-                    }))
-                  }
-                  style={{
-                    padding:"2px 6px",fontSize:"12px",
-                    background: weights[item.nome]===2?"#FF69B4":"#eee",
-                    color: weights[item.nome]===2?"#fff":"#000",
-                    border:"none",borderRadius:"4px",cursor:"pointer"
-                  }}>
-                  {weights[item.nome]===2?"×2":"×1"}
+
+          <div className="main-layout">
+            <div className="side-panel">
+              <div className="name-list-box">
+                {availableNames.length > 0 ? (
+                  availableNames.map((item) => (
+                    <NameItem
+                      key={item.nome}
+                      item={item}
+                      selected={selectedNames.includes(item.nome)}
+                      onToggle={() => handleSelectName(item.nome)}
+                      weight={weights[item.nome]}
+                      onWeightToggle={() => handleWeightToggle(item.nome)}
+                    />
+                  ))
+                ) : (
+                  <p className="empty">Nenhum nome encontrado.</p>
+                )}
+              </div>
+              <p className="tooltip-text">Mantenha o dedo ou o mouse em cima do nome para exibir o significado</p>
+            
+            <div className="switch-gender-container">
+  <button
+    onClick={switchGender}
+    className={`btn ${gender === "menina" ? "blue-btn" : "pink-btn"}`}
+  >
+    Ir para nomes de {gender === "menina" ? "menino" : "menina"}
+  </button>
+</div>
+</div>
+
+            <div className="wheel-zone">
+                <div className="speed-label">
+                  <label htmlFor="speed">Velocidade:</label>
+                </div>
+              <div className="speed-buttons">
+                <button
+                  className={`btn small ${spinSpeed === 1 ? "active" : ""}`}
+                  onClick={() => setSpinSpeed(1)}
+                >
+                  1×
                 </button>
-              </label>
-            ))}
-            {availableNames.length===0 && <p>Nenhum nome encontrado.</p>}
-          </div>
+                <button
+                  className={`btn small ${spinSpeed === 2 ? "active" : ""}`}
+                  onClick={() => setSpinSpeed(2)}
+                >
+                  2×
+                </button>
+                <button
+                  className={`btn small ${spinSpeed === 3 ? "active" : ""}`}
+                  onClick={() => setSpinSpeed(3)}
+                >
+                  3×
+                </button>
+              </div>
+              <button onClick={handleSpin} className="btn" disabled={spinning}>
+                🎡 Rodar Roleta
+              </button>
 
-          {/* botão roleta */}
-          <div style={{ margin:"20px" }}>
-            <button onClick={handleSpin} className="btn" disabled={spinning}>🎡 Rodar Roleta</button>
-          </div>
+              {selectedNames.length > 1 && (
+                <div className="wheel-container fade-in">
+                  <svg
+                    viewBox="0 0 200 200"
+                    className={`wheel ${noTransition ? "no-transition" : ""}`}
+                    style={{
+                      transform: `rotate(${rotation}deg)`,
+                      transition: noTransition
+                        ? "none"
+                        : `transform ${5000 / spinSpeed}ms cubic-bezier(0.33,1,0.68,1)`,
+                    }}
+                  >
+                    {selectedNames.map((name, i) => {
+                      const w = weights[name] || 1;
+                      const total = selectedNames.reduce((s, n) => s + (weights[n] || 1), 0);
+                      const slice = (w / total) * 360;
+                      const start =
+                        i === 0
+                          ? 0
+                          : selectedNames
+                              .slice(0, i)
+                              .reduce((acc, curr) => acc + (weights[curr] || 1), 0) /
+                                total *
+                                360;
+                      const end = start + slice;
+                      const largeArc = slice > 180 ? 1 : 0;
+                      const x1 = 100 + 100 * Math.cos((Math.PI * start) / 180);
+                      const y1 = 100 + 100 * Math.sin((Math.PI * start) / 180);
+                      const x2 = 100 + 100 * Math.cos((Math.PI * end) / 180);
+                      const y2 = 100 + 100 * Math.sin((Math.PI * end) / 180);
+                      const fill = gender === "menino" ? "#6495ED" : "#FF69B4";
+                      const midAngle = start + slice / 2;
+                      return (
+                        <g key={i}>
+                          <path
+                            d={`M100,100 L${x1},${y1} A100,100 0 ${largeArc},1 ${x2},${y2} Z`}
+                            fill={fill}
+                            stroke="#fff"
+                            strokeWidth="2"
+                          />
+                          <text
+                            x={100 + 65 * Math.cos((Math.PI * midAngle) / 180)}
+                            y={100 + 65 * Math.sin((Math.PI * midAngle) / 180)}
+                            transform={`rotate(${midAngle}, ${100 + 65 * Math.cos((Math.PI * midAngle) / 180)}, ${100 + 65 * Math.sin((Math.PI * midAngle) / 180)}) rotate(${-midAngle}, ${100 + 65 * Math.cos((Math.PI * midAngle) / 180)}, ${100 + 65 * Math.sin((Math.PI * midAngle) / 180)})`}
+                            textAnchor="middle"
+                            alignmentBaseline="middle"
+                            fill="#fff"
+                            fontSize={name.length > 10 ? "8" : "10"}
+                            fontWeight="bold"
+                          >
+                            {name}
+                          </text>
+                        </g>
+                      );
+                    })}
+                  </svg>
+                  <div className="marker">▼</div>
+                </div>
+              )}
 
-          {/* roleta SVG proporcional */}
-          {selectedNames.length>0 && (
-            <div className="wheel-container">
-              <svg viewBox="0 0 200 200" className="wheel" ref={wheelRef}
-                   style={{
-                     transform:`rotate(${rotation}deg)`,
-                     transition: spinning?"transform 5s ease-out":"none"
-                   }}>
-                {(() => {
-                  const totalWeight = selectedNames.reduce((s,n)=>s+(weights[n]||1),0);
-                  let cum = 0;
-                  return selectedNames.map((name,i)=>{
-                    const w = weights[name]||1;
-                    const sliceAngle = (w/totalWeight)*360;
-                    const start = cum;
-                    const end = cum+sliceAngle;
-                    cum += sliceAngle;
-                    const largeArc = sliceAngle>180?1:0;
-                    const x1=100+100*Math.cos(Math.PI*start/180);
-                    const y1=100+100*Math.sin(Math.PI*start/180);
-                    const x2=100+100*Math.cos(Math.PI*end/180);
-                    const y2=100+100*Math.sin(Math.PI*end/180);
-                    const fill = gender==="menino"?"#6495ED":"#FF69B4";
-                    return (
-                      <g key={i}>
-                        <path d={`M100,100 L${x1},${y1} A100,100 0 ${largeArc},1 ${x2},${y2} Z`}
-                          fill={fill} stroke="#fff" />
-                        <text
-                          x={100+65*Math.cos(Math.PI*(start+sliceAngle/2)/180)}
-                          y={100+65*Math.sin(Math.PI*(start+sliceAngle/2)/180)}
-                          textAnchor="middle" alignmentBaseline="middle"
-                          transform={`rotate(${start+sliceAngle/2},${100+65*Math.cos(Math.PI*(start+sliceAngle/2)/180)},${100+65*Math.sin(Math.PI*(start+sliceAngle/2)/180)})`}
-                          fill="#fff" fontSize="10" fontWeight="bold">
-                          {name}
-                        </text>
-                      </g>
-                    );
-                  });
-                })()}
-              </svg>
-              <div className="marker">▼</div>
+              {spinning && <p className="spinning-msg">🎡 Girando...</p>}
+
+              {winner && (
+                <div className="winner-popup">
+                  <div className="popup-content">
+                    <h2>
+                      🎉 O nome sugerido foi: <strong>{winner}</strong>
+                    </h2>
+                    {meaning && <p className="popup-meaning">Significado: {meaning}</p>}
+                    <div className="popup-actions">
+                      <button className="btn" onClick={handleSpinAgain}>
+                        Rodar novamente
+                      </button>
+                      <button className="btn small" onClick={handleClosePopup}>
+                        Fechar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-
-          {/* vencedor */}
-          {winner && !spinning && (
-            <div className="winner">
-              🎉 Nome escolhido: <strong>{winner}</strong> 🎉
-              <button onClick={handleReset} className="btn"
-                      style={{ marginLeft:"20px" }}>🔁 Resetar</button>
-            </div>
-          )}
+          </div>
         </div>
       )}
     </div>
