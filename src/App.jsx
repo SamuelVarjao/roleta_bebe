@@ -1,0 +1,4986 @@
+import React, { useEffect, useMemo, useState, useRef } from 'react';
+import './App.css';
+import logo from "./assets/logo_nomebebe.png";
+
+
+export default function App() {
+  const [allNames, setAllNames] = useState([]);
+  const [filtered, setFiltered] = useState([]);
+  const [gender, setGender] = useState('any');
+  const [nationality, setNationality] = useState('any');
+  const [initial, setInitial] = useState('any');
+  const [picked, setPicked] = useState(null);
+  const [showPicked, setShowPicked] = useState(false);
+  const [shuffling, setShuffling] = useState(false);
+  const [doubts, setDoubts] = useState([]);
+  const [showDoubts, setShowDoubts] = useState(false);
+  const shuffleRef = useRef(null);
+  const [saveMessage, setSaveMessage] = useState('');
+  const [removeMessage, setRemoveMessage] = useState('');
+
+
+
+  useEffect(() => {
+    try {
+      const nomesFixos = {
+    masculinos: [
+      {nome: "Cleberson", significado: "Variação de Cleber que tem origem germânica, significa 'aquele que é encarregado de pequenos terrenos' ou 'proprietário de terras'.", nacionalidade: "Alemã"},
+      {nome: "Cleber", significado: "De origem germânica, significa 'aquele que é encarregado de pequenos terrenos' ou 'proprietário de terras'.", nacionalidade: "Alemã"},
+      { nome: "Lorenzo", significado: "'Natural da cidade de Laurento' ou 'habitante de Laurento'. Também é associado a 'coroado de louros', simbolizando vitória e honra, já que o louro era usado para coroar heróis e poetas na Roma Antiga.", nacionalidade: "Italiana" },
+      { nome: "Calebe", significado: "'Cão fiel' ou 'de todo coração'. O nome está associado à lealdade, devoção e coragem, refletindo o caráter do Calebe bíblico, que demonstrou fidelidade a Deus e coragem ao explorar a Terra Prometida. ", nacionalidade: "Hebraica" },
+      { nome: "Danilo", significado: "'Deus é meu juiz'. Variante croata de Daniel, derivado de 'Daniyyel', composto por 'dan' (juiz) e 'El' (Deus).", nacionalidade: "Hebraica" },
+      { nome: "Diogo", significado: "O que ensina", nacionalidade: "Portuguesa" },
+      { nome: "Isaac", significado: "Riso, filho da alegria", nacionalidade: "Hebraica" },
+      { nome: "João Lucas", significado: "O luminoso abençoado por Deus", nacionalidade: "Brasileira" },
+      { nome: "João Pedro", significado: "Rocha protegida por Deus", nacionalidade: "Brasileira" },
+      { nome: "Lucas", significado: "Luminoso, iluminado", nacionalidade: "Latina" },
+      { nome: "Luiz Miguel", significado: "Combatente glorioso", nacionalidade: "Germânica" },
+      { nome: "Luiz Henrique", significado: "Guerreiro famoso que governa a casa", nacionalidade: "Germânica" },
+      { nome: "Matheus", significado: "Derivado do hebraico Mattityahu, significa 'dom de Deus' ou 'presente de Deus'. Este nome carrega uma forte conotação espiritual, associada à dádiva divina. É amplamente reconhecido na tradição cristã, sendo atribuído a um dos doze apóstolos de Jesus, conhecido como São Mateus, autor do primeiro Evangelho do Novo Testamento.", nacionalidade: "Hebraica" },
+  
+  { nome: "Nathan", significado: "Origina-se do hebraico Natan, que significa 'Ele deu', 'dádiva' ou 'presente de Deus'. Este nome é associado à generosidade divina e à bênção, refletindo a ideia de um presente concedido por Deus. Na tradição bíblica, Natã foi um profeta e conselheiro do rei Davi.", nacionalidade: "Hebraica" },
+  
+  { nome: "Pedro Henrique", significado: "Pedro vem do grego Pétros, que significa 'pedra' ou 'rocha', simbolizando firmeza e solidez. Henrique tem origem no germânico Haimirich, composto por heim (lar) e ric (governante), significando 'governante da casa' ou 'príncipe do lar'. Juntos, o nome composto pode ser interpretado como 'rocha do lar' ou 'fundamento sólido da casa'.", nacionalidade: "Germânica" },
+  
+  { nome: "Vitor Hugo", significado: "Vítor tem origem no latim 'victor', que significa 'vencedor' ou 'vitorioso'. Hugo deriva do germânico 'hug', que significa 'mente', 'espírito' ou 'pensamento'. Assim, o nome composto pode ser interpretado como 'pensador vitorioso' ou 'aquele que vence através do pensamento'.", nacionalidade: "Latina" },
+  
+  { nome: "William", significado: "De origem germânica, William é derivado de 'Willahelm', composto por 'will' (vontade) e 'helm' (proteção), significando 'protetor corajoso' ou 'aquele que deseja proteger'. Este nome é associado à força, coragem e liderança, sendo popular em várias culturas, especialmente na anglo-saxã.", nacionalidade: "Germânica" },
+  
+  { nome: "Yago", significado: "Yago é uma variação do nome Iago, que por sua vez é uma forma espanhola de Jacó. Originado do hebraico Yaaqobh, significa 'aquele que vem do calcanhar' ou 'suplantador'. Outra interpretação associada é 'aquele que Deus protege', refletindo a bênção divina. É um nome com forte presença bíblica e histórica.", nacionalidade: "Hebraica" },
+  
+  { nome: "Adrian", significado: "Adrian é a versão inglesa do nome Adriano, derivado do latim 'Hadrianus', que significa 'natural de Ádria'. Adria era uma antiga cidade portuária na Itália, e o nome Adrian carrega consigo uma conexão histórica e cultural rica, evocando uma sensação de força e dignidade.", nacionalidade: "Latina" },
+  
+  { nome: "Alaric", significado: "De origem germânica, Alaric significa 'governante de todos'. É composto pelos elementos 'ala' (tudo) e 'ric' (governante), refletindo liderança universal e autoridade. Este nome carrega uma forte conotação de poder e majestade, sendo associado a reis e líderes históricos.", nacionalidade: "Germânica" },
+  
+  { nome: "Andrei", significado: "Andrei é a forma russa de André, que tem origem no grego 'aner', significando 'homem' ou 'viril'. Este nome carrega consigo a ideia de masculinidade, coragem e força, sendo popular em várias culturas eslavas e associado a figuras históricas e religiosas de destaque.", nacionalidade: "Russa" },
+  
+  { nome: "Angelo", significado: "De origem italiana, Angelo significa 'anjo' ou 'mensageiro'. Derivado do grego 'angelos', que significa 'mensageiro', este nome carrega uma conotação espiritual e celestial, sendo associado à pureza, proteção e comunicação divina.", nacionalidade: "Italiana" },
+  
+  { nome: "Anthony", significado: "Anthony tem origem no latim 'Antonius', cujo significado é incerto, mas é frequentemente associado a 'inestimável' ou 'de valor inestimável'. Este nome carrega consigo uma aura de nobreza e importância, sendo popular em várias culturas e associado a santos e figuras históricas.", nacionalidade: "Latina" },
+  
+  { nome: "Asher", significado: "De origem hebraica, Asher significa 'feliz' ou 'abençoado'. Este nome é associado à prosperidade e alegria, refletindo uma vida abençoada e plena. Na Bíblia, Asher é o nome de um dos doze filhos de Jacó, fundador de uma das tribos de Israel.", nacionalidade: "Hebraica" },
+  
+  { nome: "Bertram", significado: "De origem germânica, Bertram é composto por 'bera' (urso) e 'trum' (famoso), significando 'famoso por seu urso' ou 'forte como um urso'. Este nome carrega consigo uma imagem de força, coragem e nobreza, sendo associado a guerreiros e líderes históricos.", nacionalidade: "Germânica" },
+  { nome: "Boris", significado: "O nome Boris tem origem eslava e deriva da palavra 'boru', que significa 'combatente', 'lutador' ou 'guerreiro'. Está associado a características de coragem e força, refletindo a bravura dos guerreiros. Além disso, algumas fontes sugerem uma possível origem turca antiga, onde 'bogoris' poderia significar 'lobo pequeno'.", nacionalidade: "Eslava" },
+  
+  { nome: "Cassius", significado: "Cassius é um nome de origem latina, derivado do nome de família romano 'Cassius'. O significado mais comum associado a este nome é 'vazio', 'oco' ou 'vão', proveniente da palavra latina 'cassus'. Outra interpretação sugere que o nome tenha origem no idioma etrusco, significando 'capacete de metal'.", nacionalidade: "Latina" },
+  
+  { nome: "Claudio", significado: "Cláudio é um nome de origem latina, derivado do nome de uma ilustre família romana chamada 'Claudius'. O significado associado a este nome é 'coxo' ou 'manco', proveniente da palavra latina 'claudus'. Apesar do significado literal, o nome carrega consigo uma história de nobreza e influência no Império Romano.", nacionalidade: "Latina" },
+  
+  { nome: "Darian", significado: "Darian é um nome de origem persa que significa 'rico' ou 'próspero'. Derivado da palavra persa 'dârayavahush', que significa 'possuidor da bondade', o nome carrega consigo a ideia de virtude e generosidade. É um nome que reflete a importância dada à bondade e à prosperidade na cultura persa.", nacionalidade: "Persa" },
+  
+  { nome: "Dimitri", significado: "Dimitri é uma variante russa do nome grego Demétrio, derivado de 'Demétrios', que significa 'consagrado à Deméter'. Deméter é a deusa grega da agricultura e fertilidade, associada à terra e à abundância. O nome Dimitri carrega consigo a conexão com a natureza e a prosperidade.", nacionalidade: "Russa" },
+  
+  { nome: "Donatello", significado: "Donatello é um nome italiano, diminutivo de Donato, que tem origem no latim 'Donatus', significando 'dado' ou 'presente'. Esse nome era atribuído a crianças que nasciam em circunstâncias especiais, como um presente divino ou uma bênção aos pais. Donatello também é associado ao famoso escultor renascentista Donato di Niccolò di Betto Bardi.", nacionalidade: "Italiana" },
+  
+  { nome: "Eliseu", significado: "Eliseu é um nome de origem hebraica, derivado de 'Elisha', composto por 'El' (Deus) e 'yésha' (salvação), significando 'Deus é salvação' ou 'Meu Deus é salvação'. Na tradição bíblica, Eliseu foi um profeta e sucessor de Elias, conhecido por realizar milagres e por sua fidelidade a Deus.", nacionalidade: "Hebraica" },
+  
+  { nome: "Eryx", significado: "Eryx é um nome de origem grega, associado à mitologia e à geografia. Na mitologia, Eryx foi um herói e lutador da ilha de Sicília, conhecido por sua força e habilidade em combate. O nome também está relacionado a uma montanha na Sicília, que leva o mesmo nome, e a um local sagrado na região.", nacionalidade: "Grega" },
+  
+  { nome: "Fabrício", significado: "Fabrício é um nome de origem latina, derivado do nome romano 'Fabius'. O significado associado a este nome é 'artesão' ou 'trabalhador do ferro', proveniente da palavra latina 'faber'. O nome carrega consigo a ideia de habilidade manual e dedicação ao trabalho, refletindo a importância das profissões artesanais na Roma antiga.", nacionalidade: "Latina" },
+  
+  { nome: "Ferdinand", significado: "Ferdinand é um nome de origem germânica, composto pelos elementos 'fardi' (viagem) e 'nand' (ousado, corajoso), significando 'viajante ousado' ou 'aquele que empreende viagens corajosas'. O nome carrega consigo a ideia de aventura e coragem, refletindo a disposição para explorar o desconhecido.", nacionalidade: "Germânica" },
+  
+  { nome: "Flávio", significado: "Flávio é um nome de origem latina, derivado do nome romano 'Flavius'. O significado associado a este nome é 'dourado' ou 'loiro', proveniente da palavra latina 'flavus'. O nome carrega consigo a ideia de brilho e luminosidade, refletindo a cor dourada do cabelo ou da pele.", nacionalidade: "Latina" },
+  
+  { nome: "Gael", significado: "Gael é um nome de origem celta, derivado da palavra 'Gael', que significa 'pessoa de origem celta' ou 'habitante da região da Gália'. O nome carrega consigo a ideia de força e coragem, refletindo as características atribuídas aos povos celtas na história.", nacionalidade: "Celta" },
+  
+  { nome: "Gaspard", significado: "Gaspard é um nome de origem persa, derivado da palavra 'kaspâ', que significa 'tesoureiro' ou 'guardião do tesouro'. O nome carrega consigo a ideia de riqueza e generosidade, refletindo a importância atribuída à distribuição de riquezas na cultura persa.", nacionalidade: "Persa" },
+  
+  { nome: "Gideon", significado: "Gideon é um nome de origem hebraica, derivado da palavra 'gibbor', que significa 'herói' ou 'guerreiro'. Na tradição bíblica, Gideon foi um juiz de Israel, conhecido por sua coragem e liderança na luta contra os midianitas. O nome carrega consigo a ideia de força e liderança.", nacionalidade: "Hebraica" },
+  
+  { nome: "Gregary", significado: "Gregary é uma variante do nome Gregory, de origem grega, derivado de 'gregoros', que significa 'vigilante' ou 'atento'. O nome carrega consigo a ideia de vigilância e atenção, refletindo a importância da observação e da consciência na cultura grega.", nacionalidade: "Grega" },
+  
+  { nome: "Hector", significado: "Hector é um nome de origem grega, derivado de 'hektôr', que significa 'aquele que segura firme' ou 'defensor'. Na mitologia grega, Hector foi um príncipe troiano e herói da guerra de Troia, conhecido por sua bravura e lealdade. O nome carrega consigo a ideia de força e defesa.", nacionalidade: "Grega" },
+  
+  { nome: "Hiram", significado: "Hiram é um nome de origem hebraica, derivado da palavra 'ḥīrām', que significa 'nobre' ou 'exaltado'. Na tradição bíblica, Hiram foi o rei de Tiro, conhecido por sua sabedoria e habilidade na construção do templo de Salomão. O nome carrega consigo a ideia de nobreza e sabedoria.", nacionalidade: "Hebraica" },
+  
+  { nome: "Ian", significado: "Ian é uma variante escocesa do nome João, que tem origem no hebraico 'Yochanan', significando 'Deus é gracioso'. O nome carrega consigo a ideia de graça divina e favor, refletindo a importância da bondade e da compaixão na tradição cristã.", nacionalidade: "Hebraica" },
+  
+  { nome: "Jonathan", significado: "Jonathan é um nome de origem hebraica, derivado de 'Yonatan', que significa 'Deus deu' ou 'presente de Deus'. Na tradição bíblica, Jonathan foi o filho do rei Saul, conhecido por sua amizade com Davi e por sua lealdade. O nome carrega consigo a ideia de dádiva divina e amizade.", nacionalidade: "Hebraica" },
+  
+  { nome: "Jordan", significado: "Jordan é um nome de origem hebraica, derivado do verbo 'yarad', que significa 'descer' ou 'fluir para baixo'. O nome está associado ao rio Jordão, que na tradição bíblica é o local onde Jesus foi batizado. O nome carrega consigo a ideia de descida ou transição espiritual.", nacionalidade: "Hebraica" },
+  { nome: "Jorge", significado: "O nome Jorge tem origem no grego antigo 'Geórgios' (Γεώργιος), derivado de 'gê' (terra) e 'érgon' (trabalho), significando 'agricultor' ou 'trabalhador da terra'. Esse nome carrega consigo a ideia de conexão com a terra e com o trabalho árduo, refletindo uma vida de dedicação e esforço. É um nome com forte tradição na cultura cristã, associado a São Jorge, um mártir e santo popular em várias culturas.", nacionalidade: "Grega" },
+  
+  { nome: "Julian", significado: "Julian é um nome de origem latina, derivado de 'Julianus', que por sua vez vem de 'Julius', associado à antiga família romana dos Julii. O nome pode ter várias interpretações: uma possível origem é 'Iovilius', significando 'dedicado a Júpiter', refletindo o costume romano de homenagear divindades. Outra interpretação sugere ligação com a palavra latina 'ioulos', que significa 'jovem' ou 'juba de leão', transmitindo a ideia de força, coragem ou juventude.", nacionalidade: "Latina" },
+  
+  { nome: "Klaus", significado: "Klaus é um nome masculino de origem alemã, derivado de 'Nikolaus', que tem raízes no grego 'Nikolaos', composto por 'níke' (vitória) e 'laos' (povo), significando 'vitória do povo'. Esse nome carrega consigo a ideia de liderança e conquista, refletindo uma pessoa que traz sucesso e realizações para seu grupo ou comunidade. Klaus é uma forma curta e moderna de Nicolau, amplamente utilizado na Alemanha e em outros países de língua alemã.", nacionalidade: "Germânica" },
+  
+  { nome: "Landon", significado: "Landon é um nome de origem inglesa antiga, derivado de um sobrenome que significa 'colina longa' ou 'cume'. Essa etimologia revela camadas de significado que ressoam com nossa compreensão da pessoa humana como guardiã da criação de Deus. O nome Landon carrega consigo a ideia de força e resistência, simbolizando uma pessoa firme e determinada, conectada à natureza e com uma base sólida.", nacionalidade: "Inglesa" },
+  
+  { nome: "Lázaro", significado: "Lázaro é um nome de origem hebraica, derivado de 'Elazar', composto por 'El' (Deus) e 'ézer' (socorro), significando 'Deus ajudou' ou 'Deus socorreu'. Esse nome carrega consigo a ideia de auxílio divino e proteção, refletindo uma pessoa que recebe apoio e orientação de uma força superior. Lázaro é uma figura bíblica conhecida por ser ressuscitado por Jesus, simbolizando renovação e esperança.", nacionalidade: "Hebraica" },
+  
+  { nome: "Lucian", significado: "Lucian é um nome de origem latina, derivado de 'Lucianus', que por sua vez vem de 'Lucius', associado à palavra 'lux' (luz), significando 'luminoso' ou 'brilhante'. Esse nome carrega consigo a ideia de clareza e iluminação, refletindo uma pessoa que traz luz e entendimento aos outros. Lucian é uma variante francesa de Luciano, com uma sonoridade elegante e sofisticada.", nacionalidade: "Latina" },
+  
+  { nome: "Maurício", significado: "Maurício é um nome de origem latina, derivado de 'Mauricius', que por sua vez vem de 'Maurus', significando 'mouro' ou 'de pele escura'. Esse nome carrega consigo a ideia de origem africana e conexão com o povo da Mauritânia. Maurício é um nome forte e imponente, associado à nobreza e à distinção, refletindo uma pessoa de caráter elevado e presença marcante.", nacionalidade: "Latina" },
+  
+  { nome: "Nathaniel", significado: "Nathaniel é uma variação do nome Natanael, de origem hebraica, composto por 'nathá' (ele deu) e 'El' (Deus), significando 'dom de Deus' ou 'presente de Deus'. Esse nome carrega consigo a ideia de bênção divina e gratidão, refletindo uma pessoa que reconhece e valoriza os presentes recebidos do Criador. Nathaniel é um nome bíblico, associado a um dos apóstolos de Jesus.", nacionalidade: "Hebraica" },
+  
+  { nome: "Pablo", significado: "Pablo é uma variante espanhola do nome Paulo, de origem latina, derivado de 'Paulus', significando 'pequeno' ou 'humilde'. Esse nome carrega consigo a ideia de modéstia e simplicidade, refletindo uma pessoa que não busca destaque, mas que possui grande valor e importância. Pablo é um nome comum em países de língua espanhola, com uma sonoridade suave e agradável.", nacionalidade: "Espanhola" },
+  
+  { nome: "Patric", significado: "Patric é uma variante do nome Patrick, de origem latina, derivado de 'Patricius', significando 'nobre' ou 'de classe alta'. Esse nome carrega consigo a ideia de nobreza e distinção, refletindo uma pessoa de caráter elevado e dignidade. Patric é uma forma moderna e simplificada de Patrick, com uma sonoridade forte e masculina.", nacionalidade: "Latina" },
+  
+  { nome: "Ricardo", significado: "Ricardo é um nome de origem germânica, derivado de 'Ricohard', composto por 'ric' (governante) e 'hard' (forte), significando 'governante poderoso' ou 'príncipe forte'. Esse nome carrega consigo a ideia de liderança e força, refletindo uma pessoa com autoridade e determinação. Ricardo é um nome clássico e atemporal, associado a várias figuras históricas e reais.", nacionalidade: "Alemã" },
+    { nome: "Rodrigo", significado: "Rodrigo é um nome de origem germânica, derivado do antigo 'Hrodric', composto pelos elementos 'hrod' (fama) e 'ric' (governante), significando 'governante famoso' ou 'príncipe glorioso'. Este nome carrega consigo a ideia de liderança e renome, refletindo uma pessoa de destaque e influência. É um nome histórico, associado a figuras como o último rei visigodo da Hispânia, Don Rodrigo, e ao herói medieval Rodrigo Díaz de Vivar, conhecido como El Cid.", nacionalidade: "Germânica" },
+  
+  { nome: "Sebastião", significado: "Sebastião é um nome de origem latina, derivado de 'Sebastianus', que por sua vez vem do grego 'Sebastianos', originado de 'sebastos', significando 'sagrado', 'venerável' ou 'reverenciado'. Este nome carrega consigo a ideia de santidade e respeito, refletindo uma pessoa digna de honra. É um nome associado a São Sebastião, um mártir cristão venerado na Igreja Católica, e a Dom Sebastião, o Desejado, rei de Portugal.", nacionalidade: "Grega" },
+  
+  { nome: "Simon", significado: "Simon é uma variante do nome Simeão, de origem hebraica, derivado de 'Shim'on', que significa 'aquele que ouve' ou 'ouvinte'. Este nome carrega consigo a ideia de atenção e receptividade, refletindo uma pessoa sensível e atenta aos outros. É um nome associado a várias figuras bíblicas, incluindo o apóstolo Simão Pedro, e é popular em várias culturas ao redor do mundo.", nacionalidade: "Hebraica" },
+  
+  { nome: "Sven", significado: "Sven é um nome de origem escandinava, derivado do nórdico antigo 'Sveinn', que significa 'jovem' ou 'servo'. Este nome carrega consigo a ideia de juventude e vigor, refletindo uma pessoa enérgica e cheia de vida. É um nome comum em países nórdicos como Suécia, Noruega e Dinamarca, e é associado a várias figuras históricas e mitológicas da região.", nacionalidade: "Escandinava" },
+  
+  { nome: "Tadeu", significado: "Tadeu é um nome de origem aramaica, derivado de 'Taddáy', que significa 'coração', 'peito' ou 'íntimo'. Este nome carrega consigo a ideia de sinceridade e profundidade emocional, refletindo uma pessoa com sentimentos profundos e genuínos. É um nome associado a Judas Tadeu, um dos doze apóstolos de Jesus Cristo, conhecido por sua devoção e coragem.", nacionalidade: "Aramaica" },
+  
+  { nome: "Tristan", significado: "Tristan é um nome de origem céltica, derivado do antigo bretão 'Drustan', que significa 'tumulto' ou 'barulho'. Este nome carrega consigo a ideia de intensidade e paixão, refletindo uma pessoa com emoções fortes e vibrantes. É um nome associado à lenda medieval de Tristão e Isolda, um conto de amor trágico que tem sido contado e recontado ao longo dos séculos.", nacionalidade: "Celta" },
+  
+  { nome: "Valentin", significado: "Valentin é um nome de origem latina, derivado de 'Valentinus', que por sua vez vem de 'valens', significando 'forte', 'vigoroso' ou 'cheio de saúde'. Este nome carrega consigo a ideia de robustez e energia, refletindo uma pessoa com grande vitalidade e força. É um nome associado a São Valentim, um sacerdote e médico martirizado no século III, cuja festa é comemorada no Dia dos Namorados.", nacionalidade: "Latina" },
+  
+  { nome: "Wagner", significado: "Wagner é um nome de origem germânica, derivado do sobrenome 'Waganari', que significa 'fabricante de vagões' ou 'carpinteiro'. Este nome carrega consigo a ideia de habilidade artesanal e trabalho manual, refletindo uma pessoa prática e habilidosa. É um nome associado ao compositor alemão Richard Wagner, conhecido por suas óperas e música clássica.", nacionalidade: "Germânica" },
+  
+  { nome: "Walter", significado: "Walter é um nome de origem germânica, derivado de 'Walthari', composto por 'wald' (governar) e 'heri' (exército), significando 'governante do exército' ou 'líder militar'. Este nome carrega consigo a ideia de liderança e autoridade, refletindo uma pessoa com poder e influência. É um nome comum em várias culturas europeias, especialmente na Alemanha e na Inglaterra.", nacionalidade: "Germânica" },
+  
+  { nome: "Xavier", significado: "Xavier é um nome de origem basca, derivado de 'Etxeberria', que significa 'nova casa'. Este nome carrega consigo a ideia de renovação e acolhimento, refletindo uma pessoa que traz novidades e mudanças positivas. É um nome associado a São Francisco Xavier, um missionário jesuíta espanhol do século XVI, conhecido por suas viagens missionárias na Ásia.", nacionalidade: "Basca" },
+  
+  { nome: "Zachary", significado: "Zachary é uma variante do nome Zacarias, de origem hebraica, derivado de 'Zekharyah', que significa 'Deus se lembrou'. Este nome carrega consigo a ideia de recordação divina e promessa cumprida, refletindo uma pessoa abençoada e protegida por Deus. É um nome associado a várias figuras bíblicas, incluindo o pai de João Batista.", nacionalidade: "Hebraica" },
+  { nome: "Zoltan", significado: "Zoltan é um nome masculino de origem húngara, derivado da palavra turca 'sultân', que significa 'sultão', 'governante' ou 'poderoso'. Esse nome carrega consigo a ideia de autoridade e liderança, refletindo uma pessoa com grande influência e respeito. É um nome tradicional e popular na Hungria, associado a figuras históricas e culturais de destaque.", nacionalidade: "Húngara" },
+  
+  { nome: "Zygmunt", significado: "Zygmunt é um nome masculino de origem polonesa, derivado do nome germânico 'Sigismund'. O nome é composto pelos elementos 'sigu', que significa 'vitória', e 'mund', que significa 'proteção' ou 'guardião', resultando em 'proteção vitoriosa' ou 'protetor vitorioso'. Esse nome carrega consigo a ideia de força e segurança, refletindo uma pessoa que traz vitória e proteção aos outros.", nacionalidade: "Polonesa" },
+  
+  { nome: "Francisco", significado: "Francisco é um nome de origem latina, derivado de 'Franciscus', que significa 'homem livre' ou 'francês'. Esse nome carrega consigo a ideia de liberdade e independência, refletindo uma pessoa com espírito livre e nobre. É um nome associado a São Francisco de Assis, fundador da Ordem dos Frades Menores e conhecido por sua humildade e devoção aos pobres.", nacionalidade: "Portuguesa" },
+  
+  { nome: "Lourenço", significado: "Lourenço é um nome de origem latina, derivado de 'Laurentius', que significa 'natural de Laurentum' ou 'coroado de louros'. Esse nome carrega consigo a ideia de vitória e honra, refletindo uma pessoa digna de respeito e reconhecimento. É um nome associado a São Lourenço, diácono e mártir cristão do século III.", nacionalidade: "Portuguesa" },
+  
+  { nome: "Tomás", significado: "Tomás é um nome de origem aramaica, derivado de 'T'oma', que significa 'gêmeo'. Esse nome carrega consigo a ideia de dualidade e equilíbrio, refletindo uma pessoa com duas facetas ou habilidades complementares. É um nome associado a São Tomás, um dos doze apóstolos de Jesus Cristo, conhecido por sua dúvida e subsequente fé.", nacionalidade: "Portuguesa" },
+  
+  { nome: "Vinícius", significado: "Vinícius é um nome de origem latina, derivado do nome romano 'Vinicius'. O nome está relacionado à palavra latina 'vinum', que significa 'vinho', e pode ser interpretado como 'vinicultor' ou 'aquele que vem da vinha'. Esse nome carrega consigo a ideia de celebração e abundância, refletindo uma pessoa com espírito festivo e generoso.", nacionalidade: "Portuguesa" },
+  
+  { nome: "Bastian", significado: "Bastian é um nome masculino de origem grega, derivado de 'Sebastianos', que significa 'de Sebastia' ou 'reverenciado'. Esse nome carrega consigo a ideia de respeito e honra, refletindo uma pessoa digna de admiração. É uma forma abreviada de Sebastian, popular em várias culturas europeias.", nacionalidade: "Grega" },
+  
+  { nome: "Benjamin", significado: "Benjamin é um nome de origem hebraica, derivado de 'Binyamin', que significa 'filho da mão direita' ou 'filho da felicidade'. Esse nome carrega consigo a ideia de bênção e alegria, refletindo uma pessoa que traz felicidade e sorte aos outros. É um nome bíblico, associado ao filho mais jovem de Jacó e Raquel.", nacionalidade: "Hebraica" },
+  
+  { nome: "Maximilian", significado: "Maximilian é um nome de origem latina, derivado de 'Maximilianus', que significa 'o maior' ou 'o mais excelente'. Esse nome carrega consigo a ideia de grandeza e excelência, refletindo uma pessoa com qualidades superiores e notáveis. É um nome associado a imperadores romanos e santos da Igreja Católica.", nacionalidade: "Latina" },
+  
+  { nome: "Nicolas", significado: "Nicolas é um nome de origem grega, derivado de 'Nikolaos', composto por 'nike' (vitória) e 'laos' (povo), significando 'vitória do povo'. Esse nome carrega consigo a ideia de liderança e sucesso coletivo, refletindo uma pessoa que guia os outros para a vitória. É um nome associado a São Nicolau, bispo de Mira, conhecido por sua generosidade e bondade.", nacionalidade: "Grega" },
+  
+  { nome: "Oliver", significado: "Oliver é um nome de origem latina, derivado de 'olivarius', que significa 'plantador de oliveiras' ou 'oliveira'. Esse nome carrega consigo a ideia de paz e prosperidade, refletindo uma pessoa que traz harmonia e abundância. É um nome associado à árvore de oliveira, símbolo de paz e longevidade.", nacionalidade: "Latina" },      {nome: "Sebastian",significado: "Venerável",nacionalidade: "Grega"},
+  { nome: "Nolan", significado: "O nome Nolan tem origem irlandesa, derivado do gaélico Ó Nualláin, composto por 'nuall', que significa 'famoso' ou 'nobre', e o sufixo diminutivo '-án'. Assim, Nolan pode ser traduzido como 'descendente do famoso' ou 'o famoso e nobre'. Tradicionalmente, é um nome bastante utilizado entre os irlandeses, associado a famílias nobres da região. Variantes do nome incluem Nolen, Noland, Nolin e Nalon.", nacionalidade: "Irlandesa" },
+  
+  { nome: "Brandon", significado: "Brandon é um nome de origem anglo-saxônica, derivado do inglês antigo 'brom' (giesta) e 'dun' (colina), significando 'colina coberta de giestas' ou 'monte de giestas'. Esse nome carrega consigo a ideia de um local natural e exuberante, refletindo uma conexão com a terra e a natureza. Surgiu como um sobrenome e, posteriormente, foi adotado como nome próprio.", nacionalidade: "Anglo-saxã" },
+  
+  { nome: "Heitor", significado: "Heitor é um nome de origem grega, derivado de 'Héktor', que significa 'aquele que guarda', 'aquele que retém o inimigo' ou 'protetor'. Esse nome carrega consigo a ideia de força e defesa, refletindo uma pessoa que protege e defende os outros. Na mitologia grega, Heitor era príncipe de Troia e um dos maiores guerreiros na Guerra de Troia, suplantado apenas por Aquiles.", nacionalidade: "Grega" },
+  
+  { nome: "Bento", significado: "Bento é um nome de origem latina, derivado de 'Benedictus', que significa 'abençoado', 'bendito' ou 'louvado'. Esse nome carrega consigo a ideia de santidade e virtude, refletindo uma pessoa digna de respeito e honra. É um nome associado a São Bento, fundador da Ordem dos Beneditinos, conhecido por sua vida de oração e trabalho.", nacionalidade: "Latina" },
+  
+  { nome: "Júlio", significado: "Júlio é um nome de origem latina, derivado de 'Iulius', que significa 'jovem', 'jovial' ou 'cheio de juventude'. Esse nome carrega consigo a ideia de vitalidade e energia, refletindo uma pessoa cheia de vida e entusiasmo. Também pode estar relacionado ao deus romano Júpiter, significando 'consagrado a Júpiter'.", nacionalidade: "Latina" },
+  
+  { nome: "Luiz Miguel", significado: "Luiz é uma variante do nome germânico 'Ludwig', composto por 'hlud' (fama) e 'wig' (guerreiro), significando 'guerreiro famoso' ou 'combatente glorioso'. Miguel tem origem no hebraico 'Mikhael', composto por 'mi' (quem) e 'El' (Deus), significando 'quem é como Deus?'. Assim, Luiz Miguel pode ser interpretado como 'guerreiro glorioso que é como Deus'.", nacionalidade: "Germânica" },
+  
+  { nome: "Vinícius", significado: "Vinícius é um nome de origem latina, derivado de 'Vinicius', que significa 'vinicultor', 'vinho' ou 'da natureza do vinho'. Esse nome carrega consigo a ideia de sofisticação e celebração, refletindo uma pessoa associada à produção ou apreciação do vinho. Está relacionado à bebida sagrada dos deuses na Roma antiga.", nacionalidade: "Latina" },
+  
+  { nome: "Muhammad", significado: "Muhammad é um nome de origem árabe, derivado do verbo 'ḥammada', que significa 'louvar', e da raiz semítica 'ḥ-m-d', significando 'louvado' ou 'digno de louvor'. Esse nome tem grande importância cultural e histórica, principalmente entre o povo muçulmano, por ser considerado o último profeta de Deus no Islã.", nacionalidade: "Árabe" },
+  
+  { nome: "Leo", significado: "Leo é um nome de origem latina, derivado de 'Leo', que significa 'leão'. Esse nome carrega consigo a ideia de força, coragem e nobreza, refletindo uma pessoa com características associadas ao leão, como liderança e valentia. É um nome curto e impactante, amplamente utilizado em diversas culturas.", nacionalidade: "Latina" },
+  
+  { nome: "Arthur", significado: "Arthur é um nome de origem celta, derivado do galês 'Artur', que significa 'urso' ou 'homem nobre'. Esse nome carrega consigo a ideia de força e liderança, refletindo uma pessoa com características associadas ao urso, como coragem e determinação. É um nome associado à lenda do Rei Arthur, líder dos Cavaleiros da Távola Redonda.", nacionalidade: "Celta" },
+  
+  { nome: "Freddie", significado: "Freddie é uma variante do nome germânico 'Frederick', composto por 'frid' (paz) e 'ric' (governante), significando 'governante da paz' ou 'paz do governante'. Esse nome carrega consigo a ideia de liderança pacífica e harmonia, refletindo uma pessoa que busca resolver conflitos de forma pacífica e justa.", nacionalidade: "Germânica" },
+  { nome: "George", significado: "George é um nome masculino de origem grega, derivado da palavra 'georgós', composta por 'gê' (terra) e 'érgon' (trabalho), significando 'agricultor' ou 'aquele que trabalha a terra'. Esse nome carrega consigo a ideia de conexão com a terra e trabalho árduo, refletindo uma pessoa com raízes profundas e dedicação. É um nome tradicional e amplamente utilizado em países de língua inglesa.", nacionalidade: "Grega" },
+  
+  { nome: "Ethan", significado: "Ethan é um nome masculino de origem hebraica, derivado do nome 'Eitan', que significa 'forte', 'firme', 'sólido', 'resistente' ou 'duradouro'. Esse nome carrega consigo a ideia de estabilidade e força interior, refletindo uma pessoa com caráter sólido e perseverante. É um nome que aparece na Bíblia, associado a um homem sábio do Antigo Testamento.", nacionalidade: "Hebraica" },
+  
+  { nome: "Jude", significado: "Jude é uma variante do nome Judas, de origem hebraica, derivado de 'Yehudah', que significa 'louvor a Deus' ou 'aquele que é louvado'. Esse nome carrega consigo a ideia de gratidão e exaltação divina, refletindo uma pessoa com espírito de agradecimento e devoção. É um nome que aparece na Bíblia, associado a um dos apóstolos de Jesus.", nacionalidade: "Hebraica" },
+  
+  { nome: "Alfie", significado: "Alfie é um diminutivo do nome Alfred, de origem germânica, derivado de 'Ælfræd', composto por 'ælf' (elfo) e 'ræd' (conselho), significando 'conselho dos elfos' ou 'conselheiro sábio'. Esse nome carrega consigo a ideia de sabedoria e orientação, refletindo uma pessoa com discernimento e capacidade de aconselhar. É um nome carinhoso e popular em países de língua inglesa.", nacionalidade: "Germânica" },
+  
+  { nome: "Jacob", significado: "Jacob é um nome masculino de origem hebraica, derivado de 'Ya'akov', que significa 'aquele que segura pelo calcanhar' ou 'suplantador'. Esse nome carrega consigo a ideia de superação e determinação, refletindo uma pessoa que luta por seus objetivos. Na Bíblia, Jacob é um dos patriarcas do povo de Israel e irmão de Esaú.", nacionalidade: "Hebraica" },
+  
+  { nome: "Charlie", significado: "Charlie é um diminutivo do nome Charles, de origem germânica, derivado de 'Karl', que significa 'homem livre' ou 'homem do povo'. Esse nome carrega consigo a ideia de liberdade e simplicidade, refletindo uma pessoa com espírito independente e acessível. É um nome popular em países de língua inglesa e associado a figuras como Charlie Chaplin.", nacionalidade: "Germânica" },
+  
+  { nome: "David", significado: "David é um nome masculino de origem hebraica, derivado de 'Dawid', que significa 'amado', 'querido' ou 'predileto'. Esse nome carrega consigo a ideia de afeto e estima, refletindo uma pessoa que é profundamente amada e valorizada. Na Bíblia, David é o segundo rei de Israel, conhecido por derrotar o gigante Golias e por ser um homem segundo o coração de Deus.", nacionalidade: "Hebraica" },
+  
+  { nome: "Joseph", significado: "Joseph é uma variante do nome José, de origem hebraica, derivado de 'Yosef', que significa 'aquele que acrescenta' ou 'Deus multiplica'. Esse nome carrega consigo a ideia de bênção e prosperidade, refletindo uma pessoa que traz crescimento e abundância. Na Bíblia, Joseph é um dos doze filhos de Jacó e é conhecido por sua história no Egito.", nacionalidade: "Hebraica" },
+  
+  { nome: "Robert", significado: "Robert é um nome masculino de origem germânica, derivado de 'Hrodebert', composto por 'hrod' (fama) e 'beraht' (brilhante), significando 'brilhante pela fama' ou 'famoso'. Esse nome carrega consigo a ideia de renome e destaque, refletindo uma pessoa conhecida e respeitada. É um nome tradicional em países de língua inglesa e associado a várias figuras históricas.", nacionalidade: "Germânica" },
+  
+  { nome: "Stephen", significado: "Stephen é uma variante do nome Estêvão, de origem grega, derivado de 'Stephanos', que significa 'coroa' ou 'coroado'. Esse nome carrega consigo a ideia de honra e recompensa, refletindo uma pessoa que é reconhecida por suas virtudes. Na Bíblia, Stephen é o primeiro mártir cristão, apedrejado por sua fé em Jesus Cristo.", nacionalidade: "Grega" },
+  { nome: "Richard", significado: "Richard é um nome de origem germânica, derivado de 'Ricohard', composto por 'rik' (governante, príncipe) e 'hard' (forte, corajoso), significando 'governante forte' ou 'príncipe corajoso'. Esse nome carrega consigo a ideia de liderança e coragem, refletindo uma pessoa com autoridade e bravura. É um nome tradicionalmente associado a figuras históricas e nobres.", nacionalidade: "Germânica" },
+  
+  { nome: "Edward", significado: "Edward é um nome de origem germânica, derivado de 'Eadweard', composto por 'ead' (riqueza, bens) e 'weard' (guarda, protetor), significando 'guardião rico' ou 'protetor das riquezas'. Esse nome carrega consigo a ideia de prosperidade e proteção, refletindo uma pessoa que zela pelo bem-estar e pela segurança dos outros. É um nome com forte presença histórica e cultural.", nacionalidade: "Germânica" },
+  
+  { nome: "Timothy", significado: "Timothy é um nome de origem grega, derivado de 'Timotheos', composto por 'timao' (honrar) e 'theos' (Deus), significando 'aquele que honra a Deus' ou 'respeitador de Deus'. Esse nome carrega consigo a ideia de devoção e reverência, refletindo uma pessoa com profunda espiritualidade e respeito pelas divindades. É um nome com forte conotação religiosa e histórica.", nacionalidade: "Grega" },
+  
+  { nome: "Peter", significado: "Peter é um nome de origem grega, derivado de 'Petros', que significa 'pedra' ou 'rochedo'. Esse nome carrega consigo a ideia de solidez e firmeza, refletindo uma pessoa com caráter inabalável e confiável. É um nome bíblico, associado ao apóstolo Pedro, considerado o primeiro papa da Igreja Católica.", nacionalidade: "Grega" },
+  
+  { nome: "Patrick", significado: "Patrick é um nome de origem latina, derivado de 'Patricius', que significa 'nobre' ou 'homem nobre'. Esse nome carrega consigo a ideia de nobreza e dignidade, refletindo uma pessoa com alto caráter e respeito pela tradição. É um nome associado a São Patrício, o padroeiro da Irlanda, conhecido por sua missão de evangelização e unificação do país.", nacionalidade: "Latina" },
+  
+  { nome: "Albert", significado: "Albert é um nome de origem germânica, derivado de 'Adalbert', composto por 'adal' (nobre) e 'berht' (brilhante), significando 'nobre brilhante' ou 'ilustre nobre'. Esse nome carrega consigo a ideia de distinção e honra, refletindo uma pessoa de alta linhagem e prestígio. Foi popularizado na Inglaterra pelo príncipe Albert, consorte da Rainha Vitória.", nacionalidade: "Germânica" },
+  
+  { nome: "Harry", significado: "Harry é um nome de origem germânica, derivado de 'Heimirich', composto por 'heim' (lar) e 'ric' (governante), significando 'governante do lar' ou 'príncipe do lar'. Esse nome carrega consigo a ideia de liderança e autoridade doméstica, refletindo uma pessoa com responsabilidade e comando sobre seu ambiente. É uma forma diminutiva de Henry, amplamente utilizada em países de língua inglesa.", nacionalidade: "Germânica" },
+  
+  { nome: "Franklin", significado: "Franklin é um nome de origem anglo-saxã, derivado de 'frankeleyn', que significa 'homem livre' ou 'proprietário livre'. Esse nome carrega consigo a ideia de liberdade e independência, refletindo uma pessoa com espírito livre e autonomia. Foi utilizado na Idade Média para designar homens livres que possuíam terras, mas não pertenciam à nobreza.", nacionalidade: "Anglo-Saxã" },
+  
+  { nome: "Jackson", significado: "Jackson é um nome de origem inglesa, derivado de 'Jack', que é uma forma diminutiva de John, significando 'filho de Jack'. Esse nome carrega consigo a ideia de linhagem e descendência, refletindo uma pessoa com raízes familiares fortes. Tornou-se popular como sobrenome e, posteriormente, adotado como nome próprio.", nacionalidade: "Inglesa" },
+  
+  { nome: "Jefferson", significado: "Jefferson é um nome de origem inglesa, derivado de 'Jeffrey', que significa 'filho de Jeffrey'. Esse nome carrega consigo a ideia de herança e linhagem, refletindo uma pessoa com forte conexão familiar. Tornou-se popular como sobrenome e, posteriormente, adotado como nome próprio.", nacionalidade: "Inglesa" },
+  
+  { nome: "Marlon", significado: "Marlon é um nome de origem inglesa, possivelmente derivado do sobrenome 'Marlowe', que significa 'colina do lago'. Esse nome carrega consigo a ideia de natureza e serenidade, refletindo uma pessoa com espírito tranquilo e conexão com o ambiente natural. Tornou-se popular no século XX, em parte devido ao ator Marlon Brando.", nacionalidade: "Inglesa" },
+    { nome: "Ralph", significado: "Ralph é um nome masculino de origem nórdica antiga, derivado de 'Ráðúlfr', composto por 'ráð' (conselho) e 'úlfr' (lobo), significando 'lobo conselheiro'. Esse nome carrega consigo a ideia de sabedoria e liderança, refletindo uma pessoa com inteligência estratégica e capacidade de orientar os outros. É um nome que remonta à era medieval e tem uma sonoridade forte e imponente.", nacionalidade: "Nórdica" },
+  
+  { nome: "Wilson", significado: "Wilson é um nome de origem inglesa, formado pela junção de 'Will', diminutivo de William (que significa 'protetor corajoso'), e 'son' (filho), resultando em 'filho de William'. Esse nome carrega consigo a ideia de descendência e continuidade, refletindo uma pessoa que carrega o legado de um protetor corajoso. É um nome que transmite força e tradição.", nacionalidade: "Inglesa" },
+  
+  { nome: "Clarêncio", significado: "Clarêncio é um nome masculino de origem latina, derivado de 'Clarentius', que significa 'iluminado' ou 'brilhante'. Esse nome carrega consigo a ideia de luz e clareza, refletindo uma pessoa com espírito iluminado e visão clara. É um nome que transmite uma sensação de distinção e nobreza, associado à sabedoria e ao conhecimento.", nacionalidade: "Latina" },
+  
+  { nome: "Adson", significado: "Adson é um nome masculino de origem germânica, derivado de 'Adam', que significa 'homem' ou 'ser humano'. Esse nome carrega consigo a ideia de humanidade e simplicidade, refletindo uma pessoa com raízes profundas e conexão com a terra. É um nome que transmite uma sensação de autenticidade e naturalidade.", nacionalidade: "Germânica" },
+  
+  { nome: "Billy", significado: "Billy é um nome masculino de origem germânica, diminutivo de William, composto por 'wil' (vontade) e 'helm' (capacete, proteção), significando 'protetor corajoso'. Esse nome carrega consigo a ideia de força de vontade e proteção, refletindo uma pessoa com determinação e coragem. É um nome que transmite energia e dinamismo, sendo popular em países de língua inglesa.", nacionalidade: "Germânica" },
+  
+  { nome: "Martim", significado: "Martim é um nome masculino de origem latina, derivado de 'Martinus', que significa 'guerreiro' ou 'dedicado ao deus Marte'. Esse nome carrega consigo a ideia de força e coragem, refletindo uma pessoa com espírito combativo e determinação. É um nome que remonta à mitologia romana, associado ao deus da guerra, Marte.", nacionalidade: "Latina" },
+  
+  { nome: "Gonçalo", significado: "Gonçalo é um nome masculino de origem germânica, derivado de 'Gundisalvus', composto por 'gund' (guerra) e 'salv' (salvo), significando 'salvo na guerra'. Esse nome carrega consigo a ideia de proteção e coragem, refletindo uma pessoa que sobrevive aos desafios e adversidades. É um nome que transmite uma sensação de bravura e resistência.", nacionalidade: "Germânica" },
+  
+  { nome: "António", significado: "António é um nome masculino de origem latina, derivado de 'Antonius', que significa 'valioso' ou 'de valor inestimável'. Esse nome carrega consigo a ideia de importância e estima, refletindo uma pessoa com grande valor e dignidade. É um nome associado a figuras históricas e religiosas, transmitindo uma sensação de respeito e reverência.", nacionalidade: "Latina" },
+  
+  { nome: "Carlos", significado: "Carlos é um nome masculino de origem germânica, derivado de 'Karl', que significa 'homem livre' ou 'homem do povo'. Esse nome carrega consigo a ideia de liberdade e simplicidade, refletindo uma pessoa com espírito independente e acessível. É um nome que transmite uma sensação de autenticidade e conexão com as raízes populares.", nacionalidade: "Germânica" },
+  
+  { nome: "Paulo", significado: "Paulo é um nome masculino de origem latina, derivado de 'Paulus', que significa 'pequeno' ou 'humilde'. Esse nome carrega consigo a ideia de modéstia e simplicidade, refletindo uma pessoa com espírito humilde e generoso. É um nome associado a figuras religiosas e históricas, transmitindo uma sensação de piedade e devoção.", nacionalidade: "Latina" },
+  
+  { nome: "Daniel", significado: "Daniel é um nome masculino de origem hebraica, derivado de 'Daniyyel', que significa 'Deus é meu juiz'. Esse nome carrega consigo a ideia de justiça divina e retidão, refletindo uma pessoa com forte senso moral e espiritualidade. É um nome associado a figuras bíblicas, transmitindo uma sensação de sabedoria e fé.", nacionalidade: "Hebraica" },
+  
+  { nome: "Fábio", significado: "Fábio é um nome masculino de origem latina, derivado de 'Fabius', que significa 'homem da família Fábia'. Esse nome carrega consigo a ideia de pertencimento e tradição, refletindo uma pessoa com raízes familiares profundas. É um nome que transmite uma sensação de continuidade e respeito pelas origens.", nacionalidade: "Latina" },
+  
+  { nome: "Mário", significado: "Mário é um nome masculino de origem latina, derivado de 'Marius', que significa 'homem do mar' ou 'homem masculino'. Esse nome carrega consigo a ideia de força e virilidade, refletindo uma pessoa com espírito aventureiro e coragem. É um nome associado a figuras históricas e mitológicas, transmitindo uma sensação de poder e masculinidade.", nacionalidade: "Latina" },
+  { nome: "Gil", significado: "Gil é um nome masculino de origem portuguesa, derivado do latim 'Aegidius', que significa 'pequena cabra' ou 'protetor'. Esse nome carrega consigo a ideia de proteção e cuidado, refletindo uma pessoa com espírito protetor e generoso. É um nome associado a figuras religiosas e históricas, transmitindo uma sensação de devoção e zelo.", nacionalidade: "Portuguesa" },
+  
+  { nome: "Dinis", significado: "Dinis é uma variante portuguesa do nome Denis, que tem origem no grego 'Dionysios', significando 'consagrado a Dionísio' ou 'espírito das águas'. Esse nome carrega consigo a ideia de conexão com a natureza e a espiritualidade, refletindo uma pessoa com sensibilidade e profundidade emocional. É um nome associado a figuras históricas e culturais, transmitindo uma sensação de tradição e respeito.", nacionalidade: "Portuguesa" },
+  
+  { nome: "Ali", significado: "Ali é um nome masculino de origem árabe, derivado da palavra 'ʿalī', que significa 'elevado', 'sublime' ou 'nobre'. Esse nome carrega consigo a ideia de dignidade e honra, refletindo uma pessoa com caráter elevado e virtudes nobres. É um nome associado a figuras religiosas e históricas, transmitindo uma sensação de respeito e reverência.", nacionalidade: "Árabe" },
+  
+  { nome: "Khalid", significado: "Khalid é um nome masculino de origem árabe, derivado da palavra 'khālid', que significa 'eterno' ou 'imortal'. Esse nome carrega consigo a ideia de durabilidade e permanência, refletindo uma pessoa com legado duradouro e presença marcante. É um nome associado a figuras históricas e culturais, transmitindo uma sensação de força e resistência.", nacionalidade: "Árabe" },
+  
+  { nome: "Faruk", significado: "Faruk é um nome masculino de origem árabe, derivado da palavra 'faruq', que significa 'aquele que distingue o certo do errado'. Esse nome carrega consigo a ideia de discernimento e sabedoria, refletindo uma pessoa com capacidade de julgamento justo e moralidade. É um nome associado a qualidades de liderança e integridade.", nacionalidade: "Árabe" },
+  
+  { nome: "Ibrahim", significado: "Ibrahim é um nome masculino de origem árabe, variante de Abraão, que significa 'pai das nações' ou 'amigo de Deus'. Esse nome carrega consigo a ideia de paternidade espiritual e liderança, refletindo uma pessoa com sabedoria e coragem. É um nome associado a figuras religiosas e patriarcais, transmitindo uma sensação de autoridade e respeito.", nacionalidade: "Árabe" },
+  
+  { nome: "Adnan", significado: "Adnan é um nome masculino de origem árabe, que significa 'colono' ou 'habitante'. Esse nome carrega consigo a ideia de estabilidade e enraizamento, refletindo uma pessoa com conexão profunda à terra e à comunidade. É um nome associado a tradições e linhagens antigas, transmitindo uma sensação de pertencimento e continuidade.", nacionalidade: "Árabe" },
+  
+  { nome: "Rami", significado: "Rami é um nome masculino de origem árabe, derivado da palavra 'rāmī', que significa 'atirador' ou 'arqueiro'. Esse nome carrega consigo a ideia de precisão e habilidade, refletindo uma pessoa com destreza e foco. É um nome associado a qualidades de concentração e destreza física.", nacionalidade: "Árabe" },
+  
+  { nome: "Bilal", significado: "Bilal é um nome masculino de origem árabe, derivado da palavra 'bilāl', que significa 'água fresca' ou 'útil'. Esse nome carrega consigo a ideia de frescor e utilidade, refletindo uma pessoa com caráter refrescante e benéfico para os outros. É um nome associado a figuras históricas e religiosas, transmitindo uma sensação de pureza e serviço.", nacionalidade: "Árabe" },
+  
+  { nome: "Said", significado: "Said é um nome masculino de origem árabe, derivado da palavra 'saʿīd', que significa 'feliz' ou 'afortunado'. Esse nome carrega consigo a ideia de alegria e sorte, refletindo uma pessoa com espírito positivo e boa fortuna. É um nome associado a qualidades de felicidade e bem-estar.", nacionalidade: "Árabe" },
+  
+  { nome: "Jamal", significado: "Jamal é um nome masculino de origem árabe, derivado da palavra 'jamāl', que significa 'beleza' ou 'graça'. Esse nome carrega consigo a ideia de estética e harmonia, refletindo uma pessoa com aparência agradável e charme. É um nome associado a qualidades de atratividade e elegância.", nacionalidade: "Árabe" },
+  
+  { nome: "Karim", significado: "Karim é um nome masculino de origem árabe, derivado da palavra 'karīm', que significa 'generoso' ou 'nobre'. Esse nome carrega consigo a ideia de generosidade e nobreza, refletindo uma pessoa com coração aberto e espírito altruísta. É um nome associado a qualidades de bondade e magnanimidade.", nacionalidade: "Árabe" },
+  
+  { nome: "Zaki", significado: "Zaki é um nome masculino de origem árabe, derivado da palavra 'zākī', que significa 'puro' ou 'virtuoso'. Esse nome carrega consigo a ideia de pureza e moralidade, refletindo uma pessoa com caráter íntegro e comportamento exemplar. É um nome associado a qualidades de virtude e retidão.", nacionalidade: "Árabe" },
+  
+  { nome: "Salim", significado: "Salim é um nome masculino de origem árabe, derivado da palavra 'sālim', que significa 'seguro' ou 'íntegro'. Esse nome carrega consigo a ideia de segurança e integridade, refletindo uma pessoa com estabilidade e caráter sólido. É um nome associado a qualidades de proteção e confiabilidade.", nacionalidade: "Árabe" },
+  
+  { nome: "Rafiq", significado: "Rafiq é um nome masculino de origem árabe, derivado da palavra 'rafīq', que significa 'amigo' ou 'companheiro'. Esse nome carrega consigo a ideia de amizade e camaradagem, refletindo uma pessoa com espírito companheiro e lealdade. É um nome associado a qualidades de amizade e apoio.", nacionalidade: "Árabe" },
+  
+  { nome: "Hadi", significado: "Hadi é um nome masculino de origem árabe, derivado da palavra 'hādī', que significa 'guiador' ou 'líder'. Esse nome carrega consigo a ideia de liderança e orientação, refletindo uma pessoa com capacidade de conduzir os outros e sabedoria. É um nome associado a qualidades de liderança e direção.", nacionalidade: "Árabe" },
+  
+  { nome: "Fadil", significado: "Fadil é um nome masculino de origem árabe, derivado da palavra 'fāḍil', que significa 'generoso' ou 'virtuoso'. Esse nome carrega consigo a ideia de generosidade e virtude, refletindo uma pessoa com espírito altruísta e comportamento exemplar. É um nome associado a qualidades de bondade e moralidade.", nacionalidade: "Árabe" },
+  { nome: "Jabir", significado: "Jabir é um nome masculino de origem árabe, derivado da palavra 'jabr', que significa 'consolador' ou 'aquele que restaura'. Esse nome carrega consigo a ideia de alguém que traz alívio e cura, sendo associado a pessoas que oferecem apoio e conforto aos outros. É um nome com forte conotação de empatia e solidariedade.", nacionalidade: "Árabe" },
+  
+  { nome: "Mansur", significado: "Mansur é um nome masculino de origem árabe, derivado da palavra 'naṣr', que significa 'vitória' ou 'ajuda'. Esse nome carrega consigo a ideia de alguém que é apoiado por Deus e alcança o triunfo. É um nome associado a pessoas que superam desafios com coragem e determinação.", nacionalidade: "Árabe" },
+  
+  { nome: "Sami", significado: "Sami é um nome masculino de origem árabe, derivado da palavra 'sāmī', que significa 'elevado' ou 'sublime'. Esse nome carrega consigo a ideia de alguém que possui dignidade e honra, sendo associado a pessoas de caráter nobre e respeitado na comunidade.", nacionalidade: "Árabe" },
+  
+  { nome: "Yassin", significado: "Yassin é um nome masculino de origem árabe, derivado das letras 'ya' e 'seen', que aparecem no início da 36ª surata do Alcorão. Esse nome carrega consigo a ideia de uma mensagem divina, sendo associado a pessoas de fé profunda e comprometidas com os ensinamentos islâmicos.", nacionalidade: "Árabe" },
+  
+  { nome: "Ziyad", significado: "Ziyad é um nome masculino de origem árabe, derivado da palavra 'ziyādah', que significa 'crescimento' ou 'abundância'. Esse nome carrega consigo a ideia de prosperidade e desenvolvimento, sendo associado a pessoas que buscam sempre melhorar e alcançar o sucesso em suas vidas.", nacionalidade: "Árabe" },
+  
+  { nome: "Waleed", significado: "Waleed é um nome masculino de origem árabe, derivado da palavra 'walada', que significa 'novo nascimento' ou 'recém-nascido'. Esse nome carrega consigo a ideia de um novo começo e renovação, sendo associado a pessoas com espírito jovem e cheio de energia.", nacionalidade: "Árabe" },
+  
+  { nome: "Riad", significado: "Riad é um nome masculino de origem árabe, derivado da palavra 'riyāḍ', que significa 'jardins' ou 'meadows'. Esse nome carrega consigo a ideia de beleza natural e tranquilidade, sendo associado a pessoas que apreciam a paz e a harmonia com a natureza.", nacionalidade: "Árabe" },
+  
+  { nome: "Tamer", significado: "Tamer é um nome masculino de origem árabe, derivado da palavra 'tamar', que significa 'dátilo'. Esse nome carrega consigo a ideia de doçura e generosidade, sendo associado a pessoas que são generosas e compartilham suas bênçãos com os outros.", nacionalidade: "Árabe" },
+  
+  { nome: "Bashir", significado: "Bashir é um nome masculino de origem árabe, derivado da palavra 'bashīr', que significa 'portador de boas notícias'. Esse nome carrega consigo a ideia de alguém que traz alegria e esperança, sendo associado a pessoas que espalham positividade e otimismo.", nacionalidade: "Árabe" },
+  
+  { nome: "Zain", significado: "Zain é um nome masculino de origem árabe, derivado da palavra 'zayn', que significa 'beleza' ou 'graça'. Esse nome carrega consigo a ideia de atratividade e charme, sendo associado a pessoas que possuem uma presença encantadora e cativante.", nacionalidade: "Árabe" },
+  
+  { nome: "Harun", significado: "Harun é um nome masculino de origem árabe, derivado da palavra 'hārūn', que significa 'montanha'. Esse nome carrega consigo a ideia de força e estabilidade, sendo associado a pessoas que são pilares de apoio e confiança para os outros.", nacionalidade: "Árabe" },
+  
+  { nome: "Maher", significado: "Maher é um nome masculino de origem árabe, derivado da palavra 'māhir', que significa 'hábil' ou 'competente'. Esse nome carrega consigo a ideia de destreza e habilidade, sendo associado a pessoas que são especialistas em suas áreas e realizam suas tarefas com excelência.", nacionalidade: "Árabe" },
+  
+  { nome: "Amin", significado: "Amin é um nome masculino de origem árabe, derivado da palavra 'ʾamīn', que significa 'fiel' ou 'confiável'. Esse nome carrega consigo a ideia de lealdade e honestidade, sendo associado a pessoas que são dignas de confiança e mantêm sua palavra.", nacionalidade: "Árabe" },
+  {
+    nome: "Salah",
+    significado: "O nome Salah tem origem árabe e carrega significados profundos relacionados à retidão e à moralidade. Derivado da palavra árabe 'ṣalāḥ' (صلاح), significa 'justiça', 'bondade' ou 'retidão'. No contexto islâmico, 'ṣalāḥ' também se refere à oração ritualística diária, um dos pilares fundamentais da fé muçulmana. Portanto, o nome Salah simboliza alguém que busca viver de acordo com princípios éticos elevados e que está comprometido com práticas espirituais devotas.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Zuhair",
+    significado: "Zuhair é um nome masculino de origem árabe, derivado da palavra 'zuhayr', que significa 'brilhante', 'radiante' ou 'luminoso'. Este nome carrega consigo a ideia de alguém que irradia luz e energia positiva, sendo associado a pessoas que se destacam por sua inteligência, charme e presença marcante. É um nome que transmite a imagem de uma pessoa que ilumina o ambiente ao seu redor com sua personalidade cativante.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "James",
+    significado: "James é um nome masculino de origem inglesa, derivado do nome hebraico 'Ya'aqov' (יעקב), que significa 'aquele que vem do calcanhar' ou 'suplantador'. Este nome tem raízes bíblicas, sendo associado a Jacó, filho de Isaac e Rebeca, que nasceu segurando o calcanhar de seu irmão gêmeo Esaú. James é uma forma anglicizada do nome Jaime, que por sua vez é uma variante de Jacó. Ao longo da história, James foi um nome popular entre a monarquia inglesa, sendo adotado por vários reis da Escócia e da Inglaterra.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Michael",
+    significado: "Michael é um nome masculino de origem hebraica, derivado da pergunta 'Mi ka'el?' (מי כאל?), que significa 'Quem é como Deus?'. Este nome é associado ao arcanjo Miguel, uma figura importante nas tradições judaica, cristã e islâmica, conhecido por sua força e papel como defensor da justiça. Michael é um nome que carrega consigo a ideia de alguém que busca viver de acordo com princípios divinos e que possui uma natureza protetora e justa.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Elijah",
+    significado: "Elijah é um nome masculino de origem hebraica, derivado de 'Eliyahu' (אֵלִיָּהוּ), que significa 'Meu Deus é Jeová' ou 'Meu Deus é o Senhor'. Este nome é associado ao profeta Elias, uma figura importante no Antigo Testamento, conhecido por sua coragem e fidelidade a Deus. Elijah é um nome que carrega consigo a ideia de alguém que possui uma forte conexão espiritual e que está comprometido com a verdade e a justiça.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Matthew",
+    significado: "Matthew é um nome masculino de origem hebraica, derivado de 'Matityahu' (מַתִּתְיָהוּ), que significa 'Dom de Deus'. Este nome é associado ao apóstolo Mateus, um dos doze discípulos de Jesus e autor do primeiro Evangelho no Novo Testamento. Matthew é um nome que carrega consigo a ideia de alguém que é grato pelas bênçãos recebidas e que busca viver de acordo com os ensinamentos divinos.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Andrew",
+    significado: "Andrew é um nome masculino de origem grega, derivado de 'Andreas' (Ανδρέας), que significa 'masculino', 'viril' ou 'corajoso'. Este nome é associado ao apóstolo André, irmão de Pedro, que foi um dos primeiros discípulos de Jesus. Andrew é um nome que carrega consigo a ideia de alguém que possui força interior, coragem e determinação para enfrentar desafios.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Chase",
+    significado: "Chase é um nome masculino de origem inglesa, derivado do verbo 'chase', que significa 'caçar' ou 'perseguir'. Este nome carrega consigo a ideia de alguém que é ativo, determinado e que busca alcançar seus objetivos com energia e entusiasmo. Chase é um nome que transmite a imagem de uma pessoa que está sempre em movimento, buscando novas aventuras e desafios.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Jason",
+    significado: "Jason é um nome masculino de origem grega, derivado de 'Iason' (Ἰάσων), que significa 'curandeiro' ou 'aquele que cura'. Este nome é associado ao herói mitológico Jasão, líder dos Argonautas na busca pelo Velocino de Ouro. Jason é um nome que carrega consigo a ideia de alguém que possui habilidades de cura, tanto no sentido físico quanto emocional, e que busca ajudar os outros.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Aaron",
+    significado: "Aaron é um nome masculino de origem hebraica, derivado de 'Aharon' (אַהֲרוֹן), cujo significado é incerto, mas pode ser interpretado como 'exaltado', 'ilustre' ou 'montanha de força'. Este nome é associado ao irmão de Moisés, que desempenhou um papel importante na liderança do povo de Israel. Aaron é um nome que carrega consigo a ideia de alguém que possui dignidade, respeito e uma posição de liderança.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Kyle",
+    significado: "Kyle é um nome masculino de origem escocesa, derivado da palavra gaélica 'caol', que significa 'estreito' ou 'canal'. Este nome é associado a lugares estreitos ou passagens de água, como estreitos entre ilhas. Kyle é um nome que carrega consigo a ideia de alguém que é direto, focado e que segue um caminho claro em sua vida.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Cole",
+    significado: "Cole é um nome masculino de origem inglesa, derivado do sobrenome medieval 'Colle', que significa 'vitorioso' ou 'poderoso'. Este nome é associado a pessoas que possuem força e determinação para alcançar o sucesso. Cole é um nome que carrega consigo a ideia de alguém que é resiliente, ambicioso e que busca sempre vencer os desafios que encontra.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Blake",
+    significado: "Blake é um nome masculino de origem inglesa, derivado do sobrenome medieval 'Blake', que significa 'escuro' ou 'moreno'. Este nome é associado a pessoas com cabelos escuros ou pele morena. Blake é um nome que carrega consigo a ideia de alguém que possui uma presença marcante e que se destaca por sua aparência e personalidade.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Connor",
+    significado: "O nome Connor tem origem no gaélico irlandês, derivado de 'Conchobhar', que significa 'justiça', 'mestre de cães' ou 'amante de lobos'. Esse nome remonta à figura do rei irlandês semi-lendário Conchobar mac Nessa, descrito no Ciclo de Ulster da mitologia irlandesa. A forma anglicizada 'Connor' foi provavelmente adotada pelos normandos hibernos.",
+    nacionalidade: "Irlandesa"
+  },
+  {
+    nome: "Dylan",
+    significado: "Dylan é um nome de origem galesa, significando 'grande maré' ou 'fluxo'. Tradicionalmente masculino, o nome ganhou popularidade também entre meninas nos últimos anos. Na mitologia galesa, Dylan é associado ao deus do mar, filho de Arianrhod, e é conhecido por sua habilidade de nadar como um peixe.",
+    nacionalidade: "Galesa"
+  },
+  {
+    nome: "Eric",
+    significado: "Eric é um nome masculino de origem nórdica antiga, derivado de 'Eiríkr', composto por 'ei' (sempre) e 'ríkr' (governante), significando 'governante eterno' ou 'governante único'. Esse nome carrega consigo a ideia de liderança e poder duradouro, sendo associado a figuras históricas e mitológicas da Escandinávia.",
+    nacionalidade: "Escandinava"
+  },
+  {
+    nome: "John",
+    significado: "John é um nome masculino de origem hebraica, derivado de 'Yohanan', que significa 'Deus é gracioso'. Esse nome é amplamente utilizado em várias culturas e idiomas, sendo associado a figuras bíblicas como João Batista e o apóstolo João. Sua popularidade se mantém ao longo dos séculos, simbolizando humildade e devoção.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Joshua",
+    significado: "Joshua é um nome masculino de origem hebraica, derivado de 'Yehoshua', que significa 'YHWH é salvação'. Esse nome é associado ao líder israelita que sucedeu Moisés e conduziu os israelitas à Terra Prometida. Carrega consigo a ideia de liderança, fé e confiança em Deus.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Justin",
+    significado: "Justin é um nome masculino de origem latina, derivado de 'Iustinus', que significa 'justo', 'honesto' ou 'virtuoso'. Esse nome é associado a figuras históricas como o imperador bizantino Justiniano e o filósofo cristão Justino Mártir. Representa retidão moral e integridade.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Kalel",
+    significado: "Kalel é um nome masculino de origem americana, criado como o nome de nascimento do Superman, Kal-El, no universo dos quadrinhos da DC Comics. Embora não tenha raízes históricas profundas, o nome é associado à ideia de 'voz de Deus', inspirado na língua kryptoniana fictícia. Representa força, heroísmo e conexão com o divino.",
+    nacionalidade: "Americana"
+  },
+  {
+    nome: "Kevin",
+    significado: "Kevin é um nome masculino de origem irlandesa, derivado de 'Caoimhín', composto por 'caomh' (querido, amado) e 'gein' (nascimento), significando 'nascimento amado' ou 'querido nascimento'. Esse nome foi popularizado por São Kevin, fundador de um mosteiro em Glendalough, na Irlanda, e é associado a qualidades de bondade e espiritualidade.",
+    nacionalidade: "Irlandesa"
+  },
+  {
+    nome: "Larry",
+    significado: "Larry é uma forma diminutiva de 'Lawrence', que tem origem no latim 'Laurentius', significando 'natural de Laurento' ou 'coroado de louros'. O nome está associado à vitória e honra, simbolizando alguém digno de reconhecimento e respeito.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Logan",
+    significado: "Logan é um nome masculino de origem escocesa, derivado do gaélico 'lagan', que significa 'pequeno lugar redondo' ou 'pequeno vale'. Esse nome está associado a características de força e resiliência, evocando imagens de paisagens naturais e tranquilas.",
+    nacionalidade: "Escocesa"
+  },
+  {
+    nome: "Malcolm",
+    significado: "Malcolm é um nome masculino de origem escocesa, derivado do gaélico 'Maolmhuire', que significa 'discípulo de São Columba'. São Columba foi um monge irlandês que fundou o mosteiro de Iona na Escócia. O nome carrega consigo a ideia de devoção religiosa e liderança espiritual.",
+    nacionalidade: "Escocesa"
+  },
+  {
+    nome: "Nicholas",
+    significado: "Nicholas é um nome masculino de origem grega, derivado de 'Nikolaos', composto por 'nike' (vitória) e 'laos' (povo), significando 'vencedor do povo'. Esse nome é associado a São Nicolau, bispo de Mira, conhecido por sua generosidade e bondade, e é a base para o nome 'Papai Noel'.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Ronald",
+    significado: "Ronald é um nome masculino de origem escocesa, derivado de 'Rǫgnvaldr', composto por 'rǫgn' (conselho) e 'valdr' (governante), significando 'governante conselheiro'. Esse nome é associado a qualidades de liderança sábia e tomada de decisões ponderadas.",
+    nacionalidade: "Escocesa"
+  },
+  {
+    nome: "Russell",
+    significado: "O nome Russell tem origem no francês normando, derivado de 'rous' ou 'roux', que significa 'vermelho' ou 'ruivo'. Originalmente um sobrenome, Russell passou a ser utilizado como nome próprio, associado a características como vitalidade e energia. É um nome que evoca imagens de pessoas com cabelos ruivos ou de temperamento ardente.",
+    nacionalidade: "Francesa"
+  },
+  {
+    nome: "Ryan",
+    significado: "Ryan é um nome masculino de origem irlandesa, derivado do sobrenome 'Ó Riain', que significa 'descendente de Ryan'. A palavra 'rí' significa 'rei', e o sufixo diminutivo '-án' indica 'pequeno', portanto, 'pequeno rei'. Em árabe, 'Rayyan' significa 'portas do paraíso', e em persa, 'Rayan' significa 'sabedoria'.",
+    nacionalidade: "Irlandesa"
+  },
+  {
+    nome: "Mason",
+    significado: "Mason é um nome masculino de origem inglesa, derivado do francês antigo 'maçon', que significa 'pedreiro' ou 'construtor'. Durante a Idade Média, o ofício de pedreiro era altamente respeitado, e muitas famílias adotaram o nome como sobrenome devido à ocupação de seus ancestrais.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Truce",
+    significado: "Truce é um nome masculino de origem inglesa, derivado da palavra 'truce', que significa 'trégua' ou 'cessação temporária de hostilidades'. Esse nome carrega consigo a ideia de paz e reconciliação, sendo associado a qualidades de diplomacia e resolução de conflitos.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Colsen",
+    significado: "Colsen é um nome masculino de origem inglesa, possivelmente uma variação de 'Colson', que significa 'filho de Cole'. O nome 'Cole' tem origem no inglês antigo 'col', que significa 'carvão' ou 'negro', podendo ser associado a características de força e resiliência.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Bryer",
+    significado: "Bryer é um nome masculino de origem inglesa, derivado da palavra 'briar', que significa 'arbusto espinhoso'. Esse nome carrega consigo a ideia de alguém que é resistente e capaz de enfrentar adversidades, sendo associado a qualidades de perseverança e força.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Halo",
+    significado: "Halo é um nome masculino de origem inglesa, derivado da palavra 'halo', que significa 'círculo de luz' ou 'auréola'. Esse nome tem uma forte ligação com a luz e a espiritualidade, sendo associado a figuras divinas e celestiais em diversas culturas.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Azaiah",
+    significado: "Azaiah é um nome masculino de origem hebraica, derivado de 'Azaryah', que significa 'Deus ajudou' ou 'Deus é a minha força'. Esse nome carrega consigo a ideia de alguém que é fortalecido pela fé e que confia na ajuda divina em momentos de necessidade.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Azai",
+    significado: "Azai é uma variação do nome Azaiah, com o mesmo significado de 'Deus ajudou' ou 'Deus é a minha força'. Esse nome é utilizado principalmente na cultura judaica e carrega consigo a ideia de proteção e amparo divino.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Eliam",
+    significado: "Eliam é um nome masculino de origem hebraica, derivado de 'Eliyyahu', que significa 'meu Deus é El'. 'El' é uma palavra semítica que significa 'Deus', e 'Eli' significa 'meu'. Esse nome carrega consigo a ideia de alguém que possui uma forte conexão espiritual e que confia plenamente em Deus.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Kolter",
+    significado: "Kolter é um nome masculino de origem alemã, derivado de 'Kolt', que significa 'vencedor do povo'. Esse nome carrega consigo a ideia de liderança e sucesso, sendo associado a qualidades de coragem e determinação.",
+    nacionalidade: "Alemã"
+  },
+  {
+    nome: "Eliel",
+    significado: "Eliel é um nome masculino de origem hebraica, derivado de 'Eliyyahu', que significa 'meu Deus é El'. 'El' é uma palavra semítica que significa 'Deus', e 'Eli' significa 'meu'. Esse nome carrega consigo a ideia de alguém que possui uma forte conexão espiritual e que confia plenamente em Deus.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Zymir",
+    significado: "O nome Zymir é uma variante moderna do nome árabe 'Zamir', que significa 'coração', 'mente' ou 'consciência'. Também é associado ao significado de 'pássaro' ou 'boa voz', derivado do hebraico e do albanês. É um nome que carrega consigo a ideia de sensibilidade e expressão artística.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Rocky",
+    significado: "Rocky é um nome masculino de origem italiana e alemã, derivado de 'Rocco', que significa 'descanso' ou 'paz'. Também pode ter raízes no alto alemão antigo 'roch', significando 'corvo'. O nome evoca imagens de força e resiliência, sendo associado a figuras como o boxeador fictício Rocky Balboa.",
+    nacionalidade: "Italiana"
+  },
+  {
+    nome: "Evren",
+    significado: "Evren é um nome de origem turca que significa 'universo' ou 'cosmos'. Na mitologia turca, Evren é uma criatura semelhante a um dragão, simbolizando poder e mistério. O nome carrega consigo a ideia de vastidão e infinitude.",
+    nacionalidade: "Turca"
+  },
+  {
+    nome: "Kace",
+    significado: "Kace é uma variante moderna do nome irlandês 'Casey', que significa 'vigilante' ou 'atento'. O nome carrega consigo a ideia de alguém que está sempre alerta e pronto para agir.",
+    nacionalidade: "Irlandesa"
+  },
+  {
+    nome: "Kyaire",
+    significado: "Kyaire é um nome moderno que combina influências latinas e africanas. De origem latina, significa 'respeitado', enquanto em algumas culturas africanas, pode significar 'força de Deus'. O nome carrega consigo a ideia de dignidade e poder espiritual.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Beckham",
+    significado: "Beckham é um nome de origem inglesa, derivado de um sobrenome que significa 'homestead by the stream' ou 'homestead near the beech tree'. O nome ganhou popularidade como primeiro nome, especialmente após a fama do jogador de futebol David Beckham.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Cal",
+    significado: "Cal é uma forma curta do nome Caleb, que tem origem hebraica e significa 'fiel', 'inteiro' ou 'corajoso'. O nome carrega consigo a ideia de lealdade e bravura.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Tate",
+    significado: "Tate é um nome de origem inglesa que significa 'alegre' ou 'cheerful'. É um nome curto e sonoro, associado a uma personalidade otimista e positiva.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Hollis",
+    significado: "Hollis é um nome de origem inglesa que significa 'membro da família'. O nome carrega consigo a ideia de pertencimento e conexão familiar.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Teddy",
+    significado: "Teddy é uma forma diminutiva de Theodore, que tem origem grega e significa 'dom de Deus'. O nome carrega consigo a ideia de generosidade e bênção divina.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Boden",
+    significado: "Boden é um nome de origem inglesa que significa 'morador de uma casa'. O nome carrega consigo a ideia de estabilidade e enraizamento.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Casey",
+    significado: "Casey é um nome de origem irlandesa que significa 'vigilante' ou 'atento'. O nome carrega consigo a ideia de alguém que está sempre alerta e pronto para agir.",
+    nacionalidade: "Irlandesa"
+  },
+  {
+    nome: "Crew",
+    significado: "Crew é um nome de origem inglesa que significa 'tripulação'. O nome carrega consigo a ideia de trabalho em equipe e colaboração.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Maverick",
+    significado: "Maverick é um nome de origem inglesa que significa 'independente'. O nome carrega consigo a ideia de alguém que segue seu próprio caminho e não se conforma com as normas estabelecidas.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Miles",
+    significado: "O nome Miles possui origens diversas, incluindo o latim, onde 'miles' significa 'soldado'. Também é associado ao nome germânico Milo, que pode significar 'gracioso' ou 'querido'. Além disso, em algumas tradições, Miles é considerado uma variante de Michael, significando 'quem é como Deus?'.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Lincoln",
+    significado: "Lincoln é um nome de origem inglesa derivado do nome da cidade de Lincoln, na Inglaterra. O nome é composto pelas palavras britônicas 'lindo', que significa 'lago', e o latim 'colonia', significando 'colônia'. Portanto, o nome Lincoln pode ser interpretado como 'colônia do lago' ou 'cidade do lago'.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Colton",
+    significado: "Colton é um nome de origem inglesa que significa 'cidade do carvão' ou 'cidade escura'. Derivado de um sobrenome habitacional, o nome é composto pelas palavras 'col' (carvão) e 'tun' (cidade ou assentamento), indicando uma localidade associada à mineração de carvão.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Hudson",
+    significado: "Hudson é um nome de origem inglesa que significa 'filho de Hudd'. Hudd é uma forma diminutiva de nomes como Hugh ou Richard. O nome ganhou notoriedade através do explorador inglês Henry Hudson, conhecido por suas expedições no século XVII.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Atticus",
+    significado: "Atticus é um nome de origem grega que significa 'homem de Attica', referindo-se à região ao redor de Atenas, na Grécia. O nome ganhou popularidade devido ao personagem Atticus Finch, advogado do romance 'O Sol é Para Todos' de Harper Lee.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "River",
+    significado: "River é um nome de origem inglesa que significa 'rio'. Derivado da palavra inglesa 'river', o nome evoca imagens de fluidez, natureza e serenidade. Tornou-se popular como nome próprio no final do século XX.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Sawyer",
+    significado: "Sawyer é um nome de origem inglesa que significa 'lenhador'. Originalmente um sobrenome ocupacional, referia-se a alguém que cortava madeira com serra. O nome ganhou popularidade como nome próprio no século XIX.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Rory",
+    significado: "Rory é um nome de origem irlandesa que significa 'guerreiro famoso'. Derivado do nome gaélico 'Ruaidhrí', composto por 'ruadh' (vermelho) e 'rí' (rei), o nome é associado a líderes históricos da Irlanda.",
+    nacionalidade: "Irlandesa"
+  },
+  {
+    nome: "Alexander",
+    significado: "Alexander é um nome de origem grega que significa 'defensor da humanidade'. Derivado do grego 'Alexandros', composto por 'alexein' (defender) e 'aner' (homem), o nome é associado a figuras históricas como Alexandre, o Grande.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Alfredo",
+    significado: "Alfredo é um nome de origem germânica que significa 'conselheiro dos elfos'. Derivado do antigo inglês 'Ælfræd', composto por 'ælf' (elfo) e 'ræd' (conselho), o nome evoca sabedoria e liderança.",
+    nacionalidade: "Germânica"
+  },
+  {
+    nome: "Godofredo",
+    significado: "Godofredo é um nome de origem germânica que significa 'paz de Deus'. Derivado do antigo alto alemão 'Gottfried', composto por 'got' (Deus) e 'frid' (paz), o nome é associado a nobres cavaleiros medievais.",
+    nacionalidade: "Germânica"
+  },
+  {
+    nome: "Jairo",
+    significado: "O nome Jairo tem origem no hebraico 'Yair', que significa 'ele ilumina' ou 'aquele que Deus desperta'. É uma variante grega do nome Jair, presente na Bíblia como um dos juízes de Israel. O nome carrega consigo a ideia de luz e orientação divina.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Adalberto",
+    significado: "Adalberto é um nome de origem germânica composto pelos elementos 'adal', que significa 'nobre', e 'berth', que significa 'brilhante' ou 'ilustre'. Assim, o nome pode ser interpretado como 'nobre brilhante' ou 'ilustre por sua nobreza'. É também o nome de um santo conhecido como Santo Adalberto de Praga, padroeiro da Boêmia, Polônia, Hungria e Prússia.",
+    nacionalidade: "Germânica"
+  },
+  {
+    nome: "Bolívar",
+    significado: "Bolívar é um nome de origem espanhola que significa 'moinho à beira do riacho'. Indica uma pessoa que trabalha com afinco e geralmente consegue transformar em pó os obstáculos ao seu progresso. Tem êxito sobretudo em atividades direta ou indiretamente ligadas à agricultura, à diplomacia e à comunicação.",
+    nacionalidade: "Espanhola"
+  },
+  {
+    nome: "Ronaldo",
+    significado: "Ronaldo tem origem no nome escocês Ronald, derivado do nórdico 'Rögnvaldr', composto por 'regin' (conselho) e 'valdr' (governante), significando 'governante aconselhado' ou 'aquele que governa por meio de conselhos'. É um nome forte, elegante e muito imponente.",
+    nacionalidade: "Germânica"
+  },
+  {
+    nome: "Neymar",
+    significado: "Neymar é um nome moderno, possivelmente derivado do francês 'Ney' (do sobrenome do jogador de futebol francês Raymond Kopa) e 'Mar' (do nome do jogador de futebol brasileiro Neymar da Silva Santos Júnior). Não possui um significado tradicionalmente atribuído, mas é associado à fama e sucesso no futebol.",
+    nacionalidade: "Brasileira"
+  },
+  {
+    nome: "Rodinei",
+    significado: "Rodinei é um nome de origem germânica que significa 'famoso guerreiro'. Derivado de 'hrod' (fama) e 'ni' (guerreiro), o nome carrega consigo a ideia de um guerreiro renomado e respeitado.",
+    nacionalidade: "Germânica"
+  },
+  {
+    nome: "Sidinei",
+    significado: "Sidinei é uma variação do nome Sídnei, que tem origem em um sobrenome inglês. O nome é formado por dois elementos anglo-saxônicos: 'Sid', que significa 'largo', e 'eg', que quer dizer 'ilha'. Assim, o nome pode ser interpretado como 'morador da ilha ampla'.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Olivan",
+    significado: "Olivan é um nome de origem latina que significa 'oliveira'. Derivado do latim 'oliva', que por sua vez vem do grego 'elaia', o nome carrega consigo a simbologia da paz, sabedoria e prosperidade associadas à oliveira.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Caique",
+    significado: "Caique é um nome de origem tupi-guarani que significa 'pássaro de rapina'. Derivado do termo 'kái', que significa 'gavião', o nome está associado à força e agilidade dessa ave.",
+    nacionalidade: "Tupi-Guarani"
+  },
+  {
+    nome: "Junior",
+    significado: "Junior é um nome de origem latina que significa 'jovem' ou 'filho mais novo'. Derivado do latim 'junior', que é o comparativo de 'iuvenis' (jovem), o nome é comumente utilizado para indicar que a pessoa é o filho mais novo com o mesmo nome do pai.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Djalma",
+    significado: "Djalma é um nome de origem árabe que significa 'aquele que é generoso'. Derivado do árabe 'jalil', que significa 'grande' ou 'nobre', o nome carrega consigo a ideia de uma pessoa de grande coração e generosidade.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Mustafá",
+    significado: "Mustafá é um nome de origem árabe que significa 'o escolhido'. Derivado do árabe 'mustafa', que significa 'o escolhido', o nome é associado à honra e distinção.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Rodilson",
+    significado: "Rodilson é um nome composto que combina 'Rodolfo' e 'Nilson'. 'Rodolfo' tem origem germânica, derivado de 'hrod' (fama) e 'wulf' (lobo), significando 'lobo famoso'. 'Nilson' é uma variação de 'Nelson', que significa 'filho de Neil' ou 'campeão'. Portanto, Rodilson pode ser interpretado como 'lobo famoso, filho do campeão'.",
+    nacionalidade: "Brasileira"
+  },
+  {
+    nome: "Edvan",
+    significado: "Edvan é um nome de origem incerta, mas pode ter raízes em diferentes culturas e idiomas. Seu significado geralmente está associado a características positivas e desejáveis. Embora não haja uma história específica ligada ao nome Edvan, podemos explorar possíveis interpretações com base na etimologia e nas tradições linguísticas.",
+    nacionalidade: "Brasileira"
+  },
+  {
+    nome: "Munir",
+    significado: "Munir é um nome de origem árabe que significa 'brilhante', 'reluzente' ou 'iluminado'. Derivado do árabe 'munir', o nome carrega consigo a ideia de luz e clareza. Suas variantes incluem 'Münir' e 'Munira' (feminino).",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Ed",
+    significado: "Ed é uma forma curta de nomes como 'Edward' ou 'Edwin', de origem anglo-saxônica. 'Edward' é composto por 'ead' (riqueza, prosperidade) e 'weard' (guarda, protetor), significando 'protetor próspero'. 'Edwin' deriva de 'ead' (riqueza) e 'wine' (amigo), significando 'amigo rico'.",
+    nacionalidade: "Anglo-saxônica"
+  },
+  {
+    nome: "Edmundo",
+    significado: "Edmundo é um nome de origem germânica, derivado de 'Eadmund', composto por 'ead' (riqueza, prosperidade) e 'mund' (proteção), significando 'protetor das riquezas' ou 'protetor rico'.",
+    nacionalidade: "Anglo-saxônica"
+  },
+  {
+    nome: "Matusalém",
+    significado: "Matusalém é um nome de origem hebraica, derivado de 'Metushalach', que significa 'homem do dardo' ou 'homem da lança'. Matusalém é conhecido na Bíblia como o homem mais longevo, vivendo 969 anos.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Ageu",
+    significado: "Ageu é um nome de origem hebraica, derivado de 'Haggay', que significa 'nascido em um dia festivo' ou 'alegria'. Ageu foi um dos profetas menores do Antigo Testamento, ativo durante o período pós-exílio babilônico.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Amós",
+    significado: "Amós é um nome de origem hebraica, derivado de 'Amas', que significa 'aquele que carrega' ou 'carregado'. Amós foi um profeta menor do Antigo Testamento, conhecido por suas mensagens de justiça social.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Sofonias",
+    significado: "Sofonias é um nome de origem hebraica, derivado de 'Tsaphon', que significa 'esconder' ou 'ocultar'. Sofonias foi um profeta menor do Antigo Testamento, ativo durante o reinado do rei Josias.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Jaconias",
+    significado: "Jaconias é uma variante de 'Jeconias', nome de origem hebraica que significa 'Deus estabelece'. Jeconias foi um rei de Judá mencionado na Bíblia.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Arão",
+    significado: "Arão é um nome de origem hebraica, derivado de 'Aharon', que significa 'montanha de força' ou 'fortaleza'. Arão foi o irmão de Moisés e o primeiro sumo sacerdote de Israel.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Edjairo",
+    significado: "Edjairo é um nome composto que combina 'Edson' e 'Jairo'. 'Edson' tem origem inglesa e significa 'filho de Edward', enquanto 'Jairo' é de origem hebraica e significa 'ele ilumina'.",
+    nacionalidade: "Brasileira"
+  },
+  {
+    nome: "Edinaldo",
+    significado: "Edinaldo é um nome composto que combina 'Edson' e 'Naldo'. 'Edson' tem origem inglesa e significa 'filho de Edward', enquanto 'Naldo' é uma forma curta de 'Arnoldo', que significa 'governante águia'.",
+    nacionalidade: "Brasileira"
+  },
+  {
+    nome: "Melquisedeque",
+    significado: "Melquisedeque é um nome de origem hebraica, derivado de 'Malki-Tzedek', composto por 'Malki' (meu rei) e 'Tzedek' (justiça), significando 'Rei de Justiça'. Ele é uma figura bíblica mencionada em Gênesis 14:18–20, descrito como rei de Salém e sacerdote do Deus Altíssimo. Sua história é breve, mas significativa, representando um exemplo de retidão e liderança espiritual.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Vasques",
+    significado: "Vasques é um sobrenome de origem espanhola, derivado do nome próprio Vasco, que tem raízes bascas. O nome Vasco é associado ao étimo basco 'basa', que significa 'lugar de vegetação viscosa', posteriormente sinônimo de campo ou região. Portanto, Vasques pode ser interpretado como 'filho de Vasco' ou 'proveniente do lugar de vegetação viscosa'.",
+    nacionalidade: "Espanhola"
+  },
+  {
+    nome: "Edivaldo",
+    significado: "Edivaldo é um nome composto que combina 'Edson' e 'Valdo'. 'Edson' tem origem inglesa e significa 'filho de Edward', enquanto 'Valdo' é uma forma curta de 'Valdemar', que significa 'governante famoso'. Assim, Edivaldo pode ser interpretado como 'filho do governante famoso'.",
+    nacionalidade: "Brasileira"
+  },
+  {
+    nome: "Olavo",
+    significado: "Olavo tem origem no escandinavo, derivando do nome Olaf, que significa 'herança dos ancestrais' ou 'descendente dos ancestrais'. Este nome é bastante popular em países nórdicos e, ao longo dos séculos, foi adotado em diversas culturas, incluindo a brasileira. A escolha do nome Olavo carrega consigo uma forte conexão com a história e a tradição, refletindo valores familiares e culturais que se perpetuam através das gerações.",
+    nacionalidade: "Escandinava"
+  },
+  {
+    nome: "Ren",
+    significado: "Ren é um nome masculino de origem japonesa que significa 'lótus'. Lótus é o nome da flor que é um dos principais símbolos do Budismo. É considerada o trono de Buda, uma vez que Buda aparece muitas vezes representado numa flor de lótus. A flor de lótus cor de rosa é a mais importante para os budistas. Ela representa o próprio Buda.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Sota",
+    significado: "Sota é um nome japonês que significa 'grande e forte'. É ideal para um rapaz destinado a tornar-se forte e resistente. Evoca uma personalidade poderosa e um caráter inabalável, ideal para um líder em formação.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Riku",
+    significado: "Riku é um nome japonês que significa 'terra' ou 'continente'. Traz uma sensação de solidez e estabilidade, evocando a força da natureza. É um nome que simboliza a conexão com as raízes e a base firme.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Daiki",
+    significado: "Daiki é um nome japonês que significa 'grande glória'. É um nome comum no Japão e pode ser usado como um nome de família. Representa grandeza e honra.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Kouki",
+    significado: "Kouki é um nome japonês que significa 'luz e esperança'. Traz consigo a ideia de brilho e otimismo, sendo associado a uma personalidade iluminada e positiva.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Keita",
+    significado: "Keita é um nome japonês que significa 'inteligente e grande'. Reflete uma mente brilhante e uma presença marcante, ideal para alguém com grande potencial e sabedoria.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Issei",
+    significado: "Issei é um nome japonês que significa 'primeira verdade'. Representa a busca pela verdade primordial, simbolizando sinceridade e autenticidade.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Tsubasa",
+    significado: "Tsubasa é um nome japonês que significa 'asas'. No contexto cultural japonês, as asas simbolizam liberdade, aspiração e a capacidade de alcançar grandes alturas. É um nome frequentemente associado a personagens que buscam realizar seus sonhos e superar desafios.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Shun",
+    significado: "Shun é um nome japonês que significa 'rápido' ou 'brilhante'. É associado a pessoas de pensamento ágil e ação rápida, refletindo dinamismo e energia. Este nome é popular no Japão e carrega consigo a ideia de vitalidade e inteligência.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Sakuto",
+    significado: "Sakuto é um nome japonês que pode ser interpretado como 'primeiro' e 'voar'. Representa alguém que lidera com coragem e busca alcançar novos horizontes. É um nome que evoca a ideia de pioneirismo e ambição.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Naoya",
+    significado: "Naoya é um nome japonês que significa 'honesto' e 'direto'. Reflete uma pessoa sincera, justa e com integridade. Este nome é valorizado por sua associação com virtudes morais e caráter sólido.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Kazuto",
+    significado: "Kazuto é um nome japonês composto por 'kazu' (harmonia) e 'to' (pessoa), significando 'pessoa harmoniosa'. É um nome que transmite a ideia de equilíbrio, paz e serenidade, características apreciadas na cultura japonesa.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Kouhei",
+    significado: "Kouhei é um nome japonês que pode ser interpretado como 'príncipe' ou 'oficial'. Dependendo dos kanjis utilizados, pode significar 'justiça' ou 'paz'. É um nome associado a liderança, responsabilidade e equilíbrio.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Toma",
+    significado: "Toma é um nome japonês que pode ser escrito com os kanjis '斗' (luta) e '真' (verdadeiro), significando 'luta pela verdade'. Representa uma pessoa determinada a buscar a verdade e a justiça, enfrentando desafios com coragem.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Yuji",
+    significado: "Yuji é um nome japonês que pode significar 'corajoso' ou 'segundo filho'. Dependendo dos kanjis utilizados, pode ter variações como 'homem valioso'. É um nome que transmite força, coragem e valor.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Seiji",
+    significado: "Seiji é um nome japonês que significa 'sincero' e 'puro'. Reflete uma pessoa honesta, com intenções claras e coração puro. Este nome é associado a virtudes morais e caráter íntegro.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Ryota",
+    significado: "Ryota é um nome japonês que pode ser interpretado como 'refrescante' e 'brilhante'. Representa uma pessoa que traz renovação e luz, sendo uma fonte de energia positiva e inspiração para os outros.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Takuya",
+    significado: "Takuya é um nome japonês que pode significar 'expandir' e 'distinto'. Reflete uma pessoa que busca crescer e se destacar, com ambições claras e determinação para alcançar seus objetivos.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Takayuki",
+    significado: "Takayuki é um nome japonês que pode ser interpretado como 'alto' e 'feliz'. Representa uma pessoa que busca alcançar grandes alturas e encontrar felicidade, simbolizando sucesso e alegria.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Kenshin",
+    significado: "Kenshin é um nome japonês que significa 'coração saudável'. Reflete uma pessoa com espírito forte e coração puro, associada a virtudes como coragem, compaixão e integridade.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Ryouma",
+    significado: "Ryouma é um nome japonês que pode significar 'bom' e 'verdadeiro'. Representa uma pessoa justa, honesta e com caráter sólido, sendo admirada por sua sinceridade e retidão.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Junya",
+    significado: "Junya é um nome japonês que significa 'puro' e 'também'. Reflete uma pessoa com coração puro e espírito gentil, associada a virtudes como bondade, sinceridade e harmonia.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Shogo",
+    significado: "Shogo é um nome japonês masculino que significa 'prosperar' ou 'iluminar'. A origem do nome remonta ao japonês '正吾' ou '昇剛', onde '正' significa 'justo' ou 'correto' e '吾' significa 'eu' ou 'meu'. Alternativamente, '昇' significa 'elevar' e '剛' significa 'forte'. O nome carrega conotações de prosperidade e iluminação espiritual.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Minato",
+    significado: "Minato é um nome japonês que significa 'porto' ou 'abrigar'. Derivado do kanji '港', que representa um local seguro para embarcações, o nome simboliza proteção, acolhimento e estabilidade.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Yuto",
+    significado: "Yuto é um nome japonês masculino com significados variados, dependendo dos kanjis utilizados. Comumente, '優斗' é interpretado como 'gentil' ou 'superior' ('優') e 'lutar' ou 'Big Dipper' ('斗'). Outra combinação popular é '悠斗', significando 'calmo' ou 'permanente' ('悠') e 'lutar' ('斗'). O nome reflete qualidades de gentileza, força e ambição.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Takashi",
+    significado: "Takashi é um nome japonês masculino que pode ter vários significados, dependendo dos kanjis usados. '隆' significa 'prosperidade' ou 'nobreza', '崇' significa 'venerar' ou 'respeitar', e '孝' significa 'filialidade' ou 'piedade'. O nome é associado a qualidades de honra, respeito e prosperidade.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Kiyoshi",
+    significado: "Kiyoshi é um nome japonês que significa 'puro', 'limpo' ou 'sagrado'. O kanji '清' representa pureza e clareza. O nome é associado a virtudes de honestidade e integridade.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Ryosuke",
+    significado: "Ryosuke é um nome japonês masculino que pode ser interpretado como 'claro' ou 'evidente' ('亮') e 'ajudar' ou 'assistir' ('介'). O nome sugere uma pessoa que é clara em suas intenções e disposta a ajudar os outros.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Keigo",
+    significado: "Keigo é um nome japonês que significa 'respeitoso' ou 'polido'. Derivado do kanji '慶' que significa 'celebração' ou 'alegria', e '悟' que significa 'iluminação' ou 'entendimento'. O nome reflete uma pessoa que é respeitosa e sábia.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Shouta",
+    significado: "Shouta é um nome japonês que significa 'soar' ou 'grande'. Composto pelos kanjis '翔' que significa 'voar' ou 'soar', e '太' que significa 'grande' ou 'espesso'. O nome é associado a ambição e grandeza.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Takeshi",
+    significado: "Takeshi é um nome japonês masculino que significa 'guerreiro' ou 'forte'. O kanji '武' representa 'guerra' ou 'militar', enquanto '士' significa 'guerreiro' ou 'samurai'. O nome é associado a força e coragem.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Nobu",
+    significado: "Nobu é um nome japonês que pode significar 'fé' ('信') ou 'extender' ('伸'). O nome é associado a confiança e crescimento.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Hikaru",
+    significado: "Hikaru é um nome japonês que significa 'luz' ou 'brilho'. O kanji '光' representa 'luz' ou 'brilho'. O nome é associado a clareza e brilho interior.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Shinji",
+    significado: "Shinji é um nome japonês que significa 'verdadeiro' ou 'real'. O kanji '真' representa 'verdade' ou 'realidade', e '司' significa 'governar' ou 'administrar'. O nome é associado a sinceridade e liderança.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Yuuma",
+    significado: "Yuuma é um nome japonês que pode significar 'calmo' ('悠') ou 'verdadeiro' ('真'). O nome é associado a serenidade e sinceridade.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Kouji",
+    significado: "O nome Kouji é de origem japonesa e possui múltiplos significados, dependendo dos kanjis utilizados. Comumente, é escrito como 幸司, onde 幸 significa 'felicidade' ou 'boa sorte' e 司 significa 'governar' ou 'administrar'. Outra variação é 康二, com 康 significando 'paz' ou 'tranquilidade' e 二 significando 'dois' ou 'segundo'. Assim, Kouji pode ser interpretado como 'governante da felicidade' ou 'paz do segundo filho'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Taichi",
+    significado: "Taichi é um nome japonês composto por 太 (ta), que significa 'grande' ou 'grandeza', e 一 (ichi), que significa 'um' ou 'único'. Portanto, Taichi pode ser interpretado como 'grande um' ou 'único grande'. Esse nome também está associado ao conceito filosófico de Tai Chi, que representa equilíbrio e harmonia.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Mitsuhiro",
+    significado: "Mitsuhiro é um nome japonês masculino que pode ser escrito com os kanjis 光弘, onde 光 significa 'luz' ou 'brilho' e 弘 significa 'amplo' ou 'expandido'. Assim, Mitsuhiro pode ser interpretado como 'luz ampla' ou 'brilho expansivo'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Kouta",
+    significado: "Kouta é um nome japonês que pode ser escrito com os kanjis 幸太, onde 幸 significa 'felicidade' ou 'boa sorte' e 太 significa 'grande' ou 'gordo'. Assim, Kouta pode ser interpretado como 'grande felicidade' ou 'felicidade abundante'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Shinya",
+    significado: "Shinya é um nome japonês que pode ser escrito com os kanjis 真也, onde 真 significa 'verdadeiro' ou 'genuíno' e 也 é uma partícula que indica afirmação. Assim, Shinya pode ser interpretado como 'verdadeiro também' ou 'genuíno também'. Outra variação é 深夜, onde 深 significa 'profundo' e 夜 significa 'noite', interpretando o nome como 'profunda noite'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Hiroki",
+    significado: "Hiroki é um nome japonês que pode ser escrito com os kanjis 弘樹, onde 弘 significa 'amplo' ou 'expansivo' e 樹 significa 'árvore'. Assim, Hiroki pode ser interpretado como 'árvore expansiva' ou 'grande árvore'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Kazuya",
+    significado: "Kazuya é um nome japonês composto por 和 (kazu), que significa 'harmonia' ou 'paz', e 也 (ya), que significa 'também' ou 'ser'. Assim, Kazuya pode ser interpretado como 'harmonioso também' ou 'paz também'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Yosuke",
+    significado: "Yosuke é um nome japonês composto por 陽 (yo), que significa 'sol' ou 'brilho', e 介 (suke), que significa 'ajuda' ou 'assistência'. Assim, Yosuke pode ser interpretado como 'ajuda do sol' ou 'assistência brilhante'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Renji",
+    significado: "Renji é um nome japonês composto por 蓮 (ren), que significa 'lótus', e 治 (ji), que significa 'governar' ou 'curar'. Assim, Renji pode ser interpretado como 'governante do lótus' ou 'curador do lótus'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Yukinori",
+    significado: "Yukinori é um nome japonês composto por 幸 (yuki), que significa 'felicidade' ou 'boa sorte', e 範 (nori), que significa 'exemplo' ou 'padrão'. Assim, Yukinori pode ser interpretado como 'exemplo de felicidade' ou 'padrão de boa sorte'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Satoru",
+    significado: "Satoru é um nome japonês que significa 'sabedoria' ou 'iluminação'. É associado ao verbo 'satoru', que significa 'entender' ou 'compreender profundamente'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Kensuke",
+    significado: "Kensuke é um nome japonês composto por 健 (ken), que significa 'saudável' ou 'forte', e 介 (suke), que significa 'ajuda' ou 'assistência'. Assim, Kensuke pode ser interpretado como 'ajuda saudável' ou 'assistência forte'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Seiya",
+    significado: "Seiya é um nome japonês composto por 聖 (sei), que significa 'santo' ou 'sagrado', e 也 (ya), que significa 'também' ou 'ser'. Assim, Seiya pode ser interpretado como 'santo também' ou 'sagrado também'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Kohaku",
+    significado: "Kohaku é um nome japonês que significa 'âmbar', a resina fóssil que é valorizada por sua cor dourada e translucidez.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Shou",
+    significado: "Shou é um nome japonês que pode ser escrito com os kanjis 翔 (shou), que significa 'voar' ou 'ascender', ou 章 (shou), que significa 'capítulo' ou 'seção'. Assim, Shou pode ser interpretado como 'ascender' ou 'capítulo'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Haruma",
+    significado: "O nome Haruma é de origem japonesa e pode ser escrito com os kanjis 春真 ou 春舞, onde 春 significa 'primavera' e 真 significa 'verdadeiro' ou 'genuíno', e 舞 significa 'dança'. Assim, Haruma pode ser interpretado como 'primavera verdadeira' ou 'dança da primavera'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Keitaro",
+    significado: "Keitaro é um nome japonês composto por 慶 (kei), que significa 'celebração' ou 'alegria', e 太郎 (tarou), que significa 'grande filho'. Assim, Keitaro pode ser interpretado como 'filho grande da celebração' ou 'filho nobre'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Rikuo",
+    significado: "Rikuo é um nome japonês composto por 陸 (riku), que significa 'terra' ou 'continente', e 央 (ou), que significa 'centro' ou 'meio'. Assim, Rikuo pode ser interpretado como 'centro da terra' ou 'meio do continente'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Isamu",
+    significado: "Isamu é um nome japonês que pode ser escrito com os kanjis 勇, que significa 'coragem' ou 'bravura', ou 武, que significa 'guerreiro'. Assim, Isamu pode ser interpretado como 'coragem' ou 'guerreiro'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Takuto",
+    significado: "Takuto é um nome japonês composto por 拓 (taku), que significa 'expandir' ou 'abrir', e 斗 (to), que se refere à constelação da Ursa Maior. Assim, Takuto pode ser interpretado como 'expandir a constelação' ou 'abrir o caminho'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Tatsuya",
+    significado: "Tatsuya é um nome japonês que pode ser escrito com os kanjis 達 (tatsu), que significa 'alcançar' ou 'atingir', e 也 (ya), que significa 'também' ou 'ser'. Assim, Tatsuya pode ser interpretado como 'aquele que alcança' ou 'aquele que atinge'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Shinsuke",
+    significado: "Shinsuke é um nome japonês composto por 慎 (shin), que significa 'prudente' ou 'cauteloso', e 介 (suke), que significa 'ajuda' ou 'assistência'. Assim, Shinsuke pode ser interpretado como 'ajuda prudente' ou 'assistência cautelosa'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Junpei",
+    significado: "Junpei é um nome japonês composto por 純 (jun), que significa 'puro' ou 'genuíno', e 平 (pei), que significa 'plano' ou 'nivelado'. Assim, Junpei pode ser interpretado como 'puro e nivelado' ou 'genuíno e equilibrado'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Taku",
+    significado: "Taku é um nome japonês que pode ser escrito com os kanjis 拓, que significa 'expandir' ou 'abrir', ou 卓, que significa 'excepcional' ou 'notável'. Assim, Taku pode ser interpretado como 'expandir' ou 'excepcional'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Kazuhiro",
+    significado: "Kazuhiro é um nome japonês composto por 和 (kazu), que significa 'harmonia' ou 'paz', e 弘 (hiro), que significa 'amplo' ou 'generoso'. Assim, Kazuhiro pode ser interpretado como 'amplo em harmonia' ou 'generoso em paz'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Souma",
+    significado: "Souma é um nome japonês que pode ser escrito com os kanjis 蒼 (sou), que significa 'azul' ou 'verde', e 真 (ma), que significa 'verdadeiro' ou 'genuíno'. Assim, Souma pode ser interpretado como 'azul verdadeiro' ou 'verde genuíno'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Ryou",
+    significado: "Ryou é um nome japonês que pode ser escrito com os kanjis 涼 (ryou), que significa 'fresco' ou 'refrescante', ou 良 (ryou), que significa 'bom' ou 'excelente'. Assim, Ryou pode ser interpretado como 'fresco' ou 'bom'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Nori",
+    significado: "Nori é um nome japonês que pode ser escrito com os kanjis 範 (nori), que significa 'exemplo' ou 'padrão', ou 法 (nori), que significa 'lei' ou 'método'. Assim, Nori pode ser interpretado como 'exemplo' ou 'lei'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Reo",
+    significado: "O nome Reo pode ser escrito com os kanjis 玲央, onde 玲 significa 'som de sinos' e 央 significa 'centro' ou 'realeza'. Assim, Reo pode ser interpretado como 'som de sinos reais'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Yushin",
+    significado: "Yushin é um nome japonês composto por 勇 (yuu), que significa 'coragem' ou 'bravura', e 心 (shin), que significa 'coração' ou 'mente'. Assim, Yushin pode ser interpretado como 'coração corajoso' ou 'mente valente'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Masashi",
+    significado: "Masashi é um nome japonês que pode ser escrito com os kanjis 正 (masa), que significa 'correto' ou 'justo', e 志 (shi), que significa 'vontade' ou 'propósito'. Assim, Masashi pode ser interpretado como 'vontade justa' ou 'propósito correto'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Yukinobu",
+    significado: "Yukinobu é um nome japonês composto por 幸 (yuki), que significa 'felicidade' ou 'boa sorte', e 信 (nobu), que significa 'fé' ou 'confiança'. Assim, Yukinobu pode ser interpretado como 'fé na felicidade' ou 'confiança na boa sorte'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Akiyoshi",
+    significado: "Akiyoshi é um nome japonês composto por 明 (aki), que significa 'brilhante' ou 'luminosa', e 吉 (yoshi), que significa 'boa sorte' ou 'felicidade'. Assim, Akiyoshi pode ser interpretado como 'boa sorte brilhante' ou 'felicidade luminosa'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Arata",
+    significado: "Arata é um nome japonês que pode ser escrito com o kanji 新, que significa 'novo' ou 'fresco'. Assim, Arata pode ser interpretado como 'novo' ou 'fresco'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Daigo",
+    significado: "Daigo é um nome japonês composto por 大 (dai), que significa 'grande' ou 'amplo', e 悟 (go), que significa 'iluminação' ou 'realização'. Assim, Daigo pode ser interpretado como 'grande iluminação' ou 'grande realização'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Eiji",
+    significado: "Eiji é um nome japonês que pode ser escrito com os kanjis 永 (ei), que significa 'eterno' ou 'perpétuo', e 治 (ji), que significa 'governar' ou 'curar'. Assim, Eiji pode ser interpretado como 'governar eternamente' ou 'cura perpétua'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Fumihiko",
+    significado: "Fumihiko é um nome japonês composto por 文 (fumi), que significa 'literatura' ou 'escrita', e 彦 (hiko), que significa 'príncipe' ou 'jovem nobre'. Assim, Fumihiko pode ser interpretado como 'príncipe literário' ou 'jovem nobre da escrita'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Goro",
+    significado: "Goro é um nome japonês que pode ser escrito com o kanji 五, que significa 'cinco'. Tradicionalmente, Goro é dado ao quinto filho da família, refletindo sua posição na ordem de nascimento.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Hachiro",
+    significado: "Hachiro é um nome japonês que pode ser escrito com o kanji 八, que significa 'oito'. Tradicionalmente, Hachiro é dado ao oitavo filho da família, refletindo sua posição na ordem de nascimento.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Ichiro",
+    significado: "Ichiro é um nome japonês que pode ser escrito com o kanji 一, que significa 'um'. Tradicionalmente, Ichiro é dado ao primeiro filho da família, refletindo sua posição na ordem de nascimento.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Jiro",
+    significado: "Jiro é um nome japonês que pode ser escrito com o kanji 二, que significa 'dois'. Tradicionalmente, Jiro é dado ao segundo filho da família, refletindo sua posição na ordem de nascimento.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Kaito",
+    significado: "O nome Kaito é composto pelos kanjis 海 (kai), que significa 'mar' ou 'oceano', e 翔 (to), que significa 'voar'. Assim, Kaito pode ser interpretado como 'voo sobre o mar' ou 'liberdade no oceano'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Lian",
+    significado: "Lian é um nome de origem chinesa que significa 'lótus' (莲) ou 'cachoeira' (濂). O lótus é um símbolo de pureza e beleza, enquanto a cachoeira representa força e fluidez.",
+    nacionalidade: "Chinesa"
+  },
+  {
+    nome: "Masahiro",
+    significado: "Masahiro é um nome japonês composto pelos kanjis 正 (masa), que significa 'correto' ou 'justo', e 浩 (hiro), que significa 'grande' ou 'amplo'. Assim, Masahiro pode ser interpretado como 'grande justiça' ou 'governo amplo'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Noboru",
+    significado: "Noboru é um nome japonês que pode ser escrito com o kanji 昇 (noboru), que significa 'ascender' ou 'subir'. É um nome que transmite a ideia de crescimento e elevação, como o sol que surge no horizonte.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Osamu",
+    significado: "Osamu é um nome japonês que significa 'governar' ou 'disciplinar'. É associado a uma pessoa que traz ordem e estrutura, refletindo liderança e responsabilidade.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Ryoji",
+    significado: "Ryoji é um nome japonês composto pelos kanjis 良 (ryo), que significa 'bom' ou 'excelente', e 二 (ji), que significa 'segundo'. Assim, Ryoji pode ser interpretado como 'segundo filho bom' ou 'excelente segundo filho'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Shin",
+    significado: "Shin é um nome japonês que pode significar 'verdade' (真), 'fé' (信) ou 'novo' (新), dependendo dos kanjis utilizados. É um nome associado à sinceridade, confiança e renovação.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Tadashi",
+    significado: "Tadashi é um nome japonês que significa 'correto', 'justo' ou 'virtuoso'. É um nome que transmite a ideia de retidão moral e integridade.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Umi",
+    significado: "Umi é um nome japonês que significa 'mar'. É associado à vastidão e serenidade do oceano, simbolizando liberdade e profundidade.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Vega",
+    significado: "Vega é um nome japonês que significa 'estrela'. É associado à luz e brilho das estrelas no céu, simbolizando orientação e inspiração.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Wataru",
+    significado: "Wataru é um nome japonês que significa 'cruzar' ou 'atravessar'. É associado à ideia de superação e transição, como atravessar um rio ou uma ponte.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Xian",
+    significado: "Xian é um nome de origem chinesa que significa 'virtude' ou 'moralidade'. É associado a qualidades éticas e morais elevadas.",
+    nacionalidade: "Chinesa"
+  },
+  {
+    nome: "Yamato",
+    significado: "Yamato é um nome japonês que significa 'grande harmonia'. É associado à ideia de unidade e paz, refletindo o espírito tradicional japonês.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Zento",
+    significado: "Zento é um nome japonês que significa 'virtude' ou 'benevolência'. É associado a qualidades de bondade e generosidade.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Akihiko",
+    significado: "Akihiko é um nome japonês composto pelos kanjis 明 (aki), que significa 'brilhante' ou 'luminosa', e 彦 (hiko), que significa 'príncipe' ou 'jovem nobre'. Assim, Akihiko pode ser interpretado como 'príncipe brilhante' ou 'jovem nobre iluminado'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Bunji",
+    significado: "O nome Bunji pode ser escrito com o kanji 文 (bun), que significa 'literatura' ou 'escrita', e 治 (ji), que significa 'governar' ou 'administrar'. Assim, Bunji pode ser interpretado como 'governar com cultura' ou 'administrar com sabedoria'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Chikara",
+    significado: "Chikara é um nome japonês que pode ser escrito com o kanji 力 (chikara), que significa 'força', 'poder' ou 'capacidade'. É um nome associado à ideia de vigor e energia.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Daisuke",
+    significado: "Daisuke é um nome japonês composto pelos kanjis 大 (dai), que significa 'grande' ou 'imenso', e 輔 (suke), que significa 'ajuda' ou 'assistência'. Assim, Daisuke pode ser interpretado como 'grande ajuda' ou 'assistência significativa'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Eisuke",
+    significado: "Eisuke é um nome japonês composto pelos kanjis 栄 (ei), que significa 'prosperidade' ou 'glória', e 祐 (suke), que significa 'ajudar' ou 'assistir'. Assim, Eisuke pode ser interpretado como 'ajuda próspera' ou 'assistência gloriosa'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Futoshi",
+    significado: "Futoshi é um nome japonês que pode ser escrito com o kanji 太 (futo), que significa 'grande', 'espesso' ou 'abundante'. É um nome associado à ideia de grandeza e plenitude.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Genji",
+    significado: "Genji é um nome japonês que pode ser escrito com o kanji 源 (gen), que significa 'origem' ou 'fonte', e 壱 (ji), que significa 'primeiro' ou 'um'. É também o nome de um famoso clã japonês e do protagonista do clássico literário 'Genji Monogatari'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Hiroshi",
+    significado: "Hiroshi é um nome japonês que pode ser escrito com o kanji 寛 (hiro), que significa 'tolerante', 'generoso' ou 'amplo'. É um nome associado à ideia de generosidade e amplidão de espírito.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Alexander",
+    significado: "Alexander é um nome de origem grega, derivado de 'Alexandros', que significa 'defensor dos homens'. É composto pelos elementos gregos 'alexein' (defender) e 'aner' (homem).",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Mateus",
+    significado: "Mateus é um nome de origem hebraica, derivado de 'Matityahu', que significa 'dom de Deus' ou 'presente de Deus'.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Akio",
+    significado: "Akio é um nome japonês composto pelos kanjis 明 (aki), que significa 'brilhante' ou 'luminosa', e 男 (o), que significa 'homem'. Assim, Akio pode ser interpretado como 'homem brilhante' ou 'homem iluminado'.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Sean",
+    significado: "Sean é uma variante irlandesa do nome inglês John, que tem origem no hebraico 'Yochanan', significando 'Yahweh é gracioso' ou 'Deus é gracioso'.",
+    nacionalidade: "Irlandesa"
+  },
+  {
+    nome: "Lars",
+    significado: "Lars é um nome de origem sueca, derivado do latim 'Laurentius', que significa 'coroado de louros' ou 'vitorioso'.",
+    nacionalidade: "Sueca"
+  },
+  {
+    nome: "Kwame",
+    significado: "Kwame é um nome de origem ganesa, pertencente ao sistema de nomes dos dias da semana. Indivíduos nascidos na sexta-feira recebem o nome Kwame, que significa 'nascido em uma sexta-feira'.",
+    nacionalidade: "Gana"
+  },
+  {
+    nome: "Raphael",
+    significado: "Nome de origem hebraica, composto por 'Repha' (curou) e 'El' (Deus), significando 'curado por Deus' ou 'Deus curou'. É associado ao arcanjo Rafael, considerado o anjo da cura na tradição judaico-cristã.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Luan",
+    significado: "Nome de origem albanesa que significa 'leão'. Também pode ter raízes germânicas ou gaélicas, significando 'guerreiro'. Em algumas interpretações, é considerado o masculino de Luana, com origem havaiana, significando 'tranquilo' ou 'satisfeito'.",
+    nacionalidade: "Albanesa"
+  },
+  {
+    nome: "Abdul",
+    significado: "Nome árabe que significa 'servo de'. É frequentemente utilizado como parte de nomes compostos que se referem a atributos de Deus, como 'Abdul-Rahman' (servo do Misericordioso).",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Bao",
+    significado: "Nome de origem vietnamita que significa 'tesouro' ou 'precioso'. Também pode ser utilizado em chinês com o significado de 'tesouro' ou 'joia'.",
+    nacionalidade: "Vietnamita"
+  },
+  {
+    nome: "Jawad",
+    significado: "Nome árabe que significa 'generoso' ou 'nobre'. É associado a valores como generosidade, bondade e compaixão na cultura árabe.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Rajesh",
+    significado: "Nome de origem sânscrita que significa 'rei dos reis' ou 'senhor dos reis'. É um nome associado à realeza e à liderança na cultura indiana.",
+    nacionalidade: "Indiana"
+  },
+  {
+    nome: "Milos",
+    significado: "Nome de origem servo-croata que significa 'gracioso' ou 'carinhoso'. É um nome associado a qualidades de simpatia e afeto.",
+    nacionalidade: "Servo-croata"
+  },
+  {
+    nome: "Yosef",
+    significado: "Nome de origem hebraica que significa 'Deus acrescenta' ou 'aquele que acrescenta'. É uma variante do nome José, associado a figuras bíblicas como José do Egito.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Nelson",
+    significado: "Nome de origem inglesa que significa 'filho de Neil'. É um sobrenome patronímico que se tornou popular como nome próprio.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Gustav",
+    significado: "Nome de origem escandinava que significa 'bastão dos godos' ou 'apoio dos godos'. É associado à nobreza e à liderança na cultura escandinava.",
+    nacionalidade: "Escandinava"
+  },
+  {
+    nome: "Farid",
+    significado: "Nome árabe que significa 'único', 'sem igual' ou 'precioso'. É associado a qualidades de singularidade e valor na cultura árabe.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Dmitri",
+    significado: "Nome de origem russa que significa 'amigo da terra' ou 'consagrado à deusa Deméter'. É associado à agricultura e à fertilidade na mitologia grega.",
+    nacionalidade: "Russa"
+  },
+  {
+    nome: "Bruno",
+    significado: "Nome de origem germânica que significa 'castanho' ou 'moreno'. Também pode significar 'escudo brilhante', associado a qualidades de proteção e força.",
+    nacionalidade: "Germânica"
+  },
+  {
+    nome: "Renato",
+    significado: "O nome Renato tem origem no latim 'Renatus', derivado de 're-' (novamente) e 'natus' (nascido), significando 'renascido', 'nascido de novo' ou 'ressuscitado'. É associado à ideia de renovação e recomeço.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Kael",
+    significado: "Kael é uma variação do nome irlandês Cael, derivado do adjetivo gaélico 'caol', que significa 'magro', 'esbelto' ou 'delgado'. Na mitologia irlandesa, Cael era um guerreiro do grupo Fianna.",
+    nacionalidade: "Irlandesa"
+  },
+  {
+    nome: "Felipe",
+    significado: "Felipe vem do grego 'Philippos', composto por 'phílos' (amigo) e 'híppos' (cavalo), significando 'amigo dos cavalos' ou 'o que ama os cavalos'. Também pode ser interpretado como 'nobre', devido à associação com a propriedade de cavalos na Grécia Antiga.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Timoteo",
+    significado: "Timóteo tem origem no grego 'Timótheos', formado por 'timao' (honrar) e 'theos' (Deus), significando 'aquele que honra a Deus' ou 'aquele que respeita os deuses'. É associado à devoção e fé.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Sayed",
+    significado: "Sayed é um nome árabe que significa 'senhor' ou 'mestre'. É frequentemente usado como uma forma respeitosa de se referir a alguém considerado líder ou nobre na comunidade muçulmana.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Viktor",
+    significado: "Viktor tem origem no latim 'victor', que significa 'vencedor', 'vitorioso' ou 'conquistador'. É um nome associado à vitória e conquista.",
+    nacionalidade: "Russa"
+  },
+  {
+    nome: "Cem",
+    significado: "Cem é um nome turco que significa 'duro como ferro'. É associado à força e resistência.",
+    nacionalidade: "Turca"
+  },
+  {
+    nome: "Boudewijn",
+    significado: "Boudewijn é um nome holandês derivado do antigo germânico 'Baldwin', composto por 'bald' (corajoso) e 'win' (amigo), significando 'amigo corajoso' ou 'governante ousado'.",
+    nacionalidade: "Holandesa"
+  },
+  {
+    nome: "Eli",
+    significado: "Eli é um nome de origem hebraica que significa 'elevado', 'sublime' ou 'ascendido'. É associado à elevação espiritual e honra.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Zubair",
+    significado: "Zubair é um nome árabe que significa 'forte' ou 'corajoso'. É associado à bravura e força.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Alvaro",
+    significado: "Álvaro tem origem no germânico 'Alwar', composto por 'all' (todo) e 'wer' (guardião), significando 'guardião de todos' ou 'defensor universal'.",
+    nacionalidade: "Espanhola"
+  },
+  {
+    nome: "Jibril",
+    significado: "Jibril é a forma árabe do nome Gabriel, que significa 'anjo mensageiro' ou 'arcanjo Gabriel'. É associado ao mensageiro de Deus na tradição islâmica.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Domingos",
+    significado: "Domingos tem origem no latim 'Dominicus', significando 'pertencente ao Senhor' ou 'nascido no domingo'.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Raul",
+    significado: "Raul tem origem no germânico 'Radulf', composto por 'rad' (conselho) e 'wulf' (lobo), significando 'conselheiro sábio do lobo' ou 'conselheiro valente'.",
+    nacionalidade: "Germânica"
+  },
+  {
+    nome: "Taras",
+    significado: "Taras é um nome de origem grega que significa 'de Taras'. Taras era uma cidade italiana fundada por colonos gregos no século VIII a.C., atualmente chamada Taranto. O nome Taras é associado à figura mitológica grega Taras, filho de Poseidon, considerado o protetor dos marinheiros e pescadores.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Winston",
+    significado: "Winston é um nome de origem inglesa derivado do nome antigo 'Wynstan', que significa 'pedra alegre'. É associado à ideia de felicidade e alegria.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Girish",
+    significado: "Girish é um nome de origem sânscrita que significa 'Senhor das montanhas'. É outro nome para o deus hindu Shiva, associado à montanha Meru, considerada o centro do universo na mitologia hindu.",
+    nacionalidade: "Indiana"
+  },
+  {
+    nome: "Iker",
+    significado: "Iker é um nome de origem basca que significa 'visitante' ou 'aquele que vem de longe'. Reflete a tradição basca de valorizar a hospitalidade e a chegada de visitantes.",
+    nacionalidade: "Basca"
+  },
+  {
+    nome: "Helder",
+    significado: "Helder é um nome de origem neerlandesa que significa 'claro' ou 'brilhante'. Deriva do antigo alto alemão 'helli', que também significa 'claro' ou 'luz'.",
+    nacionalidade: "Portuguesa"
+  },
+  {
+    nome: "Noam",
+    significado: "Noam é um nome de origem hebraica que significa 'doce', 'delicado' ou 'encantador'. Também pode significar 'descanso' ou 'repouso', associado à ideia de tranquilidade e serenidade.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Orhan",
+    significado: "Orhan é um nome de origem turca que significa 'líder' ou 'chefe nobre'. É composto pelos elementos 'or' (líder) e 'han' (chefe), refletindo a tradição turca de valorizar a liderança e a nobreza.",
+    nacionalidade: "Turca"
+  },
+  {
+    nome: "Bakary",
+    significado: "Bakary é um nome de origem africana, especificamente da língua suaili, que significa 'uma pessoa com grande promessa'. Reflete a esperança e as expectativas positivas para o futuro da pessoa.",
+    nacionalidade: "Africana"
+  },
+  {
+    nome: "Julien",
+    significado: "Julien é um nome de origem francesa que significa 'jovem' ou 'dedicado a Júpiter'. Deriva do nome romano 'Julianus', associado à família romana Júlia e ao deus romano Júpiter.",
+    nacionalidade: "Francesa"
+  },
+  {
+    nome: "Marek",
+    significado: "Marek é um nome de origem polonesa que significa 'guerreiro' ou 'dedicado a Marte'. Deriva do nome latino 'Marcus', associado ao deus romano da guerra, Marte.",
+    nacionalidade: "Polonesa"
+  },
+  {
+    nome: "Pedro",
+    significado: "Pedro é um nome de origem latina que significa 'pedra' ou 'rochedo'. Deriva do latim 'petra', associado à ideia de firmeza e estabilidade.",
+    nacionalidade: "Portuguesa"
+  },
+  {
+    nome: "Kai",
+    significado: "Kai é um nome de origem havaiana que significa 'mar' ou 'oceano'. Também pode significar 'vitorioso' em outras culturas, refletindo a ideia de conquista e sucesso.",
+    nacionalidade: "Havaiana"
+  },
+  {
+    nome: "Hermes",
+    significado: "Hermes é um nome de origem grega que significa 'intérprete de Deus' ou 'mensageiro'. Na mitologia grega, Hermes é o deus do comércio, dos viajantes e mensageiro dos deuses.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Alonso",
+    significado: "Alonso é um nome de origem espanhola que significa 'pronto para a batalha'. Deriva do nome germânico 'Adalfuns', composto por 'adal' (nobre) e 'funs' (pronto), refletindo a ideia de prontidão e nobreza.",
+    nacionalidade: "Espanhola"
+  },
+  {
+    nome: "Etienne",
+    significado: "Etienne é a forma francesa do nome Estéfano, que tem origem no grego 'Stephanos', significando 'coroa' ou 'laureado'. Este nome simboliza honra e reconhecimento, associado à ideia de ser coroado por méritos.",
+    nacionalidade: "Francesa"
+  },
+  {
+    nome: "Milo",
+    significado: "Milo é um nome de origem germânica antiga, possivelmente derivado de 'mild', que significa 'suave', 'paciente', 'calmo'. Também pode ter origem no eslavo antigo 'milu', significando 'amoroso', 'gracioso'.",
+    nacionalidade: "Eslava"
+  },
+  {
+    nome: "Antoine",
+    significado: "Antoine é a versão francesa do nome Antônio, originado do latim 'Antonius', que significa 'valioso', 'digno de apreço'. Este nome carrega a ideia de algo inestimável ou de grande valor.",
+    nacionalidade: "Francesa"
+  },
+  {
+    nome: "Kofi",
+    significado: "Kofi é um nome de origem Akan, utilizado em Gana, que significa 'nascido na sexta-feira'. Na tradição Akan, os dias da semana têm nomes específicos para os nascidos em cada dia.",
+    nacionalidade: "Gana"
+  },
+  {
+    nome: "Ilias",
+    significado: "Ilias é uma variação do nome Elias, que tem origem no hebraico 'Eliyahu', significando 'o Senhor é meu Deus' ou 'Jeová é meu Deus'. Este nome é associado à devoção e fé religiosa.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Samir",
+    significado: "Samir é um nome de origem árabe que significa 'companheiro de conversas noturnas' ou 'amigo da noite'. Também pode significar 'vigoroso', 'animado', 'vivaz', 'eloquente', 'boa companhia'.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "João",
+    significado: "João é um nome de origem hebraica, derivado de 'Yohanan', que significa 'Deus é gracioso' ou 'agraciado por Deus'. É um nome com forte presença na tradição cristã, associado a várias figuras bíblicas.",
+    nacionalidade: "Portuguesa"
+  },
+  {
+    nome: "Tommaso",
+    significado: "Tommaso é a forma italiana do nome Tomé, que tem origem no aramaico 't'oma', significando 'gêmeo'. Este nome é associado à ideia de duplicidade ou de ser um irmão gêmeo.",
+    nacionalidade: "Italiana"
+  },
+  {
+    nome: "Mohamed",
+    significado: "Mohamed é uma variação do nome Muhammad, de origem árabe, que significa 'louvado', 'digno de elogios'. Este nome é associado ao profeta Muhammad, fundador do Islã.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Stanislas",
+    significado: "Stanislas é um nome de origem polonesa, derivado do eslavo 'stan' (ficar, estabelecer) e 'slav' (glória), significando 'glória constante'. Este nome é associado à ideia de estabilidade e honra.",
+    nacionalidade: "Polonesa"
+  },
+  {
+    nome: "Guillermo",
+    significado: "Guillermo é a forma espanhola do nome Guilherme, que tem origem no germânico 'Willahelm', composto por 'will' (vontade) e 'helm' (proteção), significando 'protetor decidido'.",
+    nacionalidade: "Espanhola"
+  },
+  {
+    nome: "Raheem",
+    significado: "Raheem é um nome de origem árabe que significa 'misericordioso', 'compassivo'. Este nome é associado à qualidade de ser generoso e cheio de bondade.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Enrique",
+    significado: "Enrique é a forma espanhola do nome Henrique, que tem origem no germânico 'Heinrich', composto por 'heim' (lar) e 'ric' (poderoso), significando 'senhor do lar' ou 'governante da casa'.",
+    nacionalidade: "Espanhola"
+  },
+  {
+    nome: "Silas",
+    significado: "Silas é um nome de origem latina, derivado do latim 'Silvanus', que significa 'da floresta' ou 'homem selvagem'. Este nome é associado à natureza e ao ambiente rural.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Nuno",
+    significado: "Nuno é um nome de origem portuguesa, possivelmente derivado do latim 'nonus', significando 'nono', ou de 'nonnus', significando 'avô'. É um nome tradicional em Portugal.",
+    nacionalidade: "Portuguesa"
+  },
+  {
+    nome: "Farhan",
+    significado: "Farhan é um nome de origem árabe que significa 'alegre', 'feliz'. Este nome é associado à ideia de felicidade e contentamento.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Vasil",
+    significado: "Vasil é um nome de origem búlgara, derivado do grego 'Vasileios', que significa 'rei', 'majestade'. Este nome é associado à realeza e liderança.",
+    nacionalidade: "Búlgara"
+  },
+  {
+    nome: "Elias",
+    nacionalidade: "Hebraica",
+    significado: "O nome Elias tem origem no hebraico 'Eliyahu', que significa 'O Senhor é meu Deus' ou 'Jeová é meu Deus'. É associado ao profeta bíblico Elias, conhecido por sua defesa do monoteísmo e por realizar milagres em nome de Deus."
+  },
+  {
+    nome: "Abel",
+    nacionalidade: "Hebraica",
+    significado: "Abel deriva do hebraico 'Hevel', que significa 'névoa', 'vapor', 'sopro' ou 'efêmero'. É associado ao segundo filho de Adão e Eva, conhecido por sua bondade e pela tragédia de sua morte nas mãos de seu irmão Caim."
+  },
+  {
+    nome: "Ishaan",
+    nacionalidade: "Indiana",
+    significado: "Ishaan é um nome de origem sânscrita que significa 'sol' ou 'luz'. Está associado ao deus hindu Shiva e à direção nordeste, considerada auspiciosa na astrologia védica."
+  },
+  {
+    nome: "Henrik",
+    nacionalidade: "Escandinava",
+    significado: "Henrik é uma variante escandinava do nome Henrique, que tem origem no germânico 'Heinrich', composto por 'heim' (lar) e 'ric' (poderoso), significando 'senhor do lar' ou 'governante da casa'."
+  },
+  {
+    nome: "Ciro",
+    nacionalidade: "Persa",
+    significado: "Ciro tem origem no persa antigo 'Kūruš', que significa 'jovem' ou 'senhor'. Foi o nome de Ciro, o Grande, fundador do Império Persa, conhecido por sua liderança e conquistas."
+  },
+  {
+    nome: "Anders",
+    nacionalidade: "Dinamarquesa",
+    significado: "Anders é a forma dinamarquesa do nome André, que tem origem no grego 'Andreas', significando 'másculo', 'viril' ou 'homem'."
+  },
+  {
+    nome: "Nunzio",
+    nacionalidade: "Italiana",
+    significado: "Nunzio é um nome de origem italiana derivado do latim 'nuntius', que significa 'mensageiro' ou 'portador de notícias'."
+  },
+  {
+    nome: "Makar",
+    nacionalidade: "Russa",
+    significado: "Makar é uma forma russa do nome Makário, que tem origem no grego 'Makarios', significando 'abençoado' ou 'feliz'."
+  },
+  {
+    nome: "Guillaume",
+    nacionalidade: "Francesa",
+    significado: "Guillaume é a forma francesa do nome Guilherme, que tem origem no germânico 'Willahelm', composto por 'will' (vontade) e 'helm' (proteção), significando 'protetor decidido'."
+  },
+  {
+    nome: "Yeva",
+    nacionalidade: "Armênia",
+    significado: "Yeva é uma variante armênia do nome Eva, que tem origem no hebraico 'Chawwah', significando 'vida' ou 'vivente'."
+  },
+  {
+    nome: "Demian",
+    nacionalidade: "Grega",
+    significado: "Demian é um nome de origem grega que significa 'domador' ou 'vencedor'. Está associado ao filósofo grego Demócrito, conhecido por suas teorias sobre o átomo."
+  },
+  {
+    nome: "Everton",
+    nacionalidade: "Inglesa",
+    significado: "Everton é um nome de origem inglesa que significa 'assentamento de javalis' ou 'local de abundância'."
+  },
+  {
+    nome: "Lucca",
+    nacionalidade: "Italiana",
+    significado: "Lucca é um nome de origem italiana que significa 'de Lucânia' ou 'aquele que ilumina'. Lucânia era uma antiga região da Itália, e o nome está associado à luz e clareza."
+  },
+  {
+    nome: "Anton",
+    nacionalidade: "Alemã",
+    significado: "O nome Anton é uma forma do latim Antonius, que pode derivar do grego 'anthos', significando 'flor'. É um nome popular em várias culturas europeias, incluindo a alemã, e é associado a pessoas valiosas e dignas de apreço."
+  },
+  {
+    nome: "Narayan",
+    nacionalidade: "Indiana",
+    significado: "Narayan é um nome de origem sânscrita que significa 'o refúgio supremo' ou 'a morada de todos'. É um epíteto do deus hindu Vishnu, representando o princípio cósmico que sustenta o universo."
+  },
+  {
+    nome: "Leonardo",
+    nacionalidade: "Italiana",
+    significado: "Leonardo é um nome de origem germânica composto por 'leon' (leão) e 'hard' (forte, corajoso), significando 'forte como um leão'. É um nome associado à coragem e à nobreza."
+  },
+  {
+    nome: "Oscar",
+    nacionalidade: "Irlandesa",
+    significado: "Oscar é um nome de origem irlandesa que pode significar 'amigo dos cervos' ou 'lança divina'. Está associado a um personagem da mitologia irlandesa, neto do herói Fionn mac Cumhaill."
+  },
+  {
+    nome: "Noah",
+    nacionalidade: "Hebraica",
+    significado: "Noah é um nome de origem hebraica que significa 'descanso' ou 'paz de espírito'. É associado ao personagem bíblico que construiu a arca para sobreviver ao dilúvio."
+  },
+  {
+    nome: "Ares",
+    nacionalidade: "Grega",
+    significado: "Ares é o nome do deus grego da guerra, filho de Zeus e Hera. O nome pode derivar do grego 'are', significando 'ruína' ou 'destruição', refletindo o aspecto bélico e tumultuoso da guerra."
+  },
+  {
+    nome: "Mounir",
+    nacionalidade: "Árabe",
+    significado: "Mounir é um nome árabe que significa 'brilhante', 'iluminado' ou 'aquele que traz luz'. É derivado da palavra árabe 'nur', que significa 'luz'."
+  },
+  {
+    nome: "Dawid",
+    nacionalidade: "Polonesa",
+    significado: "Dawid é a forma polonesa do nome David, que tem origem hebraica e significa 'amado' ou 'querido'. É um nome associado ao rei David da Bíblia."
+  },
+  {
+    nome: "Simeon",
+    nacionalidade: "Hebraica",
+    significado: "Simeon é um nome de origem hebraica que significa 'aquele que ouve' ou 'Deus ouviu'. É associado a um dos doze filhos de Jacó na Bíblia."
+  },
+  {
+    nome: "Gilad",
+    nacionalidade: "Hebraica",
+    significado: "Gilad é um nome de origem hebraica que significa 'monte de testemunho'. É associado a uma região montanhosa mencionada na Bíblia."
+  },
+  {
+    nome: "Bence",
+    nacionalidade: "Húngara",
+    significado: "Bence é um nome húngaro que significa 'abençoado' ou 'feliz'. É uma variante do nome Benedito, de origem latina."
+  },
+  {
+    nome: "Ignacio",
+    nacionalidade: "Espanhola",
+    significado: "Ignacio é um nome de origem latina que significa 'nascido do fogo'. É associado a São Inácio de Loyola, fundador da Companhia de Jesus."
+  },
+  {
+    nome: "Callum",
+    nacionalidade: "Escocesa",
+    significado: "Callum é um nome de origem escocesa que significa 'pomba', simbolizando paz e pureza."
+  },
+  {
+    nome: "Rafael",
+    nacionalidade: "Hebraica",
+    significado: "Rafael é um nome de origem hebraica que significa 'Deus cura' ou 'curado por Deus'. É associado ao arcanjo Rafael, conhecido por suas curas e orientações."
+  },
+  {
+    nome: "Basil",
+    nacionalidade: "Grega",
+    significado: "Basil é um nome de origem grega que significa 'real' ou 'majestoso'. Deriva da palavra grega 'basileus', que significa 'rei'."
+  },
+  {
+    nome: "Gheorghe",
+    nacionalidade: "Romena",
+    significado: "Gheorghe é a forma romena do nome grego Georgios, que significa 'agricultor' ou 'trabalhador da terra'. É um nome tradicionalmente associado à classe trabalhadora e à conexão com a terra na cultura romena."
+  },
+  {
+    nome: "Victor",
+    nacionalidade: "Latina",
+    significado: "Victor é um nome de origem latina que significa 'vencedor' ou 'conquistador'. Era comum entre os primeiros cristãos e foi usado por vários santos e papas, simbolizando a vitória de Cristo sobre o pecado e a morte."
+  },
+  {
+    nome: "Haruto",
+    nacionalidade: "Japonesa",
+    significado: "Haruto é um nome masculino japonês composto por 'haru', que pode significar 'sol', 'luz' ou 'primavera', e 'to', que pode significar 'voar' ou 'soar'. Assim, o nome pode ser interpretado como 'sol radiante' ou 'voando alto'."
+  },
+  {
+    nome: "Khalil",
+    nacionalidade: "Árabe",
+    significado: "Khalil é um nome árabe que significa 'amigo íntimo' ou 'companheiro amado'. É um nome reverenciado na cultura árabe, associado à amizade profunda e à lealdade."
+  },
+  {
+    nome: "Hrvoje",
+    nacionalidade: "Croata",
+    significado: "Hrvoje é um nome masculino croata derivado da palavra 'hrabar', que significa 'corajoso' ou 'valente'. É um nome tradicionalmente associado à bravura na cultura croata."
+  },
+  {
+    nome: "Aarav",
+    nacionalidade: "Indiana",
+    significado: "Aarav é um nome masculino de origem sânscrita que significa 'paz' ou 'calma'. É um nome popular na Índia, associado a qualidades de serenidade e harmonia."
+  },
+  {
+    nome: "Bernard",
+    nacionalidade: "Alemã",
+    significado: "Bernard é um nome de origem germânica composto por 'bern', que significa 'urso', e 'hard', que significa 'corajoso' ou 'forte'. Assim, o nome pode ser interpretado como 'urso corajoso' ou 'forte como um urso'."
+  },
+  {
+    nome: "Roel",
+    nacionalidade: "Holandesa",
+    significado: "Roel é um nome masculino de origem holandesa, uma forma abreviada de 'Roeland', que significa 'terra famosa'. É um nome tradicionalmente associado à nobreza e à fama na cultura holandesa."
+  },
+  {
+    nome: "Massimo",
+    nacionalidade: "Italiana",
+    significado: "Massimo é um nome masculino italiano que significa 'o maior' ou 'o grandioso'. É um nome associado à excelência e à superioridade na cultura italiana."
+  },
+  {
+    nome: "Alessandro",
+    nacionalidade: "Italiana",
+    significado: "Alessandro é a forma italiana de Alexandre, que significa 'protetor da humanidade' ou 'defensor dos homens'. É um nome associado à liderança e à proteção na cultura italiana."
+  },
+  {
+    nome: "Otávio",
+    nacionalidade: "Latina",
+    significado: "Otávio é um nome de origem latina que significa 'oitavo filho'. É um nome tradicionalmente dado ao oitavo filho em uma família, simbolizando a continuidade e a prosperidade."
+  },
+  {
+    nome: "Rashid",
+    nacionalidade: "Árabe",
+    significado: "Rashid é um nome árabe que significa 'guia para a retidão' ou 'aquele que conduz ao caminho certo'. É um nome associado à sabedoria e à orientação moral."
+  },
+  {
+    nome: "Gilberto",
+    nacionalidade: "Germânica",
+    significado: "Gilberto é um nome de origem germânica composto por 'gisil', que significa 'promessa', e 'beraht', que significa 'brilhante'. Assim, o nome pode ser interpretado como 'promessa brilhante'."
+  },
+  {
+    nome: "Remy",
+    nacionalidade: "Francesa",
+    significado: "Remy é um nome masculino francês derivado do latim 'Remigius', que significa 'remador' ou 'aquele que faz avançar'. É um nome associado à diligência e ao progresso."
+  },
+  {
+    nome: "Anwar",
+    nacionalidade: "Árabe",
+    significado: "Anwar é um nome árabe que significa 'radiante' ou 'luminoso'. É um nome associado à luz e à clareza na cultura árabe."
+  },
+  {nome: "Dante", nacionalidade: "Italiana", significado: "O nome Dante é derivado do latim 'Durante', que significa 'constante', 'duradouro', 'estável' ou 'permanente'. É um nome associado à firmeza e à persistência."},
+  
+  {nome: "Basilio", nacionalidade: "Espanhola", significado: "Basílio é um nome de origem grega, derivado de 'Basíleios', que significa 'real' ou 'rei'. É um nome associado à nobreza e à autoridade."},
+  
+  {nome: "Marc", nacionalidade: "Francêsa", significado: "Marc é uma variante francesa de Marcos, que tem origem no latim 'Marcus' e está relacionado ao deus romano Marte, significando 'guerreiro' ou 'dedicado a Marte'."},
+  
+  {nome: "Arjun", nacionalidade: "Indiana", significado: "Arjun é um nome de origem sânscrita que significa 'brilhante', 'reluzente' ou 'puro'. É também o nome de um herói lendário do épico Mahabharata."},
+  
+  {nome: "Raimundo", nacionalidade: "Espanhola", significado: "Raimundo é um nome de origem germânica, composto por 'ragin' (conselho) e 'mund' (proteção), significando 'conselheiro protetor' ou 'aquele que protege com conselhos'."},
+  
+  {nome: "Axel", nacionalidade: "Escandinavo", significado: "Axel é uma variante escandinava do nome hebraico Absalão, que significa 'meu pai é a paz'. Também pode derivar do nórdico antigo 'öxull', significando 'eixo' ou 'carroça'."},
+  
+  {nome: "Nestor", nacionalidade: "Grega", significado: "Nestor é um nome de origem grega que significa 'aquele que retorna' ou 'aquele que regressa'. Na mitologia, Nestor era um rei sábio e conselheiro na Guerra de Troia."},
+  
+  {nome: "Luciano", nacionalidade: "Latina", significado: "Luciano é derivado do nome latino 'Lucianus', que significa 'nascido à luz' ou 'relativo à luz'. Está associado à clareza e à luminosidade."},
+  
+  {nome: "Evandro", nacionalidade: "Grega", significado: "Evandro é um nome de origem grega que significa 'homem bom' ou 'homem justo'. Na mitologia, Evandro foi um rei que fundou a cidade de Pallantium."},
+  
+  {nome: "Riccardo", nacionalidade: "Italiana", significado: "Riccardo é a forma italiana de Ricardo, que tem origem no germânico 'Ricohard', composto por 'ric' (rico, poderoso) e 'hard' (forte, corajoso), significando 'rei corajoso' ou 'governante forte'."},
+  
+  {nome: "Romeu", nacionalidade: "Italiana", significado: "Romeu é um nome de origem latina que significa 'cidadão de Roma'. Tornou-se popular devido à obra 'Romeu e Julieta' de William Shakespeare."},
+  
+  {nome: "Bakari", nacionalidade: "Suaíli", significado: "Bakari é um nome de origem suaíli que significa 'prometido' ou 'esperança de grandeza'. É um nome associado à prosperidade e ao futuro."},
+  
+  {nome: "Laurent", nacionalidade: "Francêsa", significado: "Laurent é a forma francesa de Lourenço, que tem origem no latim 'Laurentius', significando 'natural de Laurento' ou 'coroado de louros', simbolizando honra e vitória."},
+  
+  {nome: "Adil", nacionalidade: "Árabe", significado: "Adil é um nome árabe que significa 'justo', 'imparcial' ou 'equilibrado'. É um nome associado à retidão e à equidade."},
+  {nome: "Traian", nacionalidade: "Romena", significado: "O nome Traian é de origem romana e é derivado de 'Traianus', que significa 'aquele que vem de Troia'. É associado ao imperador romano Trajano, conhecido por suas conquistas e liderança."},
+  
+  {nome: "Percival", nacionalidade: "Arturiana", significado: "Percival é um nome de origem francesa antiga, derivado de 'Perceval', que significa 'perfurador do vale'. Na lenda arturiana, Percival é um dos cavaleiros da Távola Redonda e o herói original da busca pelo Santo Graal."},
+  
+  {nome: "Fidel", nacionalidade: "Espanhola", significado: "Fidel é um nome de origem latina, derivado de 'Fidelis', que significa 'fiel' ou 'leal'. É associado à fidelidade e lealdade."},
+  
+  {nome: "Talal", nacionalidade: "Árabe", significado: "Talal é um nome árabe que significa 'nobre' ou 'de aparência elegante'. Também pode ser interpretado como 'aquele que coloca uma camada de cor ou verniz em algo', simbolizando beleza e refinamento."},
+  
+  {nome: "Dominic", nacionalidade: "Latina", significado: "Dominic é um nome de origem latina, derivado de 'Dominicus', que significa 'pertencente ao Senhor' ou 'do Senhor'. É associado à santidade e à devoção religiosa."},
+  
+  {nome: "Marcos", nacionalidade: "Portuguêsa", significado: "Marcos é a forma portuguesa de Marcus, que tem origem no latim 'Marcus', derivado do deus romano da guerra, Marte. Significa 'dedicado a Marte' ou 'guerreiro'."},
+  
+  {nome: "Eliott", nacionalidade: "Inglêsa", significado: "Eliott é uma variação do nome inglês Elliot, que tem raízes no nome hebraico 'Eliyahu', significando 'Deus é meu Senhor'. É um nome associado à espiritualidade e devoção."},
+  
+  {nome: "Nikolai", nacionalidade: "Búlgara", significado: "Nikolai é uma forma eslava do nome grego 'Nikolaos', que significa 'vitória do povo'. É um nome associado à força, liderança e popularidade."},
+  
+  {nome: "Germán", nacionalidade: "Espanhola", significado: "Germán é um nome de origem latina, derivado de 'Germanus', que significa 'irmão' ou 'germânico'. É associado à fraternidade e à união."},
+  
+  {nome: "Zayden", nacionalidade: "Árabe", significado: "Zayden é uma variação do nome árabe 'Zayd', que significa 'crescimento' ou 'progresso'. Está associado ao desenvolvimento e à melhoria contínua."},
+  
+  {nome: "Márton", nacionalidade: "Húngaro", significado: "Márton é a forma húngara de Martin, que tem origem no latim 'Martinus', derivado do deus romano da guerra, Marte. Significa 'dedicado a Marte' ou 'guerreiro'."},
+  
+  {nome: "Scott", nacionalidade: "Inglêsa", significado: "Scott é um nome de origem inglesa, derivado do termo 'Scotti', que significa 'do povo escocês'. É associado à cultura e identidade escocesa."},
+  
+  {nome: "Padraig", nacionalidade: "Irlandêsa", significado: "Padraig é a forma irlandesa de Patrick, que tem origem no latim 'Patricius', significando 'nobre' ou 'de classe nobre'. Está associado à nobreza e honra."},
+  
+  {nome: "Justus", nacionalidade: "Latina", significado: "Justus é um nome de origem latina, derivado de 'Justus', que significa 'justo' ou 'honrado'. É associado à justiça e retidão moral."},
+    {nome: "Iskander", nacionalidade: "Persa", significado: "Iskander é uma variante do nome Alexandre, de origem grega, significando 'defensor da humanidade' ou 'protetor dos homens'. Este nome é utilizado em várias culturas, incluindo a persa, árabe e turca, e é associado ao líder histórico Alexandre, o Grande."},
+  
+  {nome: "Emre", nacionalidade: "Turca", significado: "Emre é um nome masculino de origem turca que significa 'amigo', 'irmão' ou 'companheiro'. Derivado do termo turco antigo 'amra-', que significa 'amar' ou 'desejar', o nome também é associado ao poeta sufi Yunus Emre."},
+  
+  {nome: "Bjorn", nacionalidade: "Norueguesa", significado: "Bjorn é um nome de origem nórdica antiga, derivado da palavra 'bjǫrn', que significa 'urso'. Na mitologia nórdica, os ursos simbolizavam força, coragem e liderança."},
+  
+  {nome: "Emil", nacionalidade: "Eslava", significado: "Emil é um nome masculino de origem latina, derivado de 'Aemilius', que significa 'rival', 'emulador' ou 'aquele que busca igualar'. É um nome associado à ambição e ao esforço para alcançar a excelência."},
+  
+  {nome: "Boaz", nacionalidade: "Hebraica", significado: "Boaz é um nome de origem hebraica, significando 'em força' ou 'nela é força'. É associado a qualidades de força, agilidade e determinação, e aparece na Bíblia como o marido de Rute."},
+  
+  {nome: "Shane", nacionalidade: "Irlandesa", significado: "Shane é uma variante irlandesa do nome Sean, que é derivado do nome hebraico Yohanan, significando 'Deus é gracioso'. O nome tem raízes na língua irlandesa e é associado à graça divina."},
+  
+  {nome: "Kacper", nacionalidade: "Polonesa", significado: "Kacper é uma variante polonesa do nome Gaspar, que tem origem persa e significa 'tesoureiro' ou 'aquele que traz tesouros'. É tradicionalmente associado a um dos Três Reis Magos que visitaram o menino Jesus."},
+  
+  {nome: "Cornel", nacionalidade: "Romena", significado: "Cornel é um nome de origem latina, derivado de 'Cornelius', que significa 'do clã Cornélio'. O nome está associado à força e robustez, simbolizadas pelo 'chifre' (cornu) no latim."},
+  
+  {nome: "Ruben", nacionalidade: "Espanhola", significado: "Ruben é um nome de origem hebraica, significando 'eis um filho' ou 'contemplado'. É associado à alegria e à celebração do nascimento de um filho."},
+  
+  {nome: "Augusto", nacionalidade: "Portuguesa", significado: "Augusto é um nome de origem latina, derivado de 'Augustus', que significa 'sublime' ou 'venerável'. É associado à dignidade, respeito e autoridade."},
+  
+  {nome: "Koen", nacionalidade: "Holandesa", significado: "Koen é um nome de origem holandesa, derivado do nome germânico 'Konrad', que significa 'conselho audaz'. É associado à coragem, ousadia e liderança."},
+  
+  {nome: "Lukas", nacionalidade: "Alemã", significado: "Lukas é uma variante do nome Lucas, de origem latina, significando 'luminoso' ou 'portador de luz'. É associado à clareza, iluminação e conhecimento."},
+  
+  {nome: "Franco", nacionalidade: "Italiana", significado: "Franco é um nome de origem italiana, significando 'livre' ou 'honesto'. Está associado à liberdade, sinceridade e integridade."},
+  
+  {nome: "Ronan", nacionalidade: "Irlandesa", significado: "Ronan é um nome de origem irlandesa, derivado de 'rón', que significa 'foca'. Na mitologia irlandesa, os 'ronans' eram considerados 'pequenas focas' ou 'guerreiros pequenos', simbolizando proteção e força."},
+  {nome: "Ignatius", nacionalidade: "Latina", significado: "Ignatius é um nome masculino de origem latina, derivado do nome romano 'Egnatius'. O significado exato é incerto, mas é frequentemente associado ao termo latino 'ignis', que significa 'fogo'. Portanto, Ignatius pode ser interpretado como 'fogo ardente' ou 'intenso'. Este nome foi popularizado por São Inácio de Loyola, fundador da Ordem dos Jesuítas."},
+  
+  {nome: "Akim", nacionalidade: "Russa", significado: "Akim é uma variante russa do nome hebraico Joaquim (Yaqim), que significa 'Deus estabelecerá' ou 'Deus elevará'. Este nome carrega uma forte conotação religiosa e é associado à ideia de que Deus estabelecerá ou elevará a pessoa que o carrega."},
+  
+  {nome: "Emrys", nacionalidade: "Galês", significado: "Emrys é um nome masculino de origem galesa, derivado do nome 'Ambrosius'. Significa 'imortal' ou 'eterno'. Este nome é famoso por sua associação com Merlin, o mago lendário das histórias arturianas, onde 'Emrys' era seu nome verdadeiro."},
+  
+  {nome: "Navid", nacionalidade: "Persa", significado: "Navid é um nome masculino de origem persa, significando 'boas notícias' ou 'portador de alegria'. É um nome popular em países de língua persa, como Irã e Afeganistão, e é associado a mensagens positivas e auspiciosas."},
+  
+  {nome: "Mateo", nacionalidade: "Espanhola", significado: "Mateo é uma variante espanhola do nome Mateus, que tem origem no hebraico 'Mattityahu', significando 'dom de Deus' ou 'presente de Deus'. Este nome é associado a São Mateus, um dos doze apóstolos de Jesus Cristo."},
+  
+  {nome: "Søren", nacionalidade: "Dinamarquesa", significado: "Søren é um nome masculino de origem dinamarquesa, derivado do nome 'Severin', que tem origem no latim 'severus', significando 'severo' ou 'rigoroso'. Este nome é associado a pessoas com características de seriedade e disciplina."},
+  
+  {nome: "Artem", nacionalidade: "Russa", significado: "Artem é um nome masculino de origem grega, derivado de 'Artemios', que significa 'dedicado a Artemis'. Artemis era a deusa grega da caça e da natureza selvagem. Além disso, Artem pode ser interpretado como 'saudável' ou 'integro', refletindo uma conotação de bem-estar físico e moral."},
+  
+  {nome: "Manuel", nacionalidade: "Espanhola", significado: "Manuel é uma variante espanhola do nome Emanuel, que tem origem no hebraico 'Immanuel', significando 'Deus está conosco'. Este nome é associado à presença divina e à proteção divina, sendo frequentemente utilizado em contextos religiosos."},
+  
+  {nome: "Gianni", nacionalidade: "Italiana", significado: "Gianni é uma forma italiana do nome João, que tem origem no hebraico 'Yohanan', significando 'Deus é gracioso'. Este nome é associado à graça divina e à misericórdia de Deus."},
+  
+  {nome: "Vitor", nacionalidade: "Portuguesa", significado: "Vitor é um nome masculino de origem latina, derivado de 'victor', que significa 'vencedor' ou 'conquistador'. Este nome é associado a pessoas que alcançam sucesso e superam desafios."},
+  
+  {nome: "Christian", nacionalidade: "Inglesa", significado: "Christian é um nome masculino de origem latina, derivado de 'Christianus', que significa 'seguidor de Cristo'. Este nome é amplamente utilizado em países de língua inglesa e é associado à fé cristã."},
+  
+  {nome: "Jovan", nacionalidade: "Sérvia", significado: "Jovan é uma variante sérvia do nome João, que tem origem no hebraico 'Yohanan', significando 'Deus é gracioso'. Este nome é comum em países eslavos e é associado à graça divina."},
+  
+  {nome: "Maksym", nacionalidade: "Polonesa", significado: "Maksym é uma variante polonesa do nome Maximilian, que tem origem no latim 'Maximilianus', significando 'o maior'. Este nome é associado à grandeza e à excelência."},
+  {nome: "René", nacionalidade: "Francêsa", significado: "René é a forma francesa do nome Renato, que tem origem no latim 'Renatus', significando 'renascido', 'nascido de novo' ou 'ressuscitado'. Este nome carrega uma forte conotação espiritual, simbolizando renovação e novos começos."},
+  
+  {nome: "Mikhail", nacionalidade: "Russa", significado: "Mikhail é a versão russa do nome Miguel, originado do hebraico 'Mikhael', que significa 'quem é como Deus?'. Este nome é associado à humildade diante de Deus e é amplamente utilizado na Rússia."},
+  
+  {nome: "Bartosz", nacionalidade: "Polonêsa", significado: "Bartosz é uma variante polonesa do nome Bartolomeu, que tem origem no aramaico 'Bar-Tolmai', significando 'filho de Talmai'. Talmai é interpretado como 'agricultor' ou 'aquele que cultiva a terra', refletindo uma conexão com a natureza e o trabalho rural."},
+  
+  {nome: "Talib", nacionalidade: "Árabe", significado: "Talib é um nome árabe que significa 'buscador de conhecimento' ou 'estudante'. É derivado da palavra árabe 'ṭālib', que significa 'aquele que busca'. Este nome é frequentemente associado ao estudo e à busca pelo saber."},
+  
+  {nome: "Olivier", nacionalidade: "Francêsa", significado: "Olivier é a forma francesa do nome Oliver, que tem origem no latim 'olivarius', significando 'oliveira'. A oliveira é uma árvore símbolo de paz e prosperidade, e o nome carrega consigo esses significados positivos."},
+  
+  {nome: "Damien", nacionalidade: "Francêsa", significado: "Damien é uma variante francesa do nome Damiano, que tem origem no grego 'Damianos', significando 'domador' ou 'aquele que doma'. Este nome é associado à força controladora e à capacidade de liderança."},
+  
+  {nome: "Isaak", nacionalidade: "Russa", significado: "Isaak é uma variante do nome Isaque, que tem origem no hebraico 'Yitzhak', significando 'ele ri' ou 'riso'. Este nome é associado à alegria e à felicidade, refletindo um espírito alegre."},
+  
+  {nome: "Kenji", nacionalidade: "Japonêsa", significado: "Kenji é um nome japonês que pode ser interpretado de várias maneiras, dependendo dos caracteres kanji usados. Geralmente, 'Ken' significa 'saudável', 'forte' ou 'inteligente', e 'Ji' significa 'filho' ou 'geração'. Assim, Kenji pode significar 'segundo filho saudável' ou 'filho forte e inteligente'."},
+  
+  {nome: "Bertrand", nacionalidade: "Francêsa", significado: "Bertrand é um nome de origem germânica, composto por 'berht' (brilhante) e 'hramn' (corvo), significando 'corvo brilhante'. Este nome é associado à sabedoria e à visão aguçada."},
+  
+  {nome: "Amir", nacionalidade: "Árabe", significado: "Amir é um nome árabe que significa 'príncipe', 'líder' ou 'comandante'. Derivado da palavra árabe 'amir', que significa 'aquele que comanda'. Este nome é associado à liderança e autoridade."},
+  
+  {nome: "Liam", nacionalidade: "Irlandêsa", significado: "Liam é uma forma curta do nome William, que tem origem no germânico 'Willahelm', significando 'protetor resoluto'. Este nome é associado à força de vontade e à determinação."},
+  
+  {nome: "Massoud", nacionalidade: "Persa", significado: "Massoud é um nome persa que significa 'abençoado' ou 'afortunado'. Derivado da palavra árabe 'mas'ud', que significa 'feliz' ou 'afortunado'. Este nome é associado à sorte e à felicidade."},
+  
+  {nome: "Benedito", nacionalidade: "Portuguêsa", significado: "Benedito é um nome de origem latina, derivado de 'Benedictus', significando 'abençoado' ou 'aquele que é bendito'. Este nome é associado à bênção divina e à santidade."},
+  
+  {nome: "Oskar", nacionalidade: "Polonêsa", significado: "Oskar é uma variante do nome Óscar, que tem origem no irlandês 'Oisín', significando 'amigo dos cervos'. Também pode ser interpretado como 'lança de Deus', refletindo força e proteção."},
+  {nome: "Ladislav", nacionalidade: "Eslava", significado: "Ladislav é um nome de origem eslava composto por 'slav' (glória) e 'lad' (harmonia, ordem), significando 'domínio glorioso' ou 'glória harmoniosa'. Este nome é associado à liderança justa e ao equilíbrio."},
+  
+  {nome: "Fernando", nacionalidade: "Portuguêsa", significado: "Fernando tem origem no germânico 'Ferdinand', composto por 'fardi' (jornada) e 'nanthi' (corajoso), significando 'viajante ousado' ou 'aquele que empreende jornadas corajosas'. Este nome simboliza aventura e coragem."},
+  
+  {nome: "Sergei", nacionalidade: "Russa", significado: "Sergei é uma variante russa do nome Sérgio, originado do latim 'Sergius', que significa 'guardião' ou 'protetor'. Este nome é associado à proteção e à liderança responsável."},
+  
+  {nome: "Aditya", nacionalidade: "Indiana", significado: "Aditya é um nome de origem sânscrita que significa 'filho do sol' ou 'esplendoroso'. Na mitologia hindu, Aditya é associado aos deuses solares, simbolizando luz, energia e vitalidade."},
+  
+  {nome: "Wojciech", nacionalidade: "Polonêsa", significado: "Wojciech é um nome polonês composto por 'woj' (guerreiro) e 'ciech' (alegria), significando 'aquele que se alegra na batalha'. Este nome é associado à coragem e à alegria na luta."},
+  
+  {nome: "Isidro", nacionalidade: "Espanhola", significado: "Isidro tem origem no grego 'Isidōros', significando 'dádiva de Ísis'. Ísis era uma deusa egípcia associada à fertilidade e à proteção, tornando este nome símbolo de generosidade e cuidado."},
+  
+  {nome: "Giovanni", nacionalidade: "Italiana", significado: "Giovanni é a forma italiana do nome João, originado do hebraico 'Yochanan', que significa 'Deus é gracioso'. Este nome é associado à graça divina e à bondade."},
+  
+  {nome: "Selim", nacionalidade: "Árabe", significado: "Selim é um nome de origem árabe que significa 'pacífico' ou 'seguro'. Este nome é associado à tranquilidade, segurança e harmonia."},
+  
+  {nome: "Vasileios", nacionalidade: "Grega", significado: "Vasileios é a forma grega do nome Basílio, originado do grego 'Basileios', que significa 'real' ou 'majestoso'. Este nome é associado à realeza e à liderança nobre."},
+  
+  {nome: "Osman", nacionalidade: "Turca", significado: "Osman é um nome turco que significa 'o divino' ou 'protetor pela justiça'. Este nome é associado à autoridade justa e à proteção divina."},
+  
+  {nome: "Héctor", nacionalidade: "Espanhola", significado: "Héctor é um nome de origem grega que significa 'aquele que defende' ou 'aquele que retém'. Na mitologia grega, Héctor era um herói troiano conhecido por sua coragem e lealdade."},
+  
+  {nome: "Alejandro", nacionalidade: "Espanhola", significado: "Alejandro é a forma espanhola do nome Alexandre, originado do grego 'Alexandros', que significa 'defensor da humanidade'. Este nome é associado à proteção e liderança."},
+  
+  {nome: "Sergio", nacionalidade: "Espanhola", significado: "Sergio é um nome de origem latina que significa 'servo' ou 'protetor'. Este nome é associado à dedicação e ao cuidado com os outros."},
+  
+  {nome: "Giuseppe", nacionalidade: "Italiana", significado: "Giuseppe é a forma italiana do nome José, originado do hebraico 'Yosef', que significa 'Deus acrescenta'. Este nome é associado à prosperidade e à bênção divina."},
+  {nome: "Nadir", nacionalidade: "Árabe", significado: "Nadir é um nome de origem árabe que significa 'raro', 'precioso' ou 'único'. É associado a algo ou alguém de valor excepcional, algo que se destaca pela sua singularidade e beleza. Além disso, em alguns contextos, pode também significar 'aquele que adverte' ou 'aquele que avisa'."},
+  
+  {nome: "Samuel", nacionalidade: "Hebraica", significado: "Samuel é um nome de origem hebraica, derivado de 'Shemu'el', que significa 'nome de Deus' ou 'Deus ouve'. Na tradição bíblica, Samuel foi um profeta que desempenhou um papel crucial na transição do período dos juízes para a monarquia em Israel."},
+  
+  {nome: "Maksim", nacionalidade: "Russa", significado: "Maksim é um nome de origem russa, variante de 'Máximus', que significa 'o maior' ou 'o mais excelente'. É associado a qualidades de grandeza e superioridade. O nome foi popularizado pelo escritor russo Maksim Górki."},
+  
+  {nome: "Omarion", nacionalidade: "Inglêsa", significado: "Omarion é uma variação moderna do nome Omar, que tem origem árabe e significa 'vida longa' ou 'aquele que vive muito'. A adição do sufixo 'ion' confere ao nome uma sonoridade contemporânea e única."},
+  
+  {nome: "Jonas", nacionalidade: "Hebraica", significado: "Jonas é um nome de origem hebraica, derivado de 'Yonah', que significa 'pomba'. Na tradição bíblica, Jonas foi um profeta que é conhecido por sua missão em Nínive e pelo episódio em que foi engolido por um grande peixe. A pomba é símbolo de paz e pureza."},
+  
+  {nome: "Tobias", nacionalidade: "Hebraica", significado: "Tobias é um nome de origem hebraica, derivado de 'Toviyyah', que significa 'Deus é bom' ou 'agradável a Deus'. É um nome que reflete bondade e virtude, sendo associado a personagens bíblicos que demonstraram fé e retidão."},
+  
+  {nome: "Zane", nacionalidade: "Inglêsa", significado: "Zane é uma variação do nome John, que tem origem hebraica e significa 'Deus é gracioso'. Em algumas fontes, também é associado ao significado de 'presente de Deus'. É um nome moderno e popular em países de língua inglesa."},
+  
+  {nome: "Afonso", nacionalidade: "Portuguêsa", significado: "Afonso é um nome de origem germânica, derivado de 'Adalfuns', que significa 'pronto para a nobreza' ou 'inclinação nobre'. É um nome associado à realeza e à liderança, sendo utilizado por vários monarcas portugueses."},
+  
+  {nome: "Emanuel", nacionalidade: "Portuguêsa", significado: "Emanuel é um nome de origem hebraica, derivado de 'Immanuel', que significa 'Deus conosco'. É um nome com forte conotação religiosa, associado à presença divina entre os seres humanos."},
+  
+  {nome: "Yrjö", nacionalidade: "Finlandêsa", significado: "Yrjö é a forma finlandesa do nome Jorge, que tem origem grega e significa 'agricultor' ou 'aquele que trabalha a terra'. É um nome tradicional em países de língua finlandesa."},
+  
+  {nome: "Kian", nacionalidade: "Irlandêsa", significado: "Kian é um nome de origem irlandesa que significa 'antigo', 'distante' ou 'rei'. É associado a qualidades de liderança e sabedoria, refletindo uma conexão com a tradição e a história."},
+  
+  {nome: "Keanu", nacionalidade: "Havaiana", significado: "Keanu é um nome de origem havaiana que significa 'brisa fresca das montanhas'. É um nome que evoca imagens de serenidade e beleza natural, associado à cultura e à paisagem do Havai."},
+  
+  {nome: "Pascal", nacionalidade: "Francêsa", significado: "Pascal é um nome de origem latina, derivado de 'Paschalis', que significa 'relativo à Páscoa'. É um nome associado à celebração da ressurreição de Cristo, sendo tradicionalmente dado a crianças nascidas durante a Páscoa."},
+  
+  {nome: "Idris", nacionalidade: "Árabe", significado: "Idris é um nome de origem árabe, associado ao profeta Enoque. O significado do nome é 'interpretar' ou 'instruir'. É um nome que carrega conotações de sabedoria e conhecimento."},
+  {nome: "Cristian", nacionalidade: "Espanhola", significado: "Cristian é uma variação do nome Christian, originado do latim 'Christianus', que significa 'cristão', 'ungido por Cristo', 'consagrado a Cristo' ou 'seguidor de Cristo'. Esse nome carrega consigo uma forte ligação com a religião cristã, simbolizando fé e devoção. É um nome comum em países de língua portuguesa e espanhola."},
+  
+  {nome: "Tamas", nacionalidade: "Húngara", significado: "Tamas é a forma húngara do nome Tomás, que tem origem no aramaico 'T'ōmā', significando 'gêmeo'. Através do grego 'Didymos' e do latim 'Thomas', chegou ao húngaro como Tamas. É um nome com forte tradição na Europa Central e Oriental, especialmente na Hungria, denotando dualidade ou a qualidade de ser um dos dois."},
+  
+  {nome: "Joaquin", nacionalidade: "Espanhola", significado: "Joaquin é uma variação do nome Joaquim, de origem hebraica, composto por 'Yahweh' (Jeová) e 'quwm' (estabelecer), significando 'Jeová estabeleceu' ou 'Deus estabeleceu'. Na Bíblia, este foi o nome de um dos reis de Judá, conhecido por ter sido levado pelo rei Nabucodonosor para o cativeiro na Babilônia."},
+  
+  {nome: "Zlatan", nacionalidade: "Croata", significado: "Zlatan é um nome de origem eslava, derivado da palavra 'zlato', que significa 'ouro' ou 'dourado'. Portanto, Zlatan pode ser interpretado como 'dourado' ou 'precioso'. É um nome comum entre os povos eslavos do sul, especialmente na Croácia, Bósnia e Herzegovina, Macedônia do Norte e Sérvia."},
+  
+  {nome: "Murilo", nacionalidade: "Portuguesa", significado: "Murilo é uma adaptação portuguesa do sobrenome espanhol Murillo, que tem origem no latim 'murus', significando 'parede' ou 'muralha'. Assim, Murilo pode ser interpretado como 'pequeno muro' ou 'pequena muralha'. É um nome que remete à ideia de solidez e proteção."},
+  
+  {nome: "Felix", nacionalidade: "Latina", significado: "Félix é um nome de origem latina, derivado de 'felix', que significa 'feliz', 'sortudo', 'bem-sucedido' ou 'bem-aventurado'. Esse nome carrega consigo significados positivos e é associado à sorte e à felicidade. Foi utilizado como nome próprio desde a Antiguidade e é comum em várias culturas."},
+  
+  {nome: "Mekhi", nacionalidade: "Hebraica", significado: "Mekhi é uma variação do nome Micaiah, que tem origem no hebraico 'Mikha'el', significando 'Quem é como Deus?'. É um nome que expressa humildade diante da grandeza divina e é associado à fé e devoção religiosa."},
+  
+  {nome: "Rashad", nacionalidade: "Árabe", significado: "Rashad é um nome árabe que significa 'bom julgamento', 'orientado para o bem' ou 'reto'. É derivado da palavra árabe 'rashd', que significa 'orientação correta' ou 'sabedoria'. Esse nome é associado a qualidades de retidão e discernimento."},
+  
+  {nome: "Edgar", nacionalidade: "Inglesa", significado: "Edgar é um nome de origem anglo-saxônica, composto por 'ead' (riqueza, fortuna) e 'gar' (lança), significando 'lança da fortuna' ou 'lança próspera'. É um nome associado à nobreza e à liderança."},
+  
+  {nome: "Derick", nacionalidade: "Inglesa", significado: "Derick é uma variação do nome Derek, que tem origem no nome germânico 'Theodoric', composto por 'theod' (povo) e 'ric' (governante), significando 'governante do povo'. É um nome associado à liderança e autoridade."},
+  
+  {nome: "Luiz", nacionalidade: "Portuguesa", significado: "Luiz é um nome de origem germânica, derivado de 'Hludwig', composto por 'hlud' (fama) e 'wig' (guerra), significando 'guerreiro famoso' ou 'famoso na batalha'. É um nome associado à coragem e à fama."},
+  
+  {nome: "Benedict", nacionalidade: "Inglesa", significado: "Benedict é um nome de origem latina, derivado de 'Benedictus', que significa 'abençoado' ou 'bem-aventurado'. Esse nome foi popularizado por São Bento de Núrsia, fundador da Ordem de São Bento, e é associado à santidade e à bênção divina."},
+  
+  {nome: "Vicent", nacionalidade: "Catalã", significado: "Vicent é uma variação do nome Vicente, de origem latina 'Vincentius', que significa 'vencedor' ou 'conquistador'. Esse nome é associado à vitória e ao sucesso."},
+  
+  {nome: "Karlo", nacionalidade: "Croata", significado: "Karlo é a forma croata do nome Carlos, derivado do germânico 'Karl', que significa 'homem livre'. É um nome associado à liberdade e à nobreza."},
+  
+  {nome: "Naji", nacionalidade: "Árabe", significado: "Naji é um nome árabe que significa 'salvo', 'protetor' ou 'aquele que alcança a salvação'. É derivado da palavra árabe 'najah', que significa 'sucesso' ou 'salvação'. Esse nome é associado à proteção e à segurança."},
+  
+  {nome: "Giannis", nacionalidade: "Grega", significado: "Giannis é a forma grega do nome João, que tem origem no hebraico 'Yohanan', significando 'Deus é gracioso'. Esse nome é associado à graça divina e à misericórdia."},
+  {nome: "Iago", significado: "Suplantador, substituto", nacionalidade: "Espanhola", "detalhamento": "Iago é uma variante do nome Jacó, originado do hebraico 'Ya'akov', que significa 'aquele que vem do calcanhar' ou 'suplantador'. Na tradição bíblica, Jacó nasceu segurando o calcanhar de seu irmão gêmeo Esaú, o que simboliza a ideia de substituir ou suplantar. O nome Iago é comum em países de língua espanhola e portuguesa."},
+  
+  {nome: "Dusan", significado: "Espírito, alma", nacionalidade: "Sérvia", "detalhamento": "Dušan é um nome de origem eslava, derivado da palavra 'duša', que significa 'alma' ou 'espírito'. Portanto, Dušan pode ser interpretado como 'aquele que tem alma' ou 'espírito'. É um nome comum na Sérvia e em outros países eslavos."},
+  
+  {nome: "Ertan", significado: "Raio da alvorada, novo dia", nacionalidade: "Turca", "detalhamento": "Ertan é um nome turco que combina 'ert' (raio) e 'an' (alvorada, amanhecer), significando 'raio da alvorada' ou 'novo dia'. É um nome que transmite a ideia de renovação e esperança."},
+  
+  {nome: "Musa", significado: "Tirado da água, libertador", nacionalidade: "Árabe", "detalhamento": "Musa é a forma árabe do nome Moisés, que tem origem no egípcio antigo e significa 'tirado das águas'. Na tradição islâmica, Musa é considerado um profeta e libertador do povo de Israel."},
+  
+  {nome: "Abner", significado: "Pai da luz", nacionalidade: "Hebraica", "detalhamento": "Abner é um nome de origem hebraica, composto por 'ab' (pai) e 'ner' (luz), significando 'pai da luz' ou 'meu pai é luz'. Na Bíblia, Abner foi o comandante do exército do rei Saul."},
+  
+  {nome: "Varun", significado: "Deus do oceano", nacionalidade: "Indiana", "detalhamento": "Varun é um nome de origem sânscrita, associado ao deus hindu Varuna, que é o deus do oceano e da água. O nome transmite a ideia de força e domínio sobre as águas."},
+  
+  {nome: "Jared", significado: "Descendo, aquele que desce", nacionalidade: "Inglesa", "detalhamento": "Jared é um nome de origem hebraica, derivado de 'Yared', que significa 'aquele que desce' ou 'descendente'. Na Bíblia, Jared foi um descendente de Adão."},
+  
+  {nome: "Kyler", significado: "Arqueiro, corajoso", nacionalidade: "Inglesa", "detalhamento": "Kyler é um nome moderno de origem inglesa, derivado de 'kyle', que significa 'estreito' ou 'estreito de mar'. Embora o significado literal seja 'estreito', o nome é associado à ideia de um arqueiro ou guerreiro corajoso."},
+  
+  {nome: "Filip", significado: "Amigo dos cavalos", nacionalidade: "Polonesa", "detalhamento": "Filip é a forma polonesa do nome Filipe, que tem origem no grego 'Philippos', composto por 'philos' (amigo) e 'hippos' (cavalo), significando 'amigo dos cavalos'. É um nome comum em países de língua polonesa."},
+  
+  {nome: "Moises", significado: "Tirado das águas", nacionalidade: "Hebraica", "detalhamento": "Moisés é um nome de origem egípcia, significando 'tirado das águas'. Na Bíblia, Moisés foi o líder que libertou os israelitas da escravidão no Egito."},
+  
+  {nome: "Cillian", significado: "Guerra pequena, pequeno guerreiro", nacionalidade: "Irlandesa", "detalhamento": "Cillian é um nome de origem irlandesa, derivado do gaélico 'Cillín', que significa 'pequeno guerreiro' ou 'guerreiro jovem'. É um nome tradicional na Irlanda."},
+  
+  {nome: "Rui", significado: "Famoso, glorioso", nacionalidade: "Portuguesa", "detalhamento": "Rui é um nome de origem germânica, derivado de 'Rudolf', composto por 'hrod' (fama) e 'wulf' (lobo), significando 'lobo famoso' ou 'famoso na batalha'. É um nome comum em Portugal."},
+  
+  {nome: "Cristóbal", significado: "Portador de Cristo", nacionalidade: "Espanhola", "detalhamento": "Cristóbal é a forma espanhola do nome Cristóvão, que tem origem no grego 'Christophoros', composto por 'Christos' (Cristo) e 'phero' (carregar), significando 'portador de Cristo'. Na tradição cristã, São Cristóvão é conhecido como o santo padroeiro dos viajantes."},
+    {nome: "Henry", significado: "Senhor do lar, príncipe do lar, governante da casa", nacionalidade: "Inglêsa", "detalhamento": "Henry é uma variante inglesa do nome Henrique, originado do germânico Heimirich. A raiz Haimirich é composta pelos elementos 'heim' (lar, casa) e 'rik' (senhor, príncipe, poder), resultando no significado 'senhor do lar' ou 'governante da casa'."},
+  
+  {nome: "Raoní", significado: "Líder, chefe guerreiro", nacionalidade: "Tupi", "detalhamento": "Raoní é um nome indígena brasileiro. Na língua tupi, significa 'chefe' ou 'grande guerreiro'. Em outras línguas indígenas, como o txucarramãe, significa 'onça' ou 'sexo de onça'. É um nome associado à valentia e nobreza dos povos indígenas."},
+  
+  {nome: "Jordy", significado: "Aquele que desce, flui como o rio Jordão", nacionalidade: "Holandêsa", "detalhamento": "Jordy é uma variante do nome Jordão, que tem origem no hebraico 'Yarden', significando 'aquele que desce' ou 'flui'. O rio Jordão é um símbolo de transição e renovação na tradição bíblica."},
+  
+  {nome: "Kaleb", significado: "Fervoroso, devotado como um cão fiel", nacionalidade: "Hebraica", "detalhamento": "Kaleb é uma versão inglesa do nome hebraico Caleb, que significa 'cão fiel' ou 'devotado'. Na tradição bíblica, Kaleb foi um dos doze espiões enviados por Moisés para explorar a Terra Prometida."},
+  
+  {nome: "Teemu", significado: "Honra a Deus", nacionalidade: "Finlandêsa", "detalhamento": "Teemu é um nome finlandês que pode ser interpretado como 'aquele que é honrado por Deus' ou 'aquele que honra a Deus'. É um nome associado à agilidade e prestígio esportivo."},
+  
+  {nome: "Emmanuelle", significado: "Deus conosco", nacionalidade: "Francêsa", "detalhamento": "Emmanuelle é a variante francesa de Emanuela, versão feminina de Emanuel, que vem do hebraico 'Immanuel', significando 'Deus está conosco'. Esse nome carrega um significado de presença divina e proteção."},
+  
+  {nome: "Niklas", significado: "Vitória do povo", nacionalidade: "Alemã", "detalhamento": "Niklas é uma variante do nome Nicolau, de origem grega, composto por 'níke' (vitória) e 'laós' (povo), significando 'vitória do povo'. É um nome associado à liderança e sucesso coletivo."},
+  
+  {nome: "Josué", significado: "Deus é salvação", nacionalidade: "Hebraica", "detalhamento": "Josué é uma forma do nome hebraico Yehoshua, que significa 'Deus é a salvação' ou 'Jeová é auxílio'. Na tradição bíblica, Josué foi o sucessor de Moisés e conduziu os israelitas à Terra Prometida."},
+  
+  {nome: "Diego", significado: "Doutrinador, conselheiro", nacionalidade: "Espanhola", "detalhamento": "Diego é uma variante espanhola do nome Tiago, que tem origem no hebraico 'Ya'aqov', significando 'aquele que suplantou'. É um nome associado à sabedoria e orientação."},
+  
+  {nome: "Jasper", significado: "Tesouro, portador de riquezas", nacionalidade: "Holandêsa", "detalhamento": "Jasper é uma variante do nome Gaspar, um dos três reis magos. O nome tem origem persa, significando 'tesoureiro' ou 'portador de riquezas'. É associado à generosidade e prestígio."},
+  
+  {nome: "Miguel", significado: "Quem é como Deus?", nacionalidade: "Espanhola", "detalhamento": "Miguel é um nome de origem hebraica, derivado de 'Mikha'el', significando 'quem é como Deus?'. Na tradição cristã, Miguel é um arcanjo e líder das forças celestiais."},
+  
+  {nome: "Dieudonné", significado: "Dado por Deus", nacionalidade: "Francêsa", "detalhamento": "Dieudonné é um nome francês que significa 'dado por Deus'. É uma expressão de gratidão e reconhecimento pela dádiva divina."},
+  
+  {nome: "Gabriel", significado: "Homem de Deus, força de Deus", nacionalidade: "Hebraica", "detalhamento": "Gabriel é um nome de origem hebraica, derivado de 'Gavri'el', significando 'homem de Deus' ou 'força de Deus'. Na tradição bíblica, Gabriel é um arcanjo mensageiro."},
+  
+  {nome: "Laurence", significado: "Coronado de louro, vitorioso", nacionalidade: "Inglêsa", "detalhamento": "Laurence é uma variante do nome Lorenzo, de origem latina, significando 'coronado de louros' ou 'vitorioso'. O louro era símbolo de honra e conquista na Roma antiga."},
+  {nome: "Tshepo", significado: "Esperança, confiança, fé", nacionalidade: "Tswana", "detalhamento": "Tshepo é um nome masculino de origem africana, utilizado principalmente nas línguas setswana e sesotho. Derivado do verbo 'tšhepa', que significa 'confiar' ou 'esperar', o nome carrega os significados de 'esperança', 'fé' e 'confiabilidade'. É um nome popular em países como África do Sul, Botswana e Lesoto, refletindo aspirações positivas e confiança."},
+  
+  {nome: "Stefano", significado: "Coroado, vitorioso", nacionalidade: "Italiana", "detalhamento": "Stefano é a forma italiana do nome grego 'Stephanos', que significa 'coroa', 'guirlanda' ou 'coroado'. O nome está associado a conquistas e vitórias, simbolizando honra e reconhecimento. É amplamente utilizado na Itália e em países de língua italiana."},
+  
+  {nome: "Ari", significado: "Leão, águia, valente", nacionalidade: "Hebraica", "detalhamento": "Ari é um nome masculino de origem hebraica, derivado de 'ארי' (Ary), que significa 'leão'. É um nome associado à força, coragem e liderança. Em outras culturas, como a escandinava, 'Ari' também pode significar 'águia'."},
+  
+  {nome: "Bartek", significado: "Filho de Talmai, domador da terra", nacionalidade: "Polonesa", "detalhamento": "Bartek é uma forma diminutiva polonesa de Bartosz, que por sua vez é derivado de Bartolomeu. O nome tem origem aramaica, significando 'filho de Talmai' ou 'filho do agricultor'. É um nome tradicional na Polônia, frequentemente utilizado de forma carinhosa."},
+  
+  {nome: "Claude", significado: "Manco, aquele que claudica", nacionalidade: "Francesa", "detalhamento": "Claude é um nome francês derivado do latim 'Claudius', que significa 'manco' ou 'aquele que claudica'. Embora o significado original possa ter conotações físicas, o nome tem sido associado a várias figuras históricas e culturais, como o pintor Claude Monet e o compositor Claude Debussy."},
+  
+  {nome: "Wesley", significado: "Clareira ocidental, prado a oeste", nacionalidade: "Inglesa", "detalhamento": "Wesley é um nome de origem inglesa, composto pelas palavras 'west' (oeste) e 'lea' (clareira ou prado), significando 'clareira ocidental' ou 'prado a oeste'. Originalmente utilizado como sobrenome, tornou-se um nome próprio popular, especialmente após a influência de John Wesley, fundador do movimento metodista."},
+  
+  {nome: "Serafim", significado: "Anjo ardente, inflamado", nacionalidade: "Portuguesa", "detalhamento": "Serafim é um nome masculino de origem hebraica, derivado de 'seraphim', que significa 'seres ardentes' ou 'anjos flamejantes'. Na tradição judaica e cristã, os serafins são uma ordem celestial de anjos associados à pureza e à adoração a Deus. O nome é utilizado em várias culturas, incluindo a portuguesa."},
+  
+  {nome: "Hamid", significado: "Louvável, digno de elogio", nacionalidade: "Árabe", "detalhamento": "Hamid é um nome árabe que significa 'louvável' ou 'digno de elogio'. Derivado da raiz 'ḥ-m-d', que significa 'louvar', o nome está associado a qualidades de virtude e bondade. É amplamente utilizado em países de língua árabe e muçulmanos."},
+  
+  {nome: "Eugene", significado: "Bem-nascido, nobre de família", nacionalidade: "Inglesa", "detalhamento": "Eugene é um nome masculino de origem grega, derivado de 'Eugenios', que significa 'bem-nascido' ou 'nobre de família'. O nome foi popularizado na Europa e América, sendo associado a figuras históricas e literárias."},
+  
+  {nome: "Jan", significado: "Deus é gracioso", nacionalidade: "Polonesa", "detalhamento": "Jan é uma forma eslava do nome João, que tem origem no hebraico 'Yochanan', significando 'Deus é gracioso'. É um nome comum em países de língua polonesa e outras regiões eslavas."},
+  
+  {nome: "Farouk", significado: "Aquele que distingue o certo do errado", nacionalidade: "Árabe", "detalhamento": "Farouk é um nome árabe que significa 'aquele que distingue o certo do errado'. Derivado da raiz 'f-r-q', que significa 'separar' ou 'distinguir', o nome está associado à justiça e discernimento. É utilizado em várias culturas de língua árabe."},
+  
+  {nome: "Valentín", significado: "Valente, saudável", nacionalidade: "Espanhola", "detalhamento": "Valentín é um nome masculino de origem latina, derivado de 'Valentinus', que significa 'valente' ou 'saudável'. O nome é associado a São Valentim, um mártir cristão, e é popular em países de língua espanhola."},
+  
+  {nome: "Matvey", significado: "Presente de Deus", nacionalidade: "Russa", "detalhamento": "Matvey é uma forma russa do nome Mateus, que tem origem no hebraico 'Matityahu', significando 'presente de Deus'. O nome é comum na Rússia e em outras regiões eslavas, sendo associado à bondade e generosidade."},
+  {nome: "Edvard", significado: "Guardião das riquezas, protetor das riquezas", nacionalidade: "Norueguesa", "detalhamento": "Edvard é uma variante norueguesa do nome Eduardo, originado do germânico Hadaward, formado pela junção dos termos 'ead' (riqueza, bens) e 'weard' (guarda, guardião). O nome significa 'guardião das riquezas' ou 'protetor das riquezas'. É um nome tradicional na Noruega, associado a figuras históricas e culturais."},
+  
+  {nome: "August", significado: "Majestoso, venerável", nacionalidade: "Anglo-saxã", "detalhamento": "August é um nome de origem latina, derivado do título 'Augustus', concedido aos imperadores romanos. Significa 'venerável' ou 'majestoso'. O nome foi popularizado pelos imperadores romanos e continua a ser utilizado em várias culturas."},
+  
+  {nome: "Nassif", significado: "Justo, imparcial", nacionalidade: "Árabe", "detalhamento": "Nassif é um nome árabe que significa 'justo' ou 'imparcial'. Derivado da raiz árabe 'n-s-f', que significa 'justiça' ou 'equidade', o nome está associado a qualidades de retidão e imparcialidade. É utilizado em várias culturas de língua árabe."},
+  
+  {nome: "Baldur", significado: "Brilhante, ilustre", nacionalidade: "Nórdica", "detalhamento": "Baldur é um nome de origem nórdica, derivado do antigo nórdico 'Baldr', que significa 'brilhante' ou 'ilustre'. Na mitologia nórdica, Baldur é o deus da luz e da beleza, filho de Odin e Frigg. O nome carrega conotações de luminosidade e pureza."},
+  
+  {nome: "Lazaro", significado: "Deus ajudou", nacionalidade: "Hebraica", "detalhamento": "Lázaro é uma versão do nome hebraico Eleazar, que significa 'Deus ajudou'. O nome é associado a figuras bíblicas, como Lázaro de Betânia, que foi ressuscitado por Jesus. É um nome com forte significado religioso e espiritual."},
+  
+  {nome: "Arnaud", significado: "Poder da águia", nacionalidade: "Francesa", "detalhamento": "Arnaud é a forma francesa do nome germânico Arnold, derivado de 'arn' (águia) e 'wald' (poder). O nome significa 'poder da águia' ou 'governante da águia'. É um nome tradicional na França, associado a qualidades de força e liderança."},
+  
+  {nome: "Zeki", significado: "Inteligente, esperto", nacionalidade: "Turca", "detalhamento": "Zeki é um nome turco que significa 'inteligente' ou 'esperto'. Derivado da palavra árabe 'zaki', que significa 'puro' ou 'inteligente', o nome está associado a qualidades de sagacidade e discernimento. É utilizado em várias culturas de língua turca."},
+  
+  {nome: "Marco", significado: "Guerreiro, dedicado a Marte", nacionalidade: "Italiana", "detalhamento": "Marco é a forma italiana do nome latino Marcus, derivado de 'Mars', o deus romano da guerra. O nome significa 'guerreiro' ou 'dedicado a Marte'. É um nome popular na Itália e em outros países de língua italiana."},
+  
+  {nome: "Rowan", significado: "Ruivo, pequeno arbusto", nacionalidade: "Irlandesa", "detalhamento": "Rowan é um nome de origem celta, utilizado principalmente na Irlanda e na Escócia. Significa 'ruivo' ou 'pequeno arbusto'. O nome também está associado à árvore de mesmo nome, conhecida por suas bagas vermelhas e propriedades mágicas na mitologia celta."},
+  
+  {nome: "Celso", significado: "Alto, elevado", nacionalidade: "Latina", "detalhamento": "Celso é um nome de origem latina, derivado de 'caelus', que significa 'céu' ou 'alto'. O nome transmite a ideia de algo elevado ou sublime. É um nome tradicional em países de língua latina."},
+  
+  {nome: "Roberto", significado: "Fama brilhante, ilustre", nacionalidade: "Espanhola", "detalhamento": "Roberto é um nome de origem germânica, derivado de 'Hrodebert', composto por 'hrod' (fama) e 'berht' (brilhante). O nome significa 'fama brilhante' ou 'ilustre'. É amplamente utilizado em países de língua espanhola."},
+  
+  {nome: "Willem", significado: "Protetor resoluto", nacionalidade: "Holandesa", "detalhamento": "Willem é a forma holandesa do nome germânico Wilhelm, composto por 'willa' (vontade) e 'helm' (proteção). O nome significa 'protetor resoluto'. É um nome tradicional na Holanda, associado a figuras históricas e culturais."},
+  
+  {nome: "Sorin", significado: "Pequeno sol, radiante", nacionalidade: "Romena", "detalhamento": "Sorin é um nome de origem romena, derivado de 'soare', que significa 'sol'. O nome significa 'pequeno sol' ou 'radiante'. É um nome popular na Romênia, associado a qualidades de luminosidade e calor."},
+  
+  {nome: "Lutfi", significado: "Gentil, amável", nacionalidade: "Turca", "detalhamento": "Lutfi é um nome de origem árabe, derivado de 'latif', que significa 'gentil' ou 'amável'. O nome está associado a qualidades de bondade e suavidade. É utilizado em várias culturas de língua árabe e turca."},
+  {nome: "Thomas", nacionalidade: "Inglêsa", significado: "Thomas é um nome de origem aramaica, derivado da palavra 'Te'oma', que significa 'gêmeo'. O nome é associado a São Tomé, um dos apóstolos, e está ligado à ideia de duplicidade ou de ser o irmão gêmeo de alguém."},
+  
+  {nome: "Paolo", nacionalidade: "Italiana", significado: "Paolo é a forma italiana do nome latino Paulus, que significa 'pequeno' ou 'humilde'. O nome carrega uma conotação de modéstia e humildade, e é usado amplamente em países de língua italiana."},
+  
+  {nome: "Jalil", nacionalidade: "Árabe", significado: "Jalil é um nome árabe que significa 'imponente', 'grandioso', ou 'sublime'. Derivado da raiz árabe 'j-l-l', o nome está associado a qualidades de grandeza e respeito."},
+  
+  {nome: "Quentin", nacionalidade: "Francêsa", significado: "Quentin é um nome de origem latina, derivado de 'Quintus', que significa 'quinto'. Tradicionalmente, esse nome era dado ao quinto filho de uma família."},
+  
+  {nome: "Rafa", nacionalidade: "Espanhola", significado: "Rafa é uma forma abreviada de Rafael, que tem origem hebraica e significa 'curado' ou 'abençoado por Deus'. O nome está associado ao arcanjo Rafael, que na tradição bíblica é o anjo da cura."},
+  
+  {nome: "Laslo", nacionalidade: "Húngaro", significado: "Laslo é uma variação do nome Vladislav, que significa 'glória de governo'. O nome é composto pelos elementos 'vlad' (governo) e 'slav' (glória), e está associado à autoridade e prestígio."},
+  
+  {nome: "Andre", nacionalidade: "Francêsa", significado: "Andre é uma forma francesa de Andreas, que tem origem no grego e significa 'homem', 'viril', ou 'corajoso'. O nome é associado a qualidades de força e determinação."},
+  
+  {nome: "Joris", nacionalidade: "Holandêsa", significado: "Joris é a forma holandesa do nome George, que vem do grego e significa 'agricultor' ou 'trabalhador da terra'. O nome está associado ao trabalho árduo e à conexão com a terra."},
+  
+  {nome: "Santiago", nacionalidade: "Espanhola", significado: "Santiago é uma combinação dos nomes 'San' (santo) e 'Tiago' (versão espanhola de Tiago). O nome é associado a São Tiago, um dos doze apóstolos de Jesus Cristo, e à cidade de Santiago de Compostela na Espanha."},
+  
+  {nome: "Dmitriy", nacionalidade: "Russa", significado: "Dmitriy é a forma russa do nome Demétrio, que tem origem grega e significa 'consagrado a Deméter', a deusa grega da agricultura e da fertilidade."},
+  
+  {nome: "Horacio", nacionalidade: "Espanhola", significado: "Horacio é um nome de origem latina, derivado do nome romano Horatius, que significa 'o que vê' ou 'o que observa com atenção'. O nome está associado a qualidades de observação e prudência."},
+  
+  {nome: "Raúl", nacionalidade: "Espanhola", significado: "Raúl é um nome de origem germânica, derivado do nome Raginwald, composto por 'ragin' (conselho) e 'wald' (governo). O nome significa 'conselheiro do povo' ou 'governante sábio'."},
+  
+  {nome: "Pietro", nacionalidade: "Italiana", significado: "Pietro é a forma italiana de Pedro, que tem origem no grego 'Petros', que significa 'pedra' ou 'rocha'. O nome está associado à firmeza de caráter e estabilidade."},
+  {nome: "Régis", significado: "O nome Régis tem origem no latim 'rex', que significa 'rei'. É associado à realeza, liderança e poder. Também é considerado a forma masculina de Regina, que significa 'rainha'.", nacionalidade: "Francêsa"},
+  
+  {nome: "Anselmo", significado: "Anselmo provém do germânico 'Ansehelm', composto por 'Anse' (nome dado aos deuses escandinavos) e 'helm' (capacete, proteção), significando 'aquele que está sob a proteção dos Anses'.", nacionalidade: "Germânica"},
+  
+  {nome: "Levi", significado: "Levi tem origem hebraica e significa 'ligado', 'unido' ou 'vinculado a alguma coisa ou alguém'. Na Bíblia, Levi é o terceiro filho de Jacó e Lia, e seu nome está relacionado à palavra hebraica 'lavah', que significa 'unir' ou 'associar'.", nacionalidade: "Hebraica"},
+  
+  {nome: "Hassan", significado: "Hassan é um nome árabe que significa 'o mais bonito', 'embelecedor' ou 'aquele que melhora'. Carrega um simbolismo que remete à beleza e à renovação.", nacionalidade: "Árabe"},
+  
+  {nome: "Hernán", significado: "Hernán é uma variante de Fernando, que vem do germânico 'Ferdinand', composto por 'fardi' (viagem) e 'nanthi' (corajoso), significando 'viajante corajoso' ou 'aquele que tem coragem para conseguir a paz'.", nacionalidade: "Espanhola"},
+  
+  {nome: "Ezequiel", significado: "Ezequiel deriva do hebraico 'Yehezqel', composto por 'hazáq' (forte) e 'El' (Deus), significando 'Deus fortalece' ou 'Jeová vai fortalecer'.", nacionalidade: "Hebraica"},
+  
+  {nome: "Jean-Paul", significado: "Jean-Paul é um nome composto francês. 'Jean' é a variante francesa de João, que vem do hebraico 'Yohanan', significando 'Deus é gracioso'. 'Paul' vem do latim 'Paulus', significando 'pequeno' ou 'humilde'.", nacionalidade: "Francêsa"},
+  
+  {nome: "Lev", significado: "Lev é a forma russa de Leo, que vem do latim 'leo' e significa 'leão'. Também pode significar 'coração' em hebraico, associado à força e coragem.", nacionalidade: "Russa"},
+  
+  {nome: "Tibor", significado: "Tibor é um nome de origem húngara, possivelmente derivado de 'Tiberius', que tem raízes latinas e significa 'do rio Tibre'.", nacionalidade: "Húngara"},
+  
+  {nome: "Orlando", significado: "Orlando é uma variante de Roland, que tem origem germânica e significa 'terra gloriosa' ou 'herói famoso'.", nacionalidade: "Espanhola"},
+  
+  {nome: "Helio", significado: "Helio vem do grego 'Helios', que significa 'sol'. Está associado à luz, calor e energia vital.", nacionalidade: "Portuguêsa"},
+  
+  {nome: "Priit", significado: "Priit é um nome estoniano que significa 'paz' ou 'calmo'.", nacionalidade: "Estoniana"},
+  
+  {nome: "Renan", significado: "Renan é uma variante de Renaud, que tem origem germânica e significa 'governante sábio'.", nacionalidade: "Celta"},
+  
+  {nome: "Archie", significado: "Archie é uma forma diminutiva de Archibald, que tem origem germânica e significa 'arqui' (maior) e 'bald' (corajoso), significando 'arqui-corajoso' ou 'muito corajoso'.", nacionalidade: "Inglêsa"},
+  {nome: "Jonatas", significado: "O nome Jonatas tem origem no hebraico 'Yehonathan', composto por 'Yeho' (abreviação de 'Yahweh', que significa 'Deus') e 'nathan' (que significa 'ele deu'). Assim, Jonatas significa 'Deus deu' ou 'dádiva divina'. É um nome bíblico associado ao filho do rei Saul e amigo fiel de Davi.", nacionalidade: "Hebraica"},
+  
+  {nome: "Soren", significado: "Soren é uma variação do nome Severino, que tem origem no latim 'severus', significando 'severo' ou 'rigoroso'. Portanto, Soren carrega o significado de 'severo' ou 'rigoroso'.", nacionalidade: "Dinamarquês"},
+  
+  {nome: "Yaroslav", significado: "Yaroslav é um nome de origem eslava, composto por 'yaru' (que significa 'feroz' ou 'energético') e 'slava' (que significa 'glória' ou 'honra'). Assim, Yaroslav significa 'feroz e glorioso' ou 'energético e honrado'.", nacionalidade: "Russa"},
+  
+  {nome: "Manoel", significado: "Manoel é uma variante de Manuel, que por sua vez é uma forma de Emanuel, originado do hebraico 'Immanuel', composto por 'immanu' (que significa 'conosco') e 'El' (que significa 'Deus'). Portanto, Manoel significa 'Deus está conosco'.", nacionalidade: "Portuguêsa"},
+  
+  {nome: "Guilherme", significado: "Guilherme tem origem no nome germânico 'Willahelm', composto por 'will' (que significa 'vontade' ou 'desejo') e 'helm' (que significa 'proteção' ou 'capacete'). Assim, Guilherme significa 'protetor decidido' ou 'protetor corajoso'.", nacionalidade: "Germânica"},
+  
+  {nome: "Raimond", significado: "Raimond é uma variante de Raimundo, que tem origem no germânico 'Raginmundus', composto por 'ragin' (que significa 'conselho') e 'mund' (que significa 'proteção'). Portanto, Raimond significa 'sábio protetor' ou 'aquele que protege com seus conselhos'.", nacionalidade: "Francêsa"},
+  
+  {nome: "Cedric", significado: "Cedric tem origem no nome gales 'Cerdic', que é o nome de um lendário fundador do reino de Wessex. O significado exato é incerto, mas é associado a 'chefe guerreiro' ou 'líder de guerra'.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Moussa", significado: "Moussa é a forma árabe do nome Moisés, que tem origem no hebraico 'Moshé', significando 'tirado das águas'. Esse nome é associado ao líder bíblico que libertou os israelitas da escravidão no Egito.", nacionalidade: "Árabe"},
+  
+  {nome: "Sacha", significado: "Sacha é uma forma diminutiva de Alexandre ou Alexandre, que tem origem no grego 'Alexandros', composto por 'alexein' (que significa 'defender') e 'aner' (que significa 'homem'). Assim, Sacha significa 'defensor da humanidade'.", nacionalidade: "Russa"},
+  
+  {nome: "Hélder", significado: "Hélder tem origem no grego 'Helder', que significa 'brilhante', 'ilustre' ou 'iluminado'. É um nome associado à luz e à clareza.", nacionalidade: "Portuguêsa"},
+  
+  {nome: "Abdullah", significado: "Abdullah é um nome árabe composto por 'Abd' (que significa 'servo') e 'Allah' (que significa 'Deus'). Portanto, Abdullah significa 'servo de Deus'.", nacionalidade: "Árabe"},
+  
+  {nome: "Torben", significado: "Torben é um nome de origem dinamarquesa, composto por 'Thor' (o deus do trovão na mitologia nórdica) e 'ben' (que significa 'urso'). Assim, Torben significa 'urso de Thor' ou 'urso do trovão'.", nacionalidade: "Dinamarquês"},
+  
+  {nome: "Colm", significado: "Colm é um nome de origem irlandesa, derivado do gaélico 'Colum', que significa 'pomba'. A pomba é um símbolo de paz e pureza.", nacionalidade: "Irlandêsa"},
+  
+  {nome: "Wilhelm", significado: "Wilhelm é a forma alemã de Guilherme, que tem origem no nome germânico 'Willahelm', composto por 'will' (que significa 'vontade' ou 'desejo') e 'helm' (que significa 'proteção' ou 'capacete'). Assim, Wilhelm significa 'protetor decidido' ou 'protetor corajoso'.", nacionalidade: "Alemã"},
+  {nome: "Vernon", significado: "O nome Vernon tem origem no francês medieval, derivado da palavra 'verne', que significa 'amieiro' (uma árvore de folhas largas). Assim, Vernon significa 'lugar dos amieiros' ou 'bosque de amieiros'.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Kazuo", significado: "Kazuo é um nome masculino japonês composto por 'kazu' (和), que significa 'harmonia' ou 'paz', e 'o' (男), que significa 'homem'. Portanto, Kazuo pode ser interpretado como 'homem de harmonia' ou 'homem pacífico'.", nacionalidade: "Japonêsa"},
+  
+  {nome: "Nabil", significado: "Nabil é um nome árabe que significa 'nobre', 'honrado' ou 'distinto'. Reflete qualidades de caráter elevado e respeito na sociedade.", nacionalidade: "Árabe"},
+  
+  {nome: "Simão", significado: "Simão é a forma portuguesa do nome hebraico Shimon, que significa 'ouvinte' ou 'aquele que escuta'. Na tradição bíblica, Simão foi um dos apóstolos de Jesus.", nacionalidade: "Hebraica"},
+  
+  {nome: "Fritz", significado: "Fritz é um diminutivo alemão do nome Friedrich, que significa 'governante pacífico' ou 'príncipe da paz'.", nacionalidade: "Alemã"},
+  
+  {nome: "Bernd", significado: "Bernd é uma forma curta do nome germânico Bernhard, composto por 'bern' (urso) e 'hard' (forte, corajoso), significando 'forte como um urso'.", nacionalidade: "Alemã"},
+  
+  {nome: "Aymen", significado: "Aymen é um nome árabe que significa 'abençoado', 'afortunado' ou 'aquele que é abençoado'. Também pode ser interpretado como 'aquele que está à direita', simbolizando virtude e boa sorte.", nacionalidade: "Árabe"},
+  
+  {nome: "Rodolfo", significado: "Rodolfo é a forma espanhola e italiana do nome germânico Rudolf, composto por 'hrod' (fama) e 'wulf' (lobo), significando 'lobo famoso' ou 'famoso na batalha'.", nacionalidade: "Portuguêsa"},
+  
+  {nome: "Hayden", significado: "Hayden é um nome de origem inglesa que significa 'vale de feno' ou 'prado de feno'.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Vladimir", significado: "Vladimir é um nome de origem eslava composto por 'vlad' (governar) e 'mir' (paz ou mundo), significando 'governante da paz' ou 'aquele que governa o mundo'.", nacionalidade: "Russa"},
+  
+  {nome: "Antti", significado: "Antti é a forma finlandesa do nome Andreas, que tem origem no grego 'aner' (homem), significando 'homem' ou 'guerreiro'.", nacionalidade: "Finlandêsa"},
+  
+  {nome: "Furqan", significado: "Furqan é um nome árabe que significa 'critério' ou 'diferenciação', referindo-se à capacidade de distinguir entre o certo e o errado. Também é o nome de uma surata do Alcorão.", nacionalidade: "Árabe"},
+  
+  {nome: "Asim", significado: "Asim é um nome de origem árabe que significa 'protetor' ou 'defensor'.", nacionalidade: "Indiana"},
+  {nome: "Gaston", significado: "O nome Gaston tem origem no francês antigo, derivado do termo 'gast', que significa 'hóspede' ou 'visitante'. Historicamente, o nome estava associado a pessoas que viajavam ou residiam temporariamente em um lugar, refletindo uma conexão com a hospitalidade e a troca cultural. Também pode estar relacionado à região da Gasconha, no sudoeste da França, conhecida em francês como Gascogne, sugerindo 'homem da Gasconha'.", nacionalidade: "Francêsa"},
+  
+  {nome: "Simeão", significado: "Simeão é a forma portuguesa do nome hebraico 'Shim'on', derivado do verbo 'shamá', que significa 'ouvir'. Assim, Simeão significa 'aquele que ouve' ou 'ouvinte'. Na tradição bíblica, Simeão foi um dos filhos de Jacó e uma das tribos de Israel. Este nome carrega conotações de atenção e receptividade.", nacionalidade: "Hebraica"},
+  
+  {nome: "Cristhian", significado: "Cristhian é uma variação do nome Christian, que tem origem no latim 'Christianus', derivado do grego 'Christianos', que significa 'seguidor de Cristo' ou 'pertencente a Cristo'. Este nome reflete uma conexão religiosa e espiritual, sendo associado a qualidades como bondade, fé e devoção.", nacionalidade: "Espanhola"},
+  
+  {nome: "Leandro", significado: "Leandro tem origem no grego 'Leíandros', formado pela junção de 'léon' (leão) e 'andrós' (homem), significando 'homem-leão'. Alternativamente, pode derivar de 'leîos' (dócil) e 'andrós' (homem), significando 'homem dócil'. Na mitologia grega, Leandro era um jovem apaixonado por Hero, uma sacerdotisa de Afrodite, conhecido por sua coragem e amor romântico.", nacionalidade: "Grega"},
+  
+  {nome: "Brayan", significado: "Brayan é uma variação do nome gaélico 'Bryan', que significa 'monte', 'colina' ou 'montanha'. Também pode ser interpretado como 'homem nobre', 'homem forte' ou 'homem virtuoso', refletindo qualidades de força, nobreza e caráter.", nacionalidade: "Irlandêsa"},
+  
+  {nome: "Efraim", significado: "Efraim é um nome de origem hebraica, derivado de 'Ephráyim', que significa 'frutífero' ou 'aquele que multiplica'. Na Bíblia, Efraim foi um dos filhos de José e se tornou uma das tribos de Israel, simbolizando prosperidade e fecundidade.", nacionalidade: "Hebraica"},
+  
+  {nome: "Iván", significado: "Iván é uma variante russa do nome João, que tem origem no hebraico 'Yochanan', composto por 'Yah' (abreviação de 'Javé', que significa 'Deus') e 'chanan' (que significa 'graça'). Portanto, Iván significa 'Deus é gracioso' ou 'agraciado por Deus'.", nacionalidade: "Espanhola"},
+  
+  {nome: "Rahul", significado: "Rahul é um nome de origem sânscrita que significa 'conquistador de todas as misérias' ou 'aquele que é capaz'. Na tradição budista, Rahul era o nome do filho de Buda, simbolizando pureza e renúncia. Em árabe, o nome também pode significar 'viajante'.", nacionalidade: "Indiana"},
+  
+  {nome: "Pierce", significado: "Pierce é uma variação do nome Peter, que tem origem no grego 'Petros', significando 'pedra' ou 'rocha'. Este nome simboliza firmeza, estabilidade e força, refletindo a ideia de uma base sólida.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Miro", significado: "Miro é um nome de origem eslava que significa 'paz', 'prestígio' ou 'glória'. Também pode ser associado ao nome do famoso pintor espanhol Joan Miró, conhecido por suas obras surrealistas e simbólicas.", nacionalidade: "Croata"},
+  
+  {nome: "Abbas", significado: "Abbas é um nome árabe que significa 'leão', simbolizando coragem e força. Historicamente, foi o nome de Al-'Abbas ibn 'Abd al-Muttalib, tio do profeta Muhammad, e de Abbas ibn Ali, filho de Ali ibn Abi Talib, ambos figuras reverenciadas na história islâmica.", nacionalidade: "Árabe"},
+  
+  {nome: "Jun", significado: "Jun é um nome de origem chinesa que pode significar 'obediente', 'puro' ou 'genuíno', dependendo dos caracteres chineses utilizados. É um nome associado a qualidades de integridade e sinceridade.", nacionalidade: "Chinêsa"},
+  
+  {nome: "Taner", significado: "Taner é um nome turco que significa 'amanhecer' ou 'aurora', simbolizando novos começos, esperança e luz. É um nome que evoca a beleza do início de um novo dia.", nacionalidade: "Turca"},
+  
+  {nome: "Joaquim", significado: "Joaquim é a forma portuguesa do nome hebraico 'Yehoiakim', composto por 'Yeho' (abreviação de 'Yahweh', que significa 'Deus') e 'yaqim' (que significa 'ele estabelecerá'). Portanto, Joaquim significa 'Deus estabelecerá' ou 'Deus firmará'.", nacionalidade: "Portuguêsa"},
+  {nome: "Aleksei", significado: "Aleksei é uma variante russa do nome grego 'Alexios', derivado do verbo grego 'alexo', que significa 'defender' ou 'proteger'. Portanto, Aleksei significa 'defensor dos homens' ou 'protetor da humanidade'.", nacionalidade: "Russa"},
+  
+  {nome: "Yusuf", significado: "Yusuf é a forma árabe do nome hebraico 'Yosef', que significa 'Deus acrescenta' ou 'acréscimo do Senhor'. É um nome comum em várias culturas e religiões, incluindo o Islã, onde é associado ao profeta José.", nacionalidade: "Árabe"},
+  
+  {nome: "Tyrese", significado: "Tyrese é um nome moderno de origem americana, formado pela combinação dos nomes 'Ty' e 'Reese'. 'Ty' pode derivar de 'Tyler', que significa 'fabricante de telhas', e 'Reese' é um nome galês que significa 'entusiasta' ou 'ardente'.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Francesco", significado: "Francesco deriva do nome latino medieval 'Franciscus', que significa 'francês' ou 'homem livre'. O nome foi popularizado por São Francisco de Assis, cujo verdadeiro nome era Giovanni, e recebeu o apelido 'Francesco' devido à sua afeição pela França.", nacionalidade: "Italiana"},
+  
+  {nome: "Jonah", significado: "Jonah é uma variante inglesa do nome hebraico 'Yonah', que significa 'pombo'. O pombo é tradicionalmente um símbolo de paz, e o nome Jonah é associado a qualidades de paz e harmonia.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Eltan", significado: "Eltan é uma variação do nome hebraico 'Eliezer', que significa 'Deus é a minha ajuda'. É um nome que carrega conotações de fé e confiança na assistência divina.", nacionalidade: "Hebraica"},
+  
+  {nome: "Riley", significado: "Riley tem duas origens possíveis: do gaélico 'raghalach', que significa 'valente', ou do inglês antigo 'rye leah', que significa 'clareira de centeio'. É um nome unissex que transmite coragem e conexão com a natureza.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Mateusz", significado: "Mateusz é a forma polonesa do nome hebraico 'Matityahu', que significa 'dom de Deus'. É um nome tradicionalmente associado a qualidades de gratidão e reconhecimento pela dádiva divina.", nacionalidade: "Polonêsa"},
+  
+  {nome: "Antônio", significado: "Antônio é um nome de origem latina, possivelmente derivado de 'Antonius', um nome de família romana. Seu significado exato é incerto, mas pode estar relacionado a 'inestimável' ou 'de valor incalculável'.", nacionalidade: "Portuguêsa"},
+  
+  {nome: "Devon", significado: "Devon é um nome de origem inglesa, possivelmente derivado do nome do condado de Devon, na Inglaterra. O significado exato é incerto, mas pode estar relacionado a 'defensor' ou 'poeta'.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Gonzalo", significado: "Gonzalo é um nome de origem espanhola, derivado do germânico 'Gundisalvus', que significa 'guerreiro pronto para a batalha'. É um nome associado a qualidades de coragem e prontidão para a luta.", nacionalidade: "Espanhola"},
+  
+  {nome: "Jacques", significado: "Jacques é a forma francesa do nome hebraico 'Yaakov', que significa 'suplantador' ou 'aquele que segue'. É um nome tradicionalmente associado a liderança e perseverança.", nacionalidade: "Francêsa"},
+  {nome: "Aleix", significado: "Aleix é a forma catalã do nome grego 'Alexios', derivado do verbo grego 'alexo', que significa 'defender' ou 'proteger'. Portanto, Aleix significa 'defensor dos homens' ou 'protetor da humanidade'.", nacionalidade: "Catalã"},
+  
+  {nome: "Tomislav", significado: "Tomislav é um nome de origem eslava meridional, particularmente croata, que significa 'glorioso'. O nome é composto pelos elementos eslavos 'tomiti', que significa 'afligir' ou 'sofrer', e 'slava', que significa 'glória'. Portanto, Tomislav pode ser interpretado como 'glória após sofrimento' ou 'glorioso após a luta'.", nacionalidade: "Croata"},
+  
+  {nome: "Zion", significado: "Zion é um nome de origem hebraica que significa 'terra prometida' ou 'ponto mais alto'. O nome está associado ao Monte Sião, localizado em Jerusalém, que na tradição judaica e cristã representa o local sagrado e a promessa divina. Portanto, Zion simboliza um lugar de paz, promessa e espiritualidade.", nacionalidade: "Hebraica"},
+  
+  {nome: "Jean-Louis", significado: "Jean-Louis é um nome composto de origem francesa. 'Jean' é a forma francesa do nome hebraico 'Yochanan', que significa 'Deus é gracioso'. 'Louis' tem origem germânica e significa 'combatente glorioso' ou 'famoso na guerra'. Assim, Jean-Louis pode ser interpretado como 'Deus é gracioso e combatente glorioso'.", nacionalidade: "Francêsa"},
+  
+  {nome: "Nashit", significado: "Nashit é um nome árabe que significa 'alegre', 'extrovertido' ou 'cheio de energia'. O nome está associado a uma pessoa com disposição positiva, entusiasmo e alegria de viver. É um nome que transmite vitalidade e otimismo.", nacionalidade: "Árabe"},
+  
+  {nome: "Augustin", significado: "Augustin é a forma francesa do nome latino 'Augustinus', que significa 'grande', 'venerável' ou 'sagrado'. O nome está associado a qualidades de dignidade, respeito e elevação. Historicamente, foi popularizado por figuras como Santo Agostinho, que contribuíram para a difusão do nome na tradição cristã.", nacionalidade: "Francêsa"},
+  
+  {nome: "Jasir", significado: "Jasir é um nome árabe que significa 'corajoso', 'audaz' ou 'destemido'. O nome está associado a uma pessoa com coragem para enfrentar desafios e adversidades. Em algumas interpretações, também pode significar 'ajudante' ou 'assistente', refletindo uma disposição para apoiar os outros.", nacionalidade: "Árabe"},
+  
+  {nome: "Hugo", significado: "Hugo é um nome de origem germânica, derivado do elemento 'hug', que significa 'mente', 'coração' ou 'espírito'. Portanto, Hugo pode ser interpretado como 'pensador', 'inteligente' ou 'espírito brilhante'. O nome está associado a qualidades de inteligência, clareza mental e profundidade de pensamento.", nacionalidade: "Germânica"},
+  
+  {nome: "Ismael", significado: "Ismael é um nome de origem hebraica, derivado de 'Yishma'el', que significa 'Deus ouviu'. Na tradição bíblica, Ismael foi o filho de Abraão com Hagar, e seu nome reflete a resposta divina às súplicas de sua mãe. O nome simboliza a atenção e misericórdia divina.", nacionalidade: "Hebraica"},
+  
+  {nome: "Laurens", significado: "Laurens é a forma holandesa do nome latino 'Laurentius', que significa 'natural de Laurentum' ou 'coroado de louros'. O nome está associado ao louro, símbolo de honra e vitória na Roma antiga. Portanto, Laurens pode ser interpretado como 'vitorioso' ou 'honrado'.", nacionalidade: "Holandêsa"},
+  
+  {nome: "Matias", significado: "Matias é a forma portuguesa do nome hebraico 'Mattityahu', que significa 'dom de Deus'. O nome está associado à gratidão e reconhecimento pelas bênçãos recebidas. Na tradição cristã, Matias foi o apóstolo escolhido para substituir Judas Iscariotes, simbolizando renovação e continuidade.", nacionalidade: "Portuguêsa"},
+  
+  {nome: "Veli", significado: "Veli é um nome com múltiplas origens. No turco, significa 'guardião' ou 'protetor'. No finlandês e estoniano, significa 'irmão'. Em contextos islâmicos, 'Veli' é um título honorífico que significa 'amigo de Deus'. O nome está associado a qualidades de proteção, fraternidade e espiritualidade.", nacionalidade: "Múltiplas origens"},
+  
+  {nome: "Mihael", significado: "Mihael é a forma lituana do nome hebraico 'Mikha'el', que significa 'Quem é como Deus?'. O nome está associado à humildade diante da grandeza divina e à busca por virtude e retidão. Na tradição cristã, é o nome do arcanjo Miguel, símbolo de força e proteção.", nacionalidade: "Lituana"},
+  
+  {nome: "Arvid", significado: "Arvid é um nome de origem escandinava, derivado do antigo nórdico 'Arnviðr', que significa 'floresta de águias' ou 'madeira de águia'. O nome está associado à natureza, força e liderança. Em algumas interpretações, também pode significar 'rei da floresta'.", nacionalidade: "Escandinava"},
+  {nome: "Timo", significado: "Timo é uma forma finlandesa do nome grego Timóteo, que combina as palavras gregas 'timao' (honrar) e 'theos' (Deus), significando 'aquele que honra a Deus' ou 'honrado por Deus'.", nacionalidade: "Finlandêsa"},
+  
+  {nome: "Nuri", significado: "Nuri é um nome árabe derivado de 'nur', que significa 'luz'. Assim, Nuri pode ser interpretado como 'meu brilho' ou 'minha luz', simbolizando clareza e iluminação espiritual.", nacionalidade: "Árabe"},
+  
+  {nome: "Luca", significado: "Luca é uma variante italiana do nome latino 'Lucas', originado do grego 'Loukanos', que significa 'habitante da Lucânia'. A raiz 'lyke' também está associada a 'luz', conferindo ao nome o significado de 'luminoso' ou 'aquele que traz luz'.", nacionalidade: "Italiana"},
+  
+  {nome: "Sigurd", significado: "Sigurd é um nome de origem nórdica antiga, composto pelos elementos 'sigr' (vitória) e 'vardr' (guarda), significando 'guarda da vitória' ou 'protetor vitorioso'. É associado a heróis lendários da mitologia nórdica.", nacionalidade: "Nórdica"},
+  
+  {nome: "Ezequias", significado: "Ezequias é um nome de origem hebraica, derivado de 'Hizekiiah', que combina 'hézeq' (força) e 'El' (Deus), significando 'Deus fortalece' ou 'força de Deus'. Foi o nome de um rei de Judá na Bíblia.", nacionalidade: "Hebraica"},
+  
+  {nome: "Theo", significado: "Theo é uma forma curta do nome grego 'Theodoros', que significa 'presente de Deus'. Derivado de 'theos' (Deus) e 'doron' (presente), o nome carrega conotações de gratidão e bênção divina.", nacionalidade: "Grega"},
+  
+  {nome: "Rainier", significado: "Rainier é um nome de origem germânica, composto por 'ragin' (conselho) e 'heri' (exército), significando 'guerreiro conselheiro'. É associado a líderes sábios e estrategistas.", nacionalidade: "Alemã"},
+  
+  {nome: "Mahmoud", significado: "Mahmoud é um nome árabe derivado da raiz 'ḥ-m-d', que significa 'louvar'. Assim, Mahmoud significa 'o louvado' ou 'digno de louvor', refletindo virtude e honra.", nacionalidade: "Árabe"},
+  
+  {nome: "Zubin", significado: "Zubin é um nome de origem persa, significando 'lança afiada'. É associado a guerreiros e líderes, simbolizando força e destreza em combate.", nacionalidade: "Persa"},
+  
+  {nome: "Igor", significado: "Igor é um nome de origem russa, derivado do nome escandinavo 'Ingvar', composto por 'Ing' (deus da fertilidade) e 'var' (guerreiro), significando 'guerreiro de Ing' ou 'guerreiro da paz'.", nacionalidade: "Russa"},
+  
+  {nome: "Garo", significado: "Garo é um nome de origem armênia, significando 'valente' ou 'corajoso'. É associado a guerreiros e heróis, refletindo bravura e determinação.", nacionalidade: "Armênia"},
+  
+  {nome: "Emiel", significado: "Emiel é um nome de origem holandesa, variante de 'Emílio', que deriva do latim 'Aemilius', significando 'rival' ou 'trabalhador'.", nacionalidade: "Holandêsa"},
+  
+  {nome: "Henrique", significado: "Henrique é um nome de origem germânica, composto por 'heim' (lar) e 'ric' (poderoso), significando 'governante do lar' ou 'senhor do lar'.", nacionalidade: "Portuguêsa"},
+  
+  {nome: "Rashan", significado: "Rashan é um nome árabe que significa 'ilustrado' ou 'brilhante'. Está associado a pessoas de destaque e sabedoria.", nacionalidade: "Árabe"},
+    {nome: "Aurel", significado: "Aurel é um nome de origem latina, derivado de 'Aurelius', que significa 'dourado' ou 'brilhante'. Esse nome está associado à nobreza e à luz, refletindo qualidades de brilho e distinção.", nacionalidade: "Romena"},
+  
+  {nome: "Thiago", significado: "Thiago é uma variante do nome Tiago, que tem origem no hebraico 'Ya'aqov', significando 'aquele que vem do calcanhar' ou 'suplantador'. Esse nome está associado à superação e perseverança.", nacionalidade: "Portuguêsa"},
+  
+  {nome: "Saulo", significado: "Saulo é um nome de origem hebraica, derivado de 'Sha'ul', que significa 'pedido' ou 'desejado'. Esse nome carrega a ideia de ser um filho desejado ou fruto de oração.", nacionalidade: "Hebraica"},
+  
+  {nome: "Jón", significado: "Jón é a forma islandesa do nome João, que tem origem no hebraico 'Yohanan', significando 'Deus é gracioso'. Esse nome reflete a graça divina e a misericórdia de Deus.", nacionalidade: "Islandesa"},
+  
+  {nome: "Janusz", significado: "Janusz é um nome de origem polonesa, variante de João, que significa 'Deus é misericordioso'. Esse nome está associado à bondade e compaixão divina.", nacionalidade: "Polonesa"},
+  
+  {nome: "Matei", significado: "Matei é a forma romena do nome Mateus, derivado do hebraico 'Mattityahu', que significa 'presente de Deus'. Esse nome simboliza uma dádiva divina e bênção.", nacionalidade: "Romena"},
+  
+  {nome: "Fahd", significado: "Fahd é um nome árabe que significa 'pantera'. Esse nome está associado à força, agilidade e coragem, refletindo características de um predador ágil e destemido.", nacionalidade: "Árabe"},
+  
+  {nome: "Branislav", significado: "Branislav é um nome de origem eslava, composto por 'brani' (defender) e 'slava' (glória), significando 'glória da defesa' ou 'protetor glorioso'. Esse nome está associado à coragem e honra na proteção.", nacionalidade: "Sérvia"},
+  
+  {nome: "Alireza", significado: "Alireza é um nome de origem persa, composto por 'Ali' (elevado) e 'Reza' (contentamento), significando 'elevado contentamento'. Esse nome está associado à satisfação divina e nobreza espiritual.", nacionalidade: "Persa"},
+  
+  {nome: "Kaspar", significado: "Kaspar é um nome de origem persa, significando 'tesoureiro' ou 'guardião de tesouros'. Esse nome está associado à sabedoria e habilidade na administração de riquezas.", nacionalidade: "Persa"},
+  
+  {nome: "Vicente", significado: "Vicente é um nome de origem latina, derivado de 'Vincentius', que significa 'vencedor' ou 'conquistador'. Esse nome reflete a ideia de vitória e sucesso.", nacionalidade: "Portuguêsa"},
+  
+  {nome: "Isandro", significado: "Isandro é um nome de origem grega, composto por 'aner' (homem) e 'eleutheros' (livre), significando 'homem libertador'. Esse nome está associado à liberdade e emancipação.", nacionalidade: "Grega"},
+  
+  {nome: "Oren", significado: "Oren é um nome de origem hebraica, significando 'pinheiro' ou 'árvore de luz'. Esse nome está associado à força e à luz espiritual, refletindo estabilidade e orientação."},
+  {nome: "Antônio", significado: "Antônio é um nome de origem latina, derivado de 'Antonius'. Seu significado mais aceito é 'valioso', 'de valor inestimável' ou 'digno de apreço'. Algumas fontes sugerem que também pode significar 'alimentado de flores', a partir do grego 'antheos'.", nacionalidade: "Portuguêsa"},
+  
+  {nome: "Patrik", significado: "Patrik é uma variação do nome Patrick, que tem origem no latim 'Patricius', significando 'nobre' ou 'homem nobre'. Patrick é a versão inglesa do nome Patrício, que remonta ao Império Romano, onde 'patricius' designava os membros da classe aristocrática.", nacionalidade: "Sueca"},
+  
+  {nome: "Demetrius", significado: "Demetrius é uma forma latinizada do nome grego 'Demetrios', derivado de 'Deméter', a deusa grega da agricultura, colheita e crescimento. Portanto, o nome significa 'devotado a Deméter' ou 'guerreiro da colheita'.", nacionalidade: "Grega"},
+  
+  {nome: "Tancredo", significado: "Tancredo é um nome de origem germânica, composto por 'thank' (pensamento) e 'rad' (conselho), significando 'pensamento conselheiro' ou 'mente atenta'. Indica uma pessoa de personalidade forte, que nunca passa despercebida e é conhecida por suas decisões ponderadas.", nacionalidade: "Germânica"},
+  
+  {nome: "Enrique", significado: "Enrique é a versão espanhola de Henrique, que tem origem no germânico 'Heimirich', formado pela união dos elementos 'heim' (lar, casa) e 'rik' (senhor, príncipe), significando 'senhor do lar', 'príncipe do lar' ou 'governante da casa'.", nacionalidade: "Espanhola"},
+  
+  {nome: "Orion", significado: "Orion é um nome de origem grega, possivelmente derivado de 'horion' (fronteira, limite) ou do acadiano 'uru-anna' (luz dos céus). Na mitologia grega, Orion era um gigante caçador colocado por Zeus entre as estrelas, formando a constelação de Orion.", nacionalidade: "Grega"},
+  
+  {nome: "Emiliano", significado: "Emiliano é uma variação espanhola e italiana do nome Emílio, que possui diversas origens. A teoria mais aceita é que deriva do latim 'aemulus', significando 'rival' ou 'competidor'. Outra hipótese sugere que tenha origem na mitologia grega, através do nome do filho de Numa, Aimylios, que significa 'aquele que fala de modo agradável'.", nacionalidade: "Italiana"},
+  
+  {nome: "Nilesh", significado: "Nilesh é um nome de origem indiana, significando 'senhor azul' ou 'outro nome de Krishna'. Krishna é uma das divindades mais veneradas no hinduísmo, associado à cor azul e à divindade suprema.", nacionalidade: "Indiana"},
+  
+  {nome: "Marwan", significado: "Marwan é um nome árabe que significa 'pedra branca' ou 'pedra de mármore'. Também é associado à prosperidade e à pureza, refletindo características de força e clareza.", nacionalidade: "Árabe"},
+  
+  {nome: "Lewin", significado: "Lewin é um nome de origem germânica, composto por 'hlod' (fama) e 'win' (amigo), significando 'amigo famoso'. Também pode ser interpretado como 'leão querido', refletindo características de coragem e estima.", nacionalidade: "Alemã"},
+  
+  {nome: "Gregar", significado: "Gregar é um nome de origem eslava, significando 'aquele que está alerta' ou 'vigilante'. Indica uma pessoa atenta, observadora e pronta para agir em situações que exigem atenção.", nacionalidade: "Eslava"},
+  
+  {nome: "Eldon", significado: "Eldon é um nome de origem inglesa, derivado do inglês antigo 'Ealdwine', composto por 'eald' (velho) e 'wine' (amigo), significando 'amigo antigo' ou 'amigo sábio'. Também pode ser interpretado como 'morador do vale', refletindo uma conexão com a natureza.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Roderick", significado: "Roderick é um nome de origem germânica, composto por 'hrod' (fama) e 'ric' (poderoso), significando 'poderosa glória' ou 'famoso pela glória'. Indica uma pessoa de grande prestígio e autoridade.", nacionalidade: "Germânica"},
+  {nome: "Jair", significado: "Jair é um nome de origem hebraica, derivado de 'Ya'ir', que significa 'ele brilha', 'ele resplandece' ou 'ele ilumina'. Este nome aparece no Velho Testamento da Bíblia Sagrada Cristã. No Novo Testamento, aparece um personagem chamado Jairo, a variante grega desse nome.", nacionalidade: "Hebraica"},
+  
+  {nome: "Magnus", significado: "Magnus é um nome masculino de origem latina, derivado de 'magnus', que significa 'grande' ou 'ótimo'. Era utilizado principalmente entre os mais importantes líderes religiosos e políticos de toda a história.", nacionalidade: "Latina"},
+  
+  {nome: "Tariq", significado: "Tariq é um nome árabe que significa 'visitante da noite' ou 'estrela da manhã'. No Alcorão, é o nome de uma estrela mencionada no capítulo 86, que é descrita como um 'visitante noturno' ou 'estrela fulgurante'.", nacionalidade: "Árabe"},
+  
+  {nome: "Abir", significado: "Abir é um nome de origem árabe que significa 'perfume' ou 'fragrância'. Também é utilizado em algumas culturas hebraicas com o significado de 'poderoso'.", nacionalidade: "Hebraica/Árabe"},
+  
+  {nome: "Kays", significado: "Kays é um nome árabe que significa 'perspicaz' ou 'inteligente'. É associado a pessoas de mente aguçada e habilidades analíticas.", nacionalidade: "Árabe"},
+  
+  {nome: "Pascoal", significado: "Pascoal é um nome de origem latina, derivado de 'paschalis', que significa 'relativo à Páscoa'. O nome está associado à celebração da ressurreição de Cristo e à renovação espiritual.", nacionalidade: "Portuguêsa"},
+  
+  {nome: "Gareth", significado: "Gareth é um nome de origem celta que significa 'gentil' ou 'amável'. É associado a pessoas de caráter bondoso e comportamento cortês.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Marcel", significado: "Marcel é um nome de origem latina, derivado de 'Marcellus', que significa 'pequeno guerreiro'. Está associado à força, coragem e dedicação, especialmente em contextos militares.", nacionalidade: "Francêsa"},
+  
+  {nome: "Igor", significado: "Igor é um nome de origem russa, derivado do nome nórdico 'Ingvar', que significa 'guerreiro da paz' ou 'protetor da paz'. Está associado à força e à defesa da harmonia.", nacionalidade: "Russa"},
+  
+  {nome: "Balthazar", significado: "Balthazar é um nome de origem aramaica, derivado de 'Balthasar', que significa 'Deus protege o rei'. É um dos nomes tradicionalmente atribuídos aos três reis magos que visitaram o menino Jesus.", nacionalidade: "Aramaico"},
+  
+  {nome: "Rasmus", significado: "Rasmus é um nome de origem escandinava, derivado de 'Erasmus', que significa 'amável' ou 'desejado'. Está associado a pessoas carinhosas e bem-quistas.", nacionalidade: "Sueca"},
+  
+  {nome: "Sancho", significado: "Sancho é um nome de origem latina, derivado de 'Sanctius', que significa 'santo' ou 'consagrado'. Também é associado a 'guerreiro', refletindo força e devoção.", nacionalidade: "Espanhola"},
+  
+  {nome: "Jamil", significado: "Jamil é um nome de origem árabe que significa 'belo' ou 'gracioso'. Está associado à beleza estética e à harmonia.", nacionalidade: "Árabe"},
+  
+  {nome: "Mirko", significado: "Mirko é um nome de origem eslava, derivado de 'Miroslav', que significa 'paz' ou 'glória da paz'. Está associado à serenidade e à resolução pacífica de conflitos.", nacionalidade: "Eslava"},
+  {nome: "Nael", significado: "O nome Nael tem origem árabe e significa 'aquele que conquista' ou 'aquele que alcança'. É associado a pessoas determinadas e com grande capacidade de liderança. Também pode ser interpretado como 'aquele que é escolhido por Deus para governar'.", nacionalidade: "Árabe"},
+  
+  {nome: "Elói", significado: "Elói é um nome de origem francesa, derivado do latim 'Eligiu', que significa 'o escolhido' ou 'o eleito'. Está associado à ideia de ser selecionado para uma missão especial ou para um propósito divino.", nacionalidade: "Francêsa"},
+  
+  {nome: "Nader", significado: "Nader é um nome masculino de origem árabe, que significa 'raro', 'precioso' ou 'excepcional'. É associado a pessoas únicas e valiosas, destacando-se pela sua singularidade e importância.", nacionalidade: "Árabe"},
+  
+  {nome: "Benoit", significado: "Benoit é uma variante francesa do nome Benedito, que deriva do latim 'benedictus', significando 'louvado', 'bendito' ou 'abençoado'. Está associado a pessoas que são reconhecidas por suas virtudes e bondade.", nacionalidade: "Francêsa"},
+  
+  {nome: "Henri", significado: "Henri é a forma francesa de Henrique, que tem origem no germânico 'Heimirich', composto por 'heim' (lar) e 'rik' (senhor), significando 'senhor do lar' ou 'governante da casa'. É associado à liderança e proteção da família.", nacionalidade: "Francêsa"},
+  
+  {nome: "Koji", significado: "Koji é um nome japonês que pode ter diversos significados, dependendo dos caracteres kanji utilizados. Alguns significados possíveis incluem 'próspero', 'felicidade', 'boa sorte', 'paz', 'chefe' ou 'dois'.", nacionalidade: "Japonêsa"},
+  
+  {nome: "Gabrian", significado: "Gabrian é uma variação do nome Gabriel, que tem origem hebraica e significa 'homem de Deus' ou 'Deus é minha força'. É associado à espiritualidade e à proteção divina.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Shadi", significado: "Shadi é um nome de origem árabe que significa 'feliz', 'afortunado' ou 'sortudo'. Também pode significar 'cantor' ou 'aquele que canta'. É associado a pessoas alegres e otimistas.", nacionalidade: "Árabe"},
+  
+  {nome: "Jannik", significado: "Jannik é uma variante do nome Jan, que tem origem no hebraico 'Yochanan', significando 'Deus é gracioso'. Está associado à graça divina e à bondade.", nacionalidade: "Alemã"},
+  
+  {nome: "Maarten", significado: "Maarten é a forma holandesa de Martim, que tem origem no latim 'Martinus', derivado de Marte, o deus romano da guerra. Significa 'dedicado a Marte' ou 'guerreiro'.", nacionalidade: "Holandêsa"},
+  
+  {nome: "Chang", significado: "Chang é um nome de origem chinesa que significa 'próspero', 'sempre crescente' ou 'constante'. Está associado ao crescimento contínuo e à estabilidade.", nacionalidade: "Chinêsa"},
+  
+  {nome: "Odair", significado: "Odair é um nome de origem portuguesa que significa 'rico em guerra' ou 'de energia'. Está associado a pessoas fortes e determinadas, com grande capacidade de ação.", nacionalidade: "Portuguêsa"},
+  
+  {nome: "Rauno", significado: "Rauno é um nome de origem finlandesa, possivelmente derivado do nome Rune, que significa 'místico' ou 'sábio'. Está associado à sabedoria ancestral e ao conhecimento oculto.", nacionalidade: "Finlandêsa"},
+  {nome: "Sufyan", significado: "Sufyan é um nome árabe que significa 'aquele que caminha rapidamente' ou 'viajante'. Derivado da raiz árabe 's-f-y', está associado à agilidade e movimento. Historicamente, o nome foi usado por figuras importantes no início da história islâmica.", nacionalidade: "Árabe"},
+  
+  {nome: "Anatole", significado: "Anatole é um nome de origem grega, derivado de 'anatolē', que significa 'nascer do sol' ou 'leste'. Refere-se ao ponto cardeal onde o sol nasce, simbolizando novos começos e esperança.", nacionalidade: "Francêsa"},
+  
+  {nome: "Wenceslaus", significado: "Wenceslaus é um nome de origem eslava, derivado do nome tcheco 'Václav'. Significa 'maior glória' ou 'glória maior', combinando os elementos eslavos 'vetye' (maior) e 'slava' (glória).", nacionalidade: "Eslava"},
+  
+  {nome: "Tolga", significado: "Tolga é um nome turco que significa 'capacete de guerreiro' ou 'pico de montanha'. Está associado à proteção e força. Em algumas culturas, também é interpretado como 'aquela que se ergue' ou 'o que sobe'.", nacionalidade: "Turca"},
+  
+  {nome: "Kiran", significado: "Kiran é um nome de origem sânscrita que significa 'raio de luz' ou 'raio de sol'. Está associado à iluminação, esperança e novos começos. É um nome popular no subcontinente indiano.", nacionalidade: "Indiana"},
+  
+  {nome: "Didier", significado: "Didier é um nome de origem francesa, derivado do latim 'Desiderius', que significa 'desejado' ou 'ansiosamente aguardado'. Está associado a alguém que é muito querido ou esperado com grande expectativa.", nacionalidade: "Francêsa"},
+  
+  {nome: "Jean-Pierre", significado: "Jean-Pierre é um nome composto francês, combinando 'Jean' (João) e 'Pierre' (Pedro). 'Jean' deriva do hebraico 'Yochanan', significando 'Deus é gracioso', e 'Pierre' do grego 'Petros', significando 'pedra'. Juntos, significam 'Deus é gracioso, a pedra'.", nacionalidade: "Francêsa"},
+  
+  {nome: "Lamine", significado: "Lamine é um nome de origem africana e árabe, derivado de 'Al-Amin', que significa 'o confiável' ou 'o digno de confiança'. É um nome associado à integridade e honestidade.", nacionalidade: "Africana/Árabe"},
+  
+  {nome: "Fausto", significado: "Fausto é um nome de origem latina, derivado de 'faustus', que significa 'afortunado' ou 'feliz'. Está associado à sorte e prosperidade.", nacionalidade: "Latina"},
+  
+  {nome: "Hideki", significado: "Hideki é um nome japonês que significa 'lealdade esplêndida' ou 'grande virtude'. É composto pelos caracteres japoneses 'hideo' (homem) e 'ki' (árvore), simbolizando força e caráter.", nacionalidade: "Japonêsa"},
+  
+  {nome: "Edwin", significado: "Edwin é um nome de origem inglesa antiga, derivado de 'Eadwine', que significa 'amigo rico' ou 'amigo próspero'. Está associado à amizade e prosperidade.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Mizuki", significado: "Mizuki é um nome japonês que significa 'bela lua' ou 'árvore da sorte'. É composto pelos caracteres japoneses 'mizu' (lua) e 'ki' (árvore), simbolizando beleza e sorte.", nacionalidade: "Japonêsa"},
+  
+  {nome: "Mustapha", significado: "Mustapha é um nome árabe que significa 'o escolhido' ou 'o selecionado'. É um título honorífico atribuído a pessoas de alta estima e respeito.", nacionalidade: "Árabe"},
+  
+  {nome: "Lior", significado: "Lior é um nome de origem hebraica que significa 'eu tenho luz' ou 'minha luz'. Está associado à iluminação e clareza espiritual.", nacionalidade: "Hebraica"},
+  
+  {nome: "Rubeus", significado: "Rubeus é um nome de origem latina, derivado de 'ruber', que significa 'vermelho' ou 'rubro'. Está associado à cor vermelha e à paixão.", nacionalidade: "Latina"},
+  {nome: "Olaf", significado: "Olaf é um nome masculino de origem escandinava, derivado do antigo nórdico 'Áleifr', composto por 'anu' (ancestral) e 'leifr' (herança, descendente). Significa 'descendente dos ancestrais' ou 'herdeiro da linhagem'. Foi o nome de vários reis da Noruega, incluindo São Olaf (Olaf II).", nacionalidade: "Nórdica"},
+  
+  {nome: "Theocharis", significado: "Theocharis é um nome masculino de origem grega, composto por 'theos' (Deus) e 'charis' (graça). Significa 'graça divina' ou 'presente de Deus'. É um nome associado à bondade e à benevolência divina.", nacionalidade: "Grega"},
+  
+  {nome: "Zukisa", significado: "Zukisa é um nome de origem Xhosa, uma língua bantu falada na África do Sul. Significa 'dar graças' ou 'abençoar'. É um nome unissex que carrega um forte significado cultural de gratidão e reconhecimento.", nacionalidade: "Xhosa"},
+  
+  {nome: "Aram", significado: "Aram é um nome de origem semítica, encontrado no hebraico e aramaico. Significa 'alto', 'elevado' ou 'nobre'. É associado a uma região bíblica habitada pelos arameus, descendentes de Aram, filho de Sem.", nacionalidade: "Aramaica"},
+  
+  {nome: "Gerson", significado: "Gerson é um nome de origem hebraica, derivado de 'Gershom', que significa 'forasteiro' ou 'estrangeiro'. Era o nome de um dos filhos de Moisés, conforme o Livro do Êxodo.", nacionalidade: "Hebraica"},
+  
+  {nome: "Rayan", significado: "Rayan é um nome de origem árabe que significa 'porta do paraíso' ou 'cheio de vida'. No Islã, é o nome de uma das portas do paraíso, reservada para aqueles que jejuaram regularmente. Também pode significar 'bem regado' ou 'luxuriante'.", nacionalidade: "Árabe"},
+  
+  {nome: "Toussaint", significado: "Toussaint é um nome francês que significa 'todos os santos'. Derivado da expressão 'tous les saints', é associado ao Dia de Todos os Santos, celebrado em 1º de novembro. O nome é comum na França e em regiões de influência francesa.", nacionalidade: "Francêsa"},
+  
+  {nome: "Albin", significado: "Albin é um nome de origem germânica, derivado do latim 'Albinus', que significa 'branco' ou 'brilhante'. É associado à pureza e à luz. O nome é comum em países como Suécia, Polônia e França.", nacionalidade: "Sueca"},
+  
+  {nome: "Ebbe", significado: "Ebbe é um nome de origem dinamarquesa, derivado do antigo nórdico 'Ebbe', que significa 'força' ou 'poder'. Está associado à energia e à determinação.", nacionalidade: "Dinamarquesa"},
+  
+  {nome: "Dieter", significado: "Dieter é um nome de origem alemã, derivado do antigo alto alemão 'Theodoric', composto por 'theod' (povo) e 'ric' (governante). Significa 'governante do povo' ou 'líder do povo'.", nacionalidade: "Alemã"},
+  
+  {nome: "Moss", significado: "Moss é um nome de origem inglesa, uma variação de Moisés. No hebraico, Moisés significa 'tirado das águas'. O nome é associado à salvação e à proteção divina.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Youssef", significado: "Youssef é a forma árabe do nome José, que significa 'Deus acrescenta'. É um nome comum em países árabes e tem forte significado religioso e histórico.", nacionalidade: "Árabe"},
+  
+  {nome: "Valere", significado: "Valere é um nome de origem francesa, derivado do latim 'Valerius', que significa 'valente' ou 'corajoso'. Está associado à força e à coragem.", nacionalidade: "Francêsa"},
+  
+  {nome: "Marcus", significado: "Marcus é um nome de origem latina, derivado de 'Martius', que significa 'dedicado a Marte' ou 'guerreiro'. Marte era o deus romano da guerra, e o nome está associado à força e à bravura.", nacionalidade: "Latina"},
+  {nome: "Avraham", significado: "Avraham é um nome de origem hebraica que significa 'pai das multidões'. Derivado de 'av' (pai) e 'hamon' (multidão), foi dado a Abraão após uma mudança divina de nome, conforme narrado na Torá. Este nome reflete a promessa de Deus de que Abraão seria o pai de muitas nações.", nacionalidade: "Hebraica"},
+  
+  {nome: "Chaim", significado: "Chaim é um nome hebraico que significa 'vida'. Escrito no plural (חַיִּים), indica 'vidas', simbolizando a continuidade e a multiplicidade da existência. É um nome comum entre judeus, especialmente em contextos religiosos, e é associado ao desejo de uma vida longa e próspera.", nacionalidade: "Hebraica"},
+  
+  {nome: "Eustáquio", significado: "Eustáquio é um nome de origem grega que significa 'carregado de belas espigas'. Derivado de 'eustachys', que combina 'eu' (bom) e 'stachys' (espiga), o nome está associado à prosperidade e abundância, simbolizando alguém que traz frutos e riqueza.", nacionalidade: "Grega"},
+  
+  {nome: "Gino", significado: "Gino é um nome de origem italiana, frequentemente utilizado como diminutivo de nomes como Luigi ou Eugenio. Significa 'bem-nascido' ou 'nobre', refletindo uma linhagem de prestígio e respeito. É um nome curto e forte, com uma sonoridade agradável.", nacionalidade: "Italiana"},
+  
+  {nome: "Kamil", significado: "Kamil é um nome de origem árabe que significa 'perfeito' ou 'completo'. Derivado da palavra árabe 'kamil' (كامل), o nome denota excelência, maturidade e plenitude. É um nome comum em países árabes e muçulmanos, associado a virtudes e qualidades superiores.", nacionalidade: "Árabe"},
+  
+  {nome: "Miran", significado: "Miran é um nome de origem curda que significa 'paz' ou 'pacífico'. Associado à tranquilidade e harmonia, é um nome que reflete o desejo de um mundo sem conflitos. É comum entre os curdos e em outras culturas do Oriente Médio.", nacionalidade: "Curda"},
+  
+  {nome: "Duilio", significado: "Duilio é um nome de origem latina, derivado de 'Duilius' ou 'Duillius', que significa 'duelo', 'rebelde' ou 'guerreiro'. Está associado a alguém destemido, pronto para enfrentar desafios e adversidades com coragem e determinação.", nacionalidade: "Latina"},
+  
+  {nome: "Otto", significado: "Otto é um nome de origem germânica que significa 'rico', 'opulento' ou 'próspero'. Derivado dos elementos germânicos 'od' ou 'ot', que significam 'riqueza' ou 'fortuna', o nome está associado à abundância e sucesso material.", nacionalidade: "Alemã"},
+  
+  {nome: "Ray", significado: "Ray é um nome de origem inglesa que significa 'conselheiro sábio' ou 'raio de luz'. Derivado do nome medieval 'Rae', que significa 'conselheiro', ou do francês 'rayon', que significa 'raio'. O nome simboliza clareza, orientação e iluminação.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Yannick", significado: "Yannick é uma variante francesa do nome João, que significa 'Deus é gracioso'. Derivado do hebraico 'Yochanan', o nome reflete a graça divina e é associado à bondade e misericórdia de Deus.", nacionalidade: "Francêsa"},
+  
+  {nome: "Afzal", significado: "Afzal é um nome de origem árabe que significa 'o melhor' ou 'mais excelente'. Derivado da palavra árabe 'afzal' (أفضل), o nome denota superioridade, virtude e excelência. É um nome comum em países árabes e muçulmanos.", nacionalidade: "Árabe"},
+  
+  {nome: "Eliasz", significado: "Eliasz é uma variante polonesa do nome Elias, que significa 'o Senhor é meu Deus'. Derivado do hebraico 'Eliyahu', o nome reflete uma forte conexão espiritual e fé em Deus. É comum na tradição judaica e cristã.", nacionalidade: "Polonesa"},
+  
+  {nome: "Joab", significado: "Joab é um nome de origem hebraica que significa 'Yahweh é pai'. Derivado de 'Yah' (abreviação de Yahweh) e 'ab' (pai), o nome reflete uma relação íntima com Deus. Na Bíblia, Joab foi o comandante do exército de Davi.", nacionalidade: "Hebraica"},
+  
+  {nome: "Magne", significado: "Magne é um nome de origem sueca que significa 'grande' ou 'forte'. Derivado do nórdico antigo 'magn', que significa 'força' ou 'poder', o nome está associado a alguém de grande estatura ou força física. É também o nome de um dos filhos de Thor na mitologia nórdica.", nacionalidade: "Sueca"},
+  {nome: "Baran", significado: "Baran é um nome de origem persa que significa 'chuva'. Em persa, 'باران' (bârân) representa a água que cai do céu, simbolizando bênçãos e renovação. Embora seja tradicionalmente feminino na cultura persa, é utilizado como nome masculino em países turcos e curdos, onde também pode significar 'carneiro'.", nacionalidade: "Persa"},
+  
+  {nome: "Radek", significado: "Radek é um nome masculino de origem eslava, derivado do elemento 'rad', que significa 'feliz' ou 'disposto'. É um diminutivo de nomes como Radoslav, Radomir e Radovan, transmitindo a ideia de alguém alegre e disposto. É comum na República Tcheca e na Polônia.", nacionalidade: "Eslava"},
+  
+  {nome: "Aliaksei", significado: "Aliaksei é uma forma bielorrussa do nome grego Alexios, que significa 'defensor' ou 'ajudante'. Associado a qualidades de proteção e força, é um nome masculino popular na Bielorrússia e em outras regiões eslavas.", nacionalidade: "Bielorrussa"},
+  
+  {nome: "Zied", significado: "Zied é um nome de origem árabe que significa 'prosperidade' ou 'florir'. É associado ao crescimento, beleza e renovação, simbolizando abundância e sucesso. É um nome masculino comum em países de língua árabe, especialmente na Tunísia.", nacionalidade: "Árabe"},
+  
+  {nome: "Martyn", significado: "Martyn é uma variante do nome Martin, originado do latim 'Martinus', que significa 'dedicado a Marte', o deus romano da guerra. É um nome masculino comum no País de Gales, Manx e Ucrânia, associado a qualidades de coragem e força.", nacionalidade: "Galesa"},
+  
+  {nome: "Célestin", significado: "Célestin é um nome masculino de origem francesa, derivado do latim 'caelestis', que significa 'celestial' ou 'do céu'. Está associado à pureza, bondade e à ideia de algo divino. É um nome tradicionalmente masculino na França.", nacionalidade: "Francêsa"},
+  
+  {nome: "Huynh", significado: "Huynh é um sobrenome vietnamita que é uma variante de 'Hoàng', adotada para evitar um tabu de nomeação. 'Hoàng' significa 'amarelo' ou 'imperial', e 'Huynh' é comum entre a população vietnamita, especialmente no sul do país.", nacionalidade: "Vietnamita"},
+  
+  {nome: "Borek", significado: "Borek é um nome masculino de origem tcheca, derivado da palavra 'bořek', que significa 'colina pequena' ou 'topo de colina'. Está associado à natureza e à paisagem, refletindo uma conexão com a terra e a tranquilidade.", nacionalidade: "Tcheca"},
+  
+  {nome: "Germain", significado: "Germain é um nome masculino de origem francesa, derivado do latim 'germanus', que significa 'irmão' ou 'genuíno'. Está associado à fraternidade e à autenticidade, refletindo uma conexão sincera com os outros.", nacionalidade: "Francêsa"},
+  
+  {nome: "Sébastien", significado: "Sébastien é um nome masculino de origem francesa, derivado do grego 'Sebastianos', que significa 'venerado' ou 'respeitado'. Está associado à dignidade e ao respeito, refletindo uma posição elevada na sociedade.", nacionalidade: "Francêsa"},
+  
+  {nome: "Nikola", significado: "Nikola é um nome masculino de origem eslava, derivado do grego 'Nikolaos', que significa 'vitória do povo'. Está associado ao triunfo coletivo e à liderança, refletindo uma conexão com o sucesso e a comunidade.", nacionalidade: "Eslava"},
+  
+  {nome: "Iñaki", significado: "Iñaki é um nome masculino de origem basca, derivado do nome 'Ignacio', que significa 'fogo' ou 'ardente'. Está associado à paixão e à energia, refletindo uma personalidade vibrante e entusiástica.", nacionalidade: "Basca"},
+  
+  {nome: "Zoran", significado: "Zoran é um nome masculino de origem eslava, derivado do esloveno 'zora', que significa 'aurora' ou 'amanhecer'. Está associado à luz e ao novo começo, refletindo esperança e renovação.", nacionalidade: "Eslava"},
+  {nome: "Keisuke", significado: "Keisuke é um nome masculino japonês composto por kanjis que transmitem a ideia de 'auxílio respeitoso'. O kanji '敬' significa 'respeito' ou 'honra', enquanto '助' significa 'ajudar' ou 'assistir'. Juntos, eles formam um nome que sugere uma pessoa que oferece ajuda com consideração e respeito.", nacionalidade: "Japonêsa"},
+  
+  {nome: "Valentino", significado: "Valentino é um nome masculino de origem italiana, derivado do latim 'Valentinus', que significa 'forte' ou 'saudável'. Está associado à força física e à saúde robusta. O nome também carrega conotações de amor e paixão, especialmente devido à associação com o Dia de São Valentim.", nacionalidade: "Italiana"},
+  
+  {nome: "Ilja", significado: "Ilja é uma variante eslava do nome bíblico Elias, que tem origem no hebraico 'Eliyahu', significando 'Meu Deus é Javé'. É um nome masculino comum em países eslavos, como Rússia e Ucrânia, e carrega uma forte conotação religiosa e espiritual.", nacionalidade: "Russa"},
+  
+  {nome: "Rizwan", significado: "Rizwan é um nome masculino de origem árabe, derivado do termo 'Ridwan', que significa 'satisfação' ou 'aceitação'. Na tradição islâmica, Ridwan é o nome do anjo que guarda os portões do paraíso (Jannah), conferindo ao nome uma profunda conotação espiritual e celestial.", nacionalidade: "Árabe"},
+  
+  {nome: "Krasimir", significado: "Krasimir é um nome masculino de origem búlgara, composto pelos elementos eslavos 'krasa', que significa 'beleza' ou 'adorno', e 'mir', que significa 'paz' ou 'mundo'. Assim, o nome pode ser interpretado como 'paz bela' ou 'mundo adornado', refletindo harmonia e beleza.", nacionalidade: "Búlgara"},
+  
+  {nome: "Isandro", significado: "Isandro é um nome masculino de origem grega, derivado de 'Alexandros', que significa 'defensor do homem' ou 'protetor dos homens'. Está associado à coragem e à liderança, refletindo qualidades de um líder forte e protetor.", nacionalidade: "Grega"},
+  
+  {nome: "Pavel", significado: "Pavel é um nome masculino de origem eslava, derivado do nome latino 'Paulus', que significa 'pequeno' ou 'humilde'. É um nome comum em países como Rússia, Ucrânia e Bulgária, refletindo modéstia e simplicidade.", nacionalidade: "Russa"},
+  
+  {nome: "Sigismund", significado: "Sigismund é um nome masculino de origem germânica, composto pelos elementos 'sigi', que significa 'vitória', e 'mund', que significa 'proteção' ou 'guarda'. Assim, o nome pode ser interpretado como 'proteção através da vitória' ou 'vencedor protetor', refletindo força e liderança.", nacionalidade: "Germânica"},
+  
+  {nome: "Janos", significado: "Janos é uma variante húngara do nome João, que tem origem no hebraico 'Yochanan', significando 'Deus é gracioso'. É um nome masculino comum na Hungria e em outras regiões de língua húngara, associado à graça divina.", nacionalidade: "Húngara"},
+  
+  {nome: "Aaditya", significado: "Aaditya é um nome masculino de origem sânscrita, significando 'filho do sol' ou 'brilhante'. Na mitologia hindu, Aditya é o deus do sol, e o nome está associado à luz, energia e vitalidade.", nacionalidade: "Indiana"},
+  
+  {nome: "Mehdi", significado: "Mehdi é um nome masculino de origem árabe, significando 'guiado' ou 'aquele que recebe orientação'. Na tradição islâmica, o Mahdi é uma figura messiânica esperada para trazer justiça e paz ao mundo.", nacionalidade: "Persa"},
+  
+  {nome: "Arno", significado: "Arno é um nome masculino de origem germânica, derivado de 'Arnold', que significa 'águia poderosa'. Está associado à força, coragem e visão aguçada, refletindo a majestade da águia.", nacionalidade: "Alemã"},
+  
+  {nome: "Kwan", significado: "Kwan é um nome masculino de origem coreana, significando 'forte' ou 'vigoroso'. É um nome associado à força física e mental, refletindo determinação e resistência.", nacionalidade: "Coreana"},
+  
+  {nome: "Viktoras", significado: "Viktoras é uma variante lituana do nome Victor, que tem origem no latim 'victor', significando 'vencedor' ou 'conquistador'. É um nome masculino associado à vitória e ao sucesso.", nacionalidade: "Lituana"},
+  
+  {nome: "Zidan", significado: "Zidan é um nome masculino de origem árabe, significando 'aquele que progride' ou 'aquele que cresce'. Está associado ao desenvolvimento pessoal e ao sucesso contínuo.", nacionalidade: "Árabe"},
+  
+  {nome: "Aristides", significado: "Aristides é um nome masculino de origem grega, derivado de 'aristos', que significa 'o melhor'. É associado à excelência, virtude e liderança justa.", nacionalidade: "Grega"},
+  
+  {nome: "João Pedro", significado: "João Pedro é uma combinação dos nomes João e Pedro. João tem origem no hebraico 'Yochanan', significando 'Deus é gracioso', e Pedro vem do grego 'Petros', significando 'rochedo'. Juntos, o nome pode ser interpretado como 'Deus é gracioso, rochedo'.", nacionalidade: "Portuguêsa"},
+  
+  {nome: "Benoît", significado: "Benoît é um nome masculino de origem francesa, derivado do latim 'Benedictus', que significa 'abençoado' ou 'afortunado'. É um nome associado à bênção divina e à sorte.", nacionalidade: "Francêsa"},
+  {nome: "Per", significado: "Per é um nome masculino de origem sueca, derivado do latim 'Petrus', que significa 'pedra' ou 'rochedo'. Está associado à firmeza e estabilidade, refletindo uma personalidade sólida e confiável.", nacionalidade: "Sueca"},
+  
+  {nome: "Ahmed", significado: "Ahmed é um nome masculino de origem árabe, derivado do verbo 'ḥ-m-d', que significa 'louvar' ou 'elogiar'. É uma das variantes do nome Muhammad, que significa 'o louvado' ou 'aquele que é digno de louvor'. Este nome é bastante popular em países muçulmanos e entre comunidades árabes, sendo frequentemente associado a características positivas e virtudes.", nacionalidade: "Árabe"},
+  
+  {nome: "Melvin", significado: "Melvin é um nome masculino de origem inglesa, derivado do antigo inglês 'Maelwyn', que significa 'chefe amigo' ou 'líder carinhoso'. Está associado a qualidades de liderança afetuosa e amizade.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Ravi", significado: "Ravi é um nome masculino de origem sânscrita, significando 'sol' ou 'o sol'. É associado à luz, ao conhecimento e ao poder. Nos 'Vedas' — um conjunto de quatro escrituras sagradas do hinduísmo, datadas de aproximadamente 1500 a.C. — Ravi é um dos doze filhos de Aditi, a deusa-mãe associada ao espaço cósmico.", nacionalidade: "Indiana"},
+  
+  {nome: "César", significado: "César é um nome masculino de origem latina, derivado do cognome romano 'Caesar'. O nome é associado a Júlio César, general e ditador da República Romana. A transformação de sobrenome para título utilizado pelos imperadores romanos pode ser rastreada até o ano 68 d.C., após a queda da dinastia Júlio-Claudiana. O nome 'Caesar' é frequentemente associado à autoridade imperial e poder.", nacionalidade: "Latina"},
+  
+  {nome: "Roman", significado: "Roman é um nome masculino de origem latina, derivado do termo 'Romanus', que significa 'romano' ou 'cidadão de Roma'. Este nome, portanto, carregava originalmente o significado de alguém oriundo da cidade de Roma, que foi o centro do Império Romano e desempenhou papel vital na história, cultura e política do mundo ocidental.", nacionalidade: "Latina"},
+  
+  {nome: "Lionel", significado: "Lionel é um nome masculino de origem francesa, derivado do latim 'leo', que significa literalmente 'leão'. Algumas pessoas associam este significado de modo metafórico, relacionando com características como a 'bravura' e 'força', que são caricatas destes felinos.", nacionalidade: "Francêsa"},
+  
+  {nome: "Tarik", significado: "Tarik é um nome masculino de origem árabe, derivado do verbo 'ṭarq', que significa 'bater à porta'. Na tradição islâmica, Tariq é o nome de uma estrela matutina e também de um general muçulmano que liderou a conquista da Hispânia no século VIII.", nacionalidade: "Árabe"},
+  
+  {nome: "Sulaiman", significado: "Sulaiman é um nome masculino de origem árabe, derivado do hebraico 'Shlomo', que significa 'paz'. Na tradição islâmica, Sulaiman é o nome do profeta Salomão, conhecido por sua sabedoria e justiça.", nacionalidade: "Árabe"},
+  
+  {nome: "Umar", significado: "Umar é um nome masculino de origem árabe, derivado do verbo 'ʿ-m-r', que significa 'viver' ou 'prosperar'. É associado a uma vida longa e florescente, refletindo vitalidade e crescimento.", nacionalidade: "Árabe"},
+  
+  {nome: "Bastien", significado: "Bastien é um nome masculino de origem francesa, derivado do grego 'Sebastianos', que significa 'venerável' ou 'reverenciado'. Está associado a uma pessoa digna de respeito e honra.", nacionalidade: "Francêsa"},
+  
+  {nome: "Beno", significado: "Beno é um nome masculino de origem eslovena, derivado do latim 'Benedictus', que significa 'abençoado' ou 'afortunado'. Está associado a uma pessoa que recebe bênçãos e boa sorte.", nacionalidade: "Eslovena"},
+  
+  {nome: "Paco", significado: "Paco é um nome masculino de origem espanhola, derivado do latim 'Franciscus', que significa 'livre' ou 'homem livre'. Está associado à liberdade e à independência.", nacionalidade: "Espanhola"},
+  
+  {nome: "Shaun", significado: "Shaun é uma variante irlandesa do nome João, que tem origem no hebraico 'Yochanan', significando 'Deus é gracioso'. É um nome associado à graça divina e à bondade.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Stoyan", significado: "Stoyan é um nome masculino de origem búlgara, derivado do verbo 'stoy', que significa 'ficar de pé' ou 'permanecer'. Está associado a uma pessoa constante e persistente, que enfrenta desafios com determinação.", nacionalidade: "Búlgara"},
+  
+  {nome: "Artur", significado: "Artur é um nome masculino de origem celta, derivado do gaulês 'artos', que significa 'urso'. Está associado a uma pessoa corajosa e nobre, como o lendário Rei Artur da mitologia britânica.", nacionalidade: "Celta"},
+  
+  {nome: "Simen", significado: "Simen é uma variante norueguesa do nome Simão, que tem origem no hebraico 'Shim'on', significando 'aquele que ouve'. É um nome associado à atenção e à compreensão.", nacionalidade: "Norueguesa"},
+  
+  {nome: "Ewan", significado: "Ewan é um nome masculino de origem escocesa, derivado do gaélico 'Eòghan', que significa 'jovem guerreiro'. Está associado a uma pessoa graciosa e cheia de energia, com espírito de luta.", nacionalidade: "Escocesa"},
+  {nome: "Henriq", significado: "Henriq é uma variação do nome Henrique, que tem origem no germânico Haimirich, composto por 'heim', que significa 'lar' ou 'casa', e 'rik', que significa 'senhor' ou 'príncipe'. Assim, o nome Henriq carrega o significado de 'senhor do lar', 'príncipe do lar' ou 'governante da casa'.", nacionalidade: "Portuguêsa"},
+  
+  {nome: "Abelardo", significado: "Abelardo tem origem no nome germânico 'Abelhard', composto por 'Abel', que significa 'nobre', e 'hard', que significa 'forte'. Portanto, o nome Abelardo pode ser interpretado como 'forte e nobre'.", nacionalidade: "Germânica"},
+  
+  {nome: "Cormac", significado: "Cormac é um nome de origem irlandesa, derivado do gaélico 'Corbmac', que significa 'filho do corvo'. O corvo é um símbolo de sabedoria e liderança na cultura celta, conferindo ao nome um significado de 'líder sábio'.", nacionalidade: "Irlandêsa"},
+  
+  {nome: "Enrico", significado: "Enrico é uma variante italiana do nome Henrique, que tem origem no germânico Heimirich, composto por 'heim', que significa 'lar' ou 'casa', e 'ric', que significa 'domínio' ou 'poder'. Dessa forma, Enrico significa 'governante da casa' ou 'príncipe do lar'.", nacionalidade: "Italiana"},
+  
+  {nome: "Adriel", significado: "Adriel é um nome de origem hebraica, derivado de 'Adriy'el', que significa 'rebanho de Deus' ou 'da assembleia divina'. Esse nome simboliza a assistência de Deus e a orientação divina na vida da pessoa.", nacionalidade: "Hebraica"},
+  
+  {nome: "Todor", significado: "Todor é a versão búlgara do nome Teodoro, que tem origem no grego 'Theodoros', composto por 'theos', que significa 'Deus', e 'doron', que significa 'dom' ou 'presente'. Assim, Todor significa 'presente de Deus'.", nacionalidade: "Búlgara"},
+  
+  {nome: "Leonidas", significado: "Leonidas é um nome de origem grega, derivado de 'Leonidas', que significa 'filho do leão' ou 'semelhante ao leão'. O leão é um símbolo de coragem e força, conferindo ao nome um significado de 'corajoso' ou 'valente'.", nacionalidade: "Grega"},
+  
+  {nome: "Silvio", significado: "Silvio tem origem no latim 'Silvius', derivado de 'silva', que significa 'floresta'. Assim, o nome Silvio significa 'habitante da floresta' ou 'aquele que vive no bosque'.", nacionalidade: "Latina"},
+  
+  {nome: "Moritz", significado: "Moritz é uma variante alemã do nome Maurício, que tem origem no latim 'Mauritius', que significa 'mouro' ou 'de pele escura'. O nome Moritz é associado a características de força e coragem.", nacionalidade: "Alemã"},
+  
+  {nome: "Vincent", significado: "Vincent tem origem no latim 'Vincentius', derivado de 'vincere', que significa 'vencer'. Assim, o nome Vincent significa 'vencedor' ou 'conquistador'.", nacionalidade: "Inglêsa"},
+  
+  {nome: "Manasseh", significado: "Manasseh é um nome de origem hebraica, derivado de 'Menasheh', que significa 'aquele que faz esquecer'. Na Bíblia, Manasseh era o filho de José e Asenate, e seu nome refletia a esperança de que Deus faria José esquecer suas aflições.", nacionalidade: "Hebraica"},
+  
+  {nome: "Rico", significado: "Rico é um nome de origem germânica, derivado de 'Ricoh', que significa 'governante' ou 'príncipe'. Assim, o nome Rico carrega o significado de 'governante poderoso'.", nacionalidade: "Espanhola"},
+  
+  {nome: "Stanislav", significado: "Stanislav é um nome de origem eslava, composto por 'stan', que significa 'ficar' ou 'permanecer', e 'slav', que significa 'glória'. Assim, o nome Stanislav significa 'aquele que alcança glória' ou 'glorioso'.", nacionalidade: "Russa"},
+  
+  {nome: "Parviz", significado: "Parviz é um nome de origem persa, derivado de 'Parvīz', que significa 'afortunado' ou 'sortudo'. O nome é associado a uma pessoa que traz boa sorte e prosperidade.", nacionalidade: "Persa"},
+  
+  {nome: "Paavo", significado: "Paavo é a versão finlandesa do nome Paulo, que tem origem no latim 'Paulus', que significa 'pequeno' ou 'humilde'. Assim, o nome Paavo significa 'pequeno' ou 'humilde'.", nacionalidade: "Finlandêsa"},
+  {
+    nome: "Damian",
+    significado: "O nome Damian tem origem no grego 'Damianos', derivado de 'damazo', que significa 'domar', 'vencer' ou 'subjugar'. É associado a São Damião, padroeiro dos médicos.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Shun",
+    significado: "Shun é um nome japonês que pode significar 'veloz' ou 'brilhante', dependendo dos caracteres kanji utilizados. É associado a pessoas de personalidade forte e decidida.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Teo",
+    significado: "Teo é uma forma abreviada do nome grego 'Theodoros', que significa 'presente de Deus' ou 'dádiva divina'.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Kaio",
+    significado: "Kaio é uma variação do nome latino 'Caio', que deriva de 'Gaius', significando 'alegre', 'contente' ou 'feliz'.",
+    nacionalidade: "Brasileira"
+  },
+  {
+    nome: "Feliks",
+    significado: "Feliks é a forma polonesa do nome latino 'Felix', que significa 'feliz', 'afortunado' ou 'abençoado'.",
+    nacionalidade: "Polonesa"
+  },
+  {
+    nome: "Erez",
+    significado: "Erez é um nome hebraico que significa 'cedro', uma árvore conhecida por sua força e durabilidade.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Rudolf",
+    significado: "Rudolf é um nome de origem germânica composto por 'hrod' (fama) e 'wulf' (lobo), significando 'lobo famoso' ou 'glorioso'.",
+    nacionalidade: "Alemã"
+  },
+  {
+    nome: "Eero",
+    significado: "Eero é uma forma finlandesa do nome 'Henrique', que significa 'governante da casa' ou 'príncipe'.",
+    nacionalidade: "Finlandesa"
+  },
+  {
+    nome: "Dawud",
+    significado: "Dawud é a forma árabe do nome 'Davi', que significa 'amado' ou 'querido'.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Franz",
+    significado: "Franz é uma forma alemã do nome 'Francisco', que significa 'homem livre' ou 'francês'.",
+    nacionalidade: "Alemã"
+  },
+  {
+    nome: "Mehmet",
+    significado: "Mehmet é uma forma turca do nome árabe 'Muhammad', que significa 'louvado' ou 'digno de louvor'.",
+    nacionalidade: "Turca"
+  },
+  {
+    nome: "Zuriel",
+    significado: "Zuriel é um nome hebraico que significa 'meu rochedo é Deus', simbolizando força e proteção divina.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Virgil",
+    significado: "O nome Virgil tem origem no latim 'Virgilius', derivado do nome de uma antiga família romana. Seu significado exato é incerto, mas é comumente associado à palavra latina 'virga', que significa 'vara' ou 'cajado', simbolizando autoridade ou liderança.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Harish",
+    significado: "Harish é um nome masculino de origem indiana, derivado do sânscrito 'Hari' (nome de Lord Vishnu) e 'Isha' (Senhor), significando 'Senhor dos macacos'. É também associado a Lord Shiva, refletindo uma fusão das qualidades de ambos os deuses.",
+    nacionalidade: "Indiana"
+  },
+  {
+    nome: "Teun",
+    significado: "Teun é uma forma abreviada do nome holandês Antonius, derivado do nome romano Anthony. Seu significado exato é incerto, mas é comumente associado à palavra latina 'antonius', que pode significar 'de valor incalculável' ou 'inestimável'.",
+    nacionalidade: "Holandesa"
+  },
+  {
+    nome: "Jerzy",
+    significado: "Jerzy é a versão polonesa do nome George, que tem origem no grego 'Georgios', derivado de 'georgos', que significa 'agricultor' ou 'trabalhador da terra'.",
+    nacionalidade: "Polonesa"
+  },
+  {
+    nome: "Zayd",
+    significado: "Zayd é um nome árabe que significa 'crescimento' ou 'abundância', derivado do verbo árabe 'zāda', que significa 'aumentar' ou 'crescer'. É associado a prosperidade e desenvolvimento.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Niklaus",
+    significado: "Niklaus é uma variante alemã do nome Nicholas, originado do grego 'Nikolaos', composto por 'nike' (vitória) e 'laos' (povo), significando 'vitória do povo'.",
+    nacionalidade: "Alemã"
+  },
+  {
+    nome: "Aurelio",
+    significado: "Aurelio é um nome de origem latina, derivado do nome romano Aurelius, que significa 'dourado' ou 'reluzente', simbolizando brilho e valor.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Ioannis",
+    significado: "Ioannis é a forma grega do nome João, derivado do hebraico 'Yochanan', que significa 'Deus é gracioso'.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Laszlo",
+    significado: "Laszlo é um nome de origem húngara, derivado do nome eslavo 'Vladislav', composto por 'vlad' (governar) e 'slav' (glória), significando 'glória do governante'.",
+    nacionalidade: "Húngara"
+  },
+  {
+    nome: "Dionísio",
+    significado: "Dionísio é um nome de origem grega, derivado de 'Dionysios', que significa 'consagrado a Dionísio', o deus grego do vinho, da fertilidade e do teatro.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Iskandar",
+    significado: "Iskandar é uma forma árabe do nome Alexandre, derivado do grego 'Alexandros', composto por 'alexein' (defender) e 'aner' (homem), significando 'defensor dos homens'.",
+    nacionalidade: "Persa"
+  },
+  {
+    nome: "Aitor",
+    significado: "Aitor é um nome de origem basca, tradicionalmente associado à lenda de Aitor, considerado o patriarca mítico dos bascos. Seu significado é incerto, mas é frequentemente interpretado como 'nobre pai'.",
+    nacionalidade: "Basca"
+  },
+  {
+    nome: "Patrice",
+    significado: "Patrice é uma variante francesa do nome Patrick, derivado do latim 'Patricius', que significa 'nobre' ou 'patrício', indicando uma pessoa de classe alta ou nobreza.",
+    nacionalidade: "Francesa"
+  },
+  {
+    nome: "Geoffrey",
+    significado: "Geoffrey é um nome de origem germânica, composto por 'god' (Deus) e 'frid' (paz), significando 'paz de Deus'. É uma variante do nome Godfrey.",
+    nacionalidade: "Inglesa"
+  },
+  {
+    nome: "Fahed",
+    significado: "O nome Fahed é uma variação do árabe 'Fahd', que significa 'pantera' ou 'lince'. É associado a qualidades como agilidade, força e coragem.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Suleyman",
+    significado: "Suleyman é a versão turca do nome Salomão, que significa 'homem de paz'. É associado à sabedoria e à justiça.",
+    nacionalidade: "Turca"
+  },
+  {
+    nome: "Armand",
+    significado: "Armand é um nome de origem germânica que significa 'homem do exército' ou 'guerreiro'. É associado a qualidades de liderança e força.",
+    nacionalidade: "Francêsa"
+  },
+  {
+    nome: "Caius",
+    significado: "Caius é um nome de origem latina que significa 'alegre', 'contente' ou 'feliz'. Era um nome comum na Roma Antiga.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Zahar",
+    significado: "Zahar é um nome de origem russa que significa 'ilustre' ou 'brilhante'. É associado a pessoas de destaque e influência.",
+    nacionalidade: "Russa"
+  },
+  {
+    nome: "Yann",
+    significado: "Yann é uma forma bretã do nome João, que significa 'Deus é gracioso'. É um nome comum na Bretanha, região da França.",
+    nacionalidade: "Bretã"
+  },
+  {
+    nome: "Salvador",
+    significado: "Salvador é um nome de origem latina que significa 'aquele que salva'. É associado a qualidades de proteção e redenção.",
+    nacionalidade: "Espanhola"
+  },
+  {
+    nome: "Arlo",
+    significado: "Arlo é um nome de origem inglesa que significa 'colina fortificada'. É associado a qualidades de proteção e segurança.",
+    nacionalidade: "Inglêsa"
+  },
+  {
+    nome: "Mauro",
+    significado: "Mauro é um nome de origem latina que significa 'mouro' ou 'moreno'. É associado a pessoas de pele escura ou origem africana.",
+    nacionalidade: "Portuguêsa"
+  },
+  {
+    nome: "Vasco",
+    significado: "Vasco é um nome de origem basca que significa 'de origem basca'. É associado a pessoas da região do País Basco, na Espanha.",
+    nacionalidade: "Portuguêsa"
+  },
+  {
+    nome: "Yehuda",
+    significado: "Yehuda é um nome de origem hebraica que significa 'louvor' ou 'agradecimento'. É associado a qualidades de gratidão e devoção.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Sören",
+    significado: "Sören é um nome de origem sueca que significa 'sério' ou 'severo'. É associado a pessoas de caráter firme e determinado.",
+    nacionalidade: "Sueca"
+  },
+  {
+    nome: "Firmino",
+    significado: "Firmino é um nome de origem latina que significa 'forte' ou 'firme'. É associado a pessoas de caráter robusto e resiliente.",
+    nacionalidade: "Portuguêsa"
+  },
+  {
+    nome: "Hamza",
+    significado: "Hamza é um nome de origem árabe que significa 'corajoso' ou 'forte como um leão'. É associado a qualidades de bravura e liderança.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Gustavo",
+    significado: "Gustavo é um nome de origem sueca que significa 'bastão dos godos' ou 'bastião'. É associado a qualidades de força e liderança.",
+    nacionalidade: "Portuguêsa"
+  },
+    {nome:"Aleksei",significado:"Aleksei é uma variante russa de Alexandre, que significa 'defensor dos homens'. O nome é associado à proteção e força, representando alguém que defende a humanidade e os ideais de justiça.",nacionalidade:"Russa"},
+    {nome:"Elmar",significado:"Elmar tem origem germânica e significa 'fama nobre' ou 'brilhante'. O nome é associado a pessoas com grande reputação e prestígio, destacando-se pela sua grandeza.",nacionalidade:"Alemã"},
+    {nome:"Suchart",significado:"Suchart é um nome tailandês que significa 'boa sorte' ou 'fortuna'. Ele é frequentemente associado à prosperidade e às bênçãos da sorte.",nacionalidade:"Tailandêsa"},
+    {nome:"Nikica",significado:"Nikica é uma forma croata de Nicolau, que significa 'vitória do povo'. O nome está relacionado a liderança e a luta pela justiça e liberdade.",nacionalidade:"Croata"},
+    {nome:"Matteo",significado:"Matteo é uma forma italiana de Mateus, que significa 'presente de Deus'. Está associado à bênção divina e à dádiva de uma vida rica em graça e compaixão.",nacionalidade:"Italiana"},
+    {nome:"Ignat",significado:"Ignat é um nome de origem russa que vem de 'Ignácio', que significa 'fogo' ou 'ardente'. Ele simboliza uma pessoa com um espírito intenso e apaixonado, capaz de iluminar os outros.",nacionalidade:"Russa"},
+    {nome:"Kätlin",significado:"Kätlin é um nome estoniano que significa 'puro' ou 'íntegro'. Está associado à ideia de pureza e sinceridade, sendo frequentemente dado a pessoas com um caráter irrepreensível.",nacionalidade:"Estoniano"},
+    {nome:"Fairuz",significado:"Fairuz é um nome árabe que significa 'turquesa', uma pedra preciosa. Está relacionado ao brilho e à beleza, simbolizando um ser valioso e radiante.",nacionalidade:"Árabe"},
+    {nome:"Eetu",significado:"Eetu é um nome de origem finlandesa que significa 'guardião rico'. Refere-se a uma pessoa que protege e cuida dos outros, sendo uma figura de força e generosidade.",nacionalidade:"Finlandêsa"},
+    {nome:"Achille",significado:"Achille é um nome de origem grega, associado ao herói grego Aquiles. Significa 'dom da graça maçante', sendo ligado à grandeza e força incomparáveis.",nacionalidade:"Francêsa"},
+    {nome:"Farhad",significado:"Farhad é um nome de origem persa que significa 'abençoado' ou 'alegre'. Ele representa uma pessoa cheia de felicidade e de bênçãos divinas, com uma energia positiva contagiante.",nacionalidade:"Persa"},
+    {nome:"Rufus",significado:"Rufus é um nome de origem latina que significa 'ruivo' ou 'de cabelos avermelhados'. O nome está associado à distinção e ao caráter único, representando a coragem e a vitalidade.",nacionalidade:"Latina"},
+    {nome:"Jules",significado:"Jules é um nome francês que significa 'jovem' ou 'macio'. Está ligado à juventude e à leveza, com a ideia de um espírito jovem e flexível que se adapta às situações.",nacionalidade:"Francêsa"},
+    {nome:"Nikolay",significado:"Nikolay é a forma russa de Nicolau, que significa 'vitória do povo'. Ele simboliza alguém que lidera e conquista, trazendo vitórias e prosperidade ao seu povo.",nacionalidade:"Russa"},
+        {nome:"Claudiu",significado:"Claudiu é de origem romana e significa 'manco' ou 'claudicante'. O nome está associado à pessoa que, por algum motivo, possui alguma deficiência física ou limitações, mas que, muitas vezes, é símbolo de superação e força para enfrentar desafios.",nacionalidade:"Romena"},
+    {nome:"Eamon",significado:"Eamon é um nome de origem irlandesa que significa 'guardião rico' ou 'protetor da fortuna'. Refere-se a uma pessoa que possui a responsabilidade de proteger algo valioso, especialmente riqueza ou bem-estar familiar.",nacionalidade:"Irlandêsa"},
+    {nome:"Jesús",significado:"Jesús é a forma espanhola do nome hebraico Yeshua, que significa 'Deus é salvação'. É um nome profundamente espiritual, associado à divindade e à ideia de que a salvação é um presente divino oferecido aos seres humanos.",nacionalidade:"Espanhola"},
+    {nome:"Vasili",significado:"Vasili é de origem russa e significa 'rei' ou 'régio'. O nome está ligado à nobreza e à realeza, sendo associado a pessoas que possuem uma posição de destaque e autoridade, geralmente simbolizando força e liderança.",nacionalidade:"Russa"},
+    {nome:"Ivo",significado:"Ivo é um nome de origem holandesa que significa 'arco de teixo'. O teixo é uma árvore que possui madeira resistente, associando o nome a força e perseverança, além de também simbolizar a habilidade de um lutador.",nacionalidade:"Holandêsa"},
+    {nome:"Kobus",significado:"Kobus é um nome sul-africano que significa 'ousado' ou 'corajoso'. Ele é frequentemente associado a pessoas destemidas, dispostas a enfrentar qualquer desafio que surgir em seu caminho.",nacionalidade:"Sul-Africano"},
+    {nome:"Hernando",significado:"Hernando é um nome de origem espanhola que significa 'aventureiro ousado'. Está associado a pessoas corajosas e audaciosas, dispostas a explorar novas possibilidades e a viver de forma vibrante e destemida.",nacionalidade:"Espanhola"},
+    {nome:"Serge",significado:"Serge é um nome de origem francesa que significa 'servo' ou 'protetor'. Tradicionalmente, o nome está ligado à ideia de alguém que serve aos outros com dedicação e também está relacionado ao cuidado e à proteção.",nacionalidade:"Francêsa"},
+    {nome:"Rogelio",significado:"Rogelio é um nome de origem espanhola que significa 'famoso guerreiro'. Ele está associado a indivíduos corajosos, com espírito de luta e liderança, sendo símbolo de honra e valentia.",nacionalidade:"Espanhola"},
+    {nome:"Boris",significado:"Boris é um nome russo que significa 'combativo' ou 'guerreiro'. Está relacionado a uma pessoa forte e destemida, que luta pela justiça e pela proteção dos outros, sendo um nome frequentemente associado à coragem e ao poder.",nacionalidade:"Russa"},
+    {nome:"Hercule",significado:"Hercule é de origem francesa e significa 'aquele que tem fama e glória'. O nome é relacionado a uma pessoa de grande força, honra e prestígio, frequentemente associado ao mito de Hércules e à ideia de superação de desafios extraordinários.",nacionalidade:"Francêsa"},
+    {nome:"Geraud",significado:"Geraud é um nome francês que significa 'lança poderosa'. Tradicionalmente, é associado a pessoas fortes e determinadas, com grande capacidade de ação e coragem em tempos de conflito ou desafio.",nacionalidade:"Francêsa"},
+    {nome:"Wojtek",significado:"Wojtek é um nome polonês que significa 'alegre na guerra'. Ele é relacionado a uma pessoa com coragem e um espírito positivo, capaz de enfrentar adversidades com alegria e otimismo, mantendo-se firme e resiliente em tempos difíceis.",nacionalidade:"Polonêsa"},
+    {nome:"Duarte",significado:"Duarte é um nome português que significa 'guardião da prosperidade'. Ele é associado à proteção da riqueza e ao bem-estar dos outros, frequentemente atribuído a indivíduos que possuem uma visão focada em crescimento e desenvolvimento.",nacionalidade:"Portuguêsa"},
+    {
+        nome: "Rómulo",
+        significado: "Rómulo é o fundador de Roma, o primeiro rei de Roma, forte e imbatível. Seu nome é associado à fundação de uma grande cidade, sendo símbolo de força e liderança.",
+        nacionalidade: "Latina"
+    },
+    {
+        nome: "Mahmud",
+        significado: "Mahmud vem do árabe e significa 'Digno de louvor'. Ele carrega o significado de alguém que é louvado e elogiado por suas boas ações e caráter.",
+        nacionalidade: "Árabe"
+    },
+    {
+        nome: "Ulrik",
+        significado: "Ulrik tem origem sueca e significa 'Governo dos lobos', associando o nome à liderança forte, muitas vezes ligada a figuras de poder e autoridade.",
+        nacionalidade: "Sueca"
+    },
+    {
+        nome: "Olliver",
+        significado: "Olliver vem da palavra 'Oliveira', que é um símbolo da paz. O nome sugere alguém sereno, pacífico, com qualidades de proteção e sabedoria.",
+        nacionalidade: "Inglêsa"
+    },
+    {
+        nome: "Ugo",
+        significado: "Ugo tem origem italiana e significa 'Pensador, mente brilhante'. É um nome associado a intelectuais, pessoas de raciocínio rápido e capacidade de liderança intelectual.",
+        nacionalidade: "Italiana"
+    },
+    {
+        nome: "Enzo",
+        significado: "Enzo é um nome italiano que significa 'Governante do lar, príncipe do lar'. Refere-se a uma pessoa que tem uma posição de autoridade e liderança dentro de sua casa ou círculo social.",
+        nacionalidade: "Italiana"
+    },
+    {
+        nome: "Mustafa",
+        significado: "Mustafa é um nome árabe que significa 'O escolhido'. Este nome é associado a uma pessoa especial, que foi escolhida para realizar uma missão importante ou sagrada.",
+        nacionalidade: "Árabe"
+    },
+    {
+        nome: "Paulus",
+        significado: "Paulus é um nome latino que significa 'Pequeno, humilde'. Esse nome está associado a humildade e simplicidade, sendo popular em muitas culturas históricas.",
+        nacionalidade: "Latina"
+    },
+    {
+        nome: "Oren",
+        significado: "Oren tem origem hebraica e significa 'Pinheiro', que é um símbolo de força e longevidade. O nome também transmite a ideia de resistência e durabilidade, assim como a árvore.",
+        nacionalidade: "Hebraica"
+    },
+    {
+        nome: "Nawfal",
+        significado: "Nawfal é um nome árabe que significa 'Generoso, caridoso'. Refere-se a uma pessoa com um grande coração, que está sempre disposta a ajudar os outros e fazer o bem.",
+        nacionalidade: "Árabe"
+    },
+    {
+        nome: "Jacek",
+        significado: "Jacek é de origem polonesa e significa 'Jacinto', uma flor perfumada, sendo associado a beleza e elegância. É um nome que transmite delicadeza e charme.",
+        nacionalidade: "Polonêsa"
+    },
+    {
+        nome: "Armin",
+        significado: "Armin é de origem persa e significa 'Soldado, defensor'. Refere-se a uma pessoa que protege os outros, lutando por aquilo que é justo e defendendo os vulneráveis.",
+        nacionalidade: "Persa"
+    },
+    {
+        nome: "Valerio",
+        significado: "Valerio é um nome espanhol que significa 'Valente, forte, corajoso'. Este nome está associado a pessoas destemidas, que demonstram força em situações difíceis e se destacam pela coragem.",
+        nacionalidade: "Espanhola"
+    },
+    {
+        nome: "Omar",
+        significado: "Omar é um nome árabe que significa 'Vida longa, florescente'. Ele está associado a longevidade, prosperidade e crescimento contínuo, sendo um nome de boa sorte e vitalidade.",
+        nacionalidade: "Árabe"
+    },
+    {
+        nome: "Quirin",
+        significado: "O nome Quirin vem do latim 'Quirinus' que significa 'lanca' ou 'guerreiro'. Associado aos antigos guerreiros romanos, carrega a ideia de força e coragem em batalhas.",
+        nacionalidade: "Alemã"
+    },
+    {
+        nome: "Troy",
+        significado: "Troy é derivado da antiga cidade de Troia, conhecida pela mitologia grega e pela guerra entre os gregos e troianos. O nome simboliza força, coragem e a nobreza dos guerreiros célebres.",
+        nacionalidade: "Inglêsa"
+    },
+    {
+        nome: "Anson",
+        significado: "Anson é um nome de origem inglesa que significa 'Filho do santo', 'descendente abençoado'. Está associado à linhagem nobre e espiritual, com a ideia de herdar virtudes divinas.",
+        nacionalidade: "Inglêsa"
+    },
+    {
+        nome: "Bartos",
+        significado: "Bartos é um nome polonês que significa 'Filho de Talmai', que se refere ao agricultor na bíblia. Está relacionado ao trabalho árduo no campo e à força derivada da terra.",
+        nacionalidade: "Polonêsa"
+    },
+    {
+        nome: "Reidar",
+        significado: "Reidar é um nome sueco que significa 'Comandante do exército'. Ele carrega a conotação de liderança, sabedoria e a habilidade de liderar forças em batalhas.",
+        nacionalidade: "Sueca"
+    },
+    {
+        nome: "Lucius",
+        significado: "Lucius vem do latim e significa 'Luminoso, nascido à luz'. Este nome simboliza clareza, sabedoria e iluminada orientação.",
+        nacionalidade: "Latina"
+    },
+    {
+        nome: "Alon",
+        significado: "Alon é um nome hebraico que significa 'Carvalho robusto'. O carvalho é símbolo de força e resistência, e este nome está ligado à firmeza e estabilidade.",
+        nacionalidade: "Hebraica"
+    },
+    {
+        nome: "Yuri",
+        significado: "Yuri é um nome russo que significa 'Fazendeiro, trabalhador da terra'. Refere-se à força e perseverança daqueles que trabalham com a terra e com os ciclos naturais.",
+        nacionalidade: "Russa"
+    },
+    {
+        nome: "Alessio",
+        significado: "Alessio é um nome italiano que significa 'Defensor, protetor da humanidade'. Este nome transmite a ideia de proteção e cuidado com os outros, refletindo nobreza e responsabilidade.",
+        nacionalidade: "Italiana"
+    },
+    {
+        nome: "Deyan",
+        significado: "Deyan é um nome búlgaro que significa 'Ativo, trabalhador'. Este nome está associado ao esforço constante e à dedicação ao trabalho e à vida prática.",
+        nacionalidade: "Búlgaro"
+    },
+    {
+        nome: "Faris",
+        significado: "Faris é um nome árabe que significa 'Cavaleiro, corajoso'. Está relacionado à nobreza, bravura e à honra em combate.",
+        nacionalidade: "Árabe"
+    },
+    {
+        nome: "Antal",
+        significado: "Antal é um nome húngaro que significa 'De valor incalculável'. Este nome está associado à grandeza pessoal e à importância que alguém tem para sua comunidade ou família.",
+        nacionalidade: "Húngaro"
+    },
+    {
+        nome: "Miguel Ángel",
+        significado: "Miguel Ángel é um nome espanhol composto que significa 'Quem é como Deus?' (Miguel) e 'Mensageiro, anjo' (Ángel). Refere-se à força divina e à presença celestial.",
+        nacionalidade: "Espanhola"
+    },
+    {
+        nome: "Khaled",
+        significado: "Khaled é um nome árabe que significa 'Eterno, imortal'. Está ligado à ideia de longevidade, resistência e à capacidade de deixar um legado duradouro.",
+        nacionalidade: "Árabe"
+    },
+    {
+        nome: "Alberto",
+        significado: "Alberto é um nome de origem portuguesa que significa 'Nobre brilhante, ilustre'. Este nome está associado à liderança, sabedoria e grandeza pessoal.",
+        nacionalidade: "Portuguêsa"
+    },
+    {
+        nome: "Veljko",
+        significado: "Veljko é um nome sérvio que significa 'Maior, grandioso'. Refere-se a alguém que se destaca pela sua importância e grandeza em caráter e feitos.",
+        nacionalidade: "Sérvia"
+    },
+  {
+    nome: "Osvaldo",
+    significado: "Osvaldo é um nome de origem germânica, significando 'poder divino'. Está associado a um protetor, alguém que traz proteção divina e cuidado pelos deuses.",
+    nacionalidade: "Germânica"
+  },
+  {
+    nome: "Tomasz",
+    significado: "Tomasz, de origem polonesa, significa 'gêmeo', uma referência à duplicidade e a essência do relacionamento entre irmãos gêmeos. Também simboliza pessoas de personalidade complementares.",
+    nacionalidade: "Polonêsa"
+  },
+  {
+    nome: "Bogdan",
+    significado: "Bogdan é um nome de origem romena que significa 'dado por Deus'. Está associado à graça divina e à bênção de nascer em um contexto abençoado.",
+    nacionalidade: "Romena"
+  },
+  {
+    nome: "Kalil",
+    significado: "Kalil, de origem árabe, significa 'amigo íntimo'. Este nome carrega a ideia de uma amizade profunda e sincera, sendo associado a uma pessoa confiável e carinhosa.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Erik",
+    significado: "Erik é um nome sueco que significa 'governante eterno'. Relacionado à nobreza e ao poder, ele evoca a ideia de liderança e durabilidade.",
+    nacionalidade: "Sueca"
+  },
+  {
+    nome: "Fyodor",
+    significado: "Fyodor, de origem russa, significa 'presente de Deus'. Este nome é associado à ideia de um presente divino, algo muito valioso e uma bênção recebida dos céus.",
+    nacionalidade: "Russa"
+  },
+  {
+    nome: "Tigran",
+    significado: "Tigran, um nome armênio, significa 'nascido do tigre'. Ele simboliza força, coragem e valentia, com uma forte conexão com a natureza feroz do tigre.",
+    nacionalidade: "Armênio"
+  },
+  {
+    nome: "Dimitrios",
+    significado: "Dimitrios é um nome grego que significa 'devotado à deusa Deméter'. Está associado à agricultura e fertilidade, e simboliza alguém que é dedicado à natureza e ao bem-estar da terra.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Halil",
+    significado: "Halil, de origem turca, significa 'amigo devoto'. É um nome que transmite a ideia de um amigo sincero, dedicado e sempre presente.",
+    nacionalidade: "Turca"
+  },
+  {
+    nome: "Gonzague",
+    significado: "Gonzague, de origem francesa, é um nome com forte conexão religiosa, simbolizando o protetor da juventude. No contexto católico, é um nome de piedade e proteção.",
+    nacionalidade: "Francêsa"
+  },
+  {
+    nome: "Teodoro",
+    significado: "Teodoro vem do grego e significa 'presente de Deus'. Esse nome carrega um significado de grande valor, representando um presente divino que traz bênçãos e força.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Raad",
+    significado: "Raad, de origem árabe, significa 'trovão' e é associado à força e ao poder. Está relacionado à ideia de um impacto imenso, como o som do trovão.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Reynaldo",
+    significado: "Reynaldo, de origem espanhola, significa 'conselheiro sábio'. Refere-se a uma pessoa de grande sabedoria e capacidade de dar conselhos importantes e valiosos.",
+    nacionalidade: "Espanhola"
+  },
+  {
+    nome: "Amilcar",
+    significado: "Amilcar é um nome de origem fenícia, significando 'irmão de Melkart, favores do deus'. Está ligado à mitologia e à proteção divina.",
+    nacionalidade: "Fenício"
+  },
+  {
+    nome: "Elie",
+    significado: "Elie, de origem francesa, significa 'o elevado, exaltado'. Este nome carrega um significado de honra, status elevado e respeito em sua comunidade.",
+    nacionalidade: "Francêsa"
+  },
+  {
+    nome: "Didier",
+    significado: "Didier é um nome francês que significa 'desejado, amado'. Ele transmite uma imagem de uma pessoa altamente apreciada e querida, com grande amor e afeição ao seu redor.",
+    nacionalidade: "Francêsa"
+  },
+  {
+    nome: "Agnaldo",
+    significado: "Agnaldo tem origem germânica e significa 'forte como uma espada'. O nome reflete força, coragem e resiliência, remetendo a uma pessoa com grande poder de defesa e proteção.",
+    nacionalidade: "Germânica"
+  },
+  {
+    nome: "Rodolphe",
+    significado: "Rodolphe, de origem francesa, significa 'lobo famoso, glorioso'. Refere-se a alguém com grande coragem e uma reputação ilustre, como um líder em seu campo.",
+    nacionalidade: "Francêsa"
+  },
+  {
+    nome: "Eugenio",
+    significado: "Eugenio é um nome de origem italiana que significa 'bem-nascido, nobre'. Representa uma pessoa com um caráter elevado, com dignidade e uma boa linhagem.",
+    nacionalidade: "Italiana"
+  },
+  {
+    nome: "Sachin",
+    significado: "Sachin é um nome de origem indiana que significa 'puro, essência verdadeira'. Refere-se à pureza e à autenticidade, representando uma pessoa de grande integridade.",
+    nacionalidade: "Indiana"
+  },
+  {
+    nome: "Josías",
+    significado: "Josías tem origem espanhola e significa 'Deus cura, Deus apóia'. É um nome que evoca a ideia de fé e da capacidade divina de proporcionar cura e apoio espiritual.",
+    nacionalidade: "Espanhola"
+  },
+  {
+    nome: "Pasha",
+    significado: "Pasha, de origem turca, significa 'chefe, comandante'. O nome é associado a liderança, autoridade e respeito, refletindo uma figura de alta posição e responsabilidade.",
+    nacionalidade: "Turca"
+  },
+  {
+    nome: "Galeno",
+    significado: "Galeno, de origem grega, significa 'calmo, sereno'. Refere-se a uma pessoa com uma natureza tranquila e pacífica, frequentemente associada à saúde e sabedoria.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Lucijan",
+    significado: "Lucijan é um nome de origem croata que significa 'luminoso'. Refere-se a alguém que é brilhante, tanto no sentido físico quanto figurativo, iluminando os caminhos ao seu redor.",
+    nacionalidade: "Croata"
+  },
+  {
+    nome: "Ulisses",
+    significado: "Ulisses é de origem grega e significa 'o irritado, aventureiro da Odisseia'. O nome evoca a história do herói mítico da Grécia, conhecido por suas viagens épicas e perseverança.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Rouvin",
+    significado: "Rouvin é uma variante de Reuven, de origem francesa, e significa 'pequeno rubi'. É associado a algo precioso e raro, simbolizando uma pessoa de grande valor e beleza.",
+    nacionalidade: "Francêsa"
+  },
+  {
+    nome: "Nikiforos",
+    significado: "Nikiforos, de origem grega, significa 'portador da vitória'. Refere-se a alguém que traz sucesso, conquistas e glórias, sendo uma pessoa que sempre triunfa.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Aman",
+    significado: "Aman é um nome de origem árabe que significa 'paz, segurança'. Está associado à serenidade, à proteção e ao bem-estar, representando uma pessoa de espírito tranquilo.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Rajiv",
+    significado: "Rajiv é um nome de origem indiana que significa 'flor de lótus, imaculado'. Está associado à pureza, beleza e à espiritualidade, sendo frequentemente ligado ao despertar espiritual.",
+    nacionalidade: "Indiana"
+  },
+  {
+    nome: "Ömer",
+    significado: "Ömer é um nome turco que significa 'vida longa'. Refere-se a uma pessoa com uma vida próspera e duradoura, muitas vezes associada à sabedoria e à longevidade.",
+    nacionalidade: "Turca"
+  },
+  {
+    nome: "Joaquim",
+    significado: "Joaquim, de origem portuguesa, significa 'a quem Deus estabeleceu'. Está associado à ideia de ser escolhido ou designado para uma missão divina ou importante.",
+    nacionalidade: "Portuguêsa"
+  },
+  {
+    nome: "Davi",
+    significado: "Davi é de origem hebraica e significa 'amado, predileto'. Este nome é associado a uma pessoa querida e valorizada por aqueles ao seu redor, além de ser conhecido pela sua importância bíblica como o segundo rei de Israel.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Vitorino",
+    significado: "Vitorino, de origem portuguesa, significa 'pequeno vitorioso'. O nome está relacionado a vitória, sucesso e conquistas, representando uma pessoa que superou desafios com êxito.",
+    nacionalidade: "Portuguêsa"
+  },
+  {
+    nome: "Joaquín",
+    significado: "Joaquín, de origem espanhola, significa 'Deus estabeleceu'. O nome transmite a ideia de alguém que foi escolhido ou designado por Deus para uma missão ou propósito divino.",
+    nacionalidade: "Espanhola"
+  },
+  {
+    nome: "Omer",
+    significado: "Omer é um nome de origem hebraica que significa 'coleção de trigo, abundante'. O nome está associado à fertilidade e prosperidade, simbolizando abundância e colheitas abundantes.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Kelvin",
+    significado: "Kelvin, de origem escocesa, significa 'do rio Kelvin, águas tranquilas'. Este nome está associado à serenidade, calma e estabilidade, representando algo ou alguém calmo como as águas de um rio.",
+    nacionalidade: "Escocês"
+  },
+  {
+    nome: "Anatoly",
+    significado: "Anatoly, de origem russa, significa 'nascer do sol, origem do leste'. O nome simboliza o amanhecer, a luz e a renovação, sendo associado ao início de um novo dia.",
+    nacionalidade: "Russa"
+  },
+  {
+    nome: "Stephanos",
+    significado: "Stephanos, de origem grega, significa 'coronado, vitorioso'. O nome é associado ao sucesso, à vitória e ao reconhecimento, como uma pessoa que alcançou grandes feitos e recebeu sua recompensa.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Dimitar",
+    significado: "Dimitar, de origem búlgara, significa 'devotado à deusa Deméter'. O nome é relacionado à agricultura e à fertilidade, em homenagem à deusa grega da agricultura.",
+    nacionalidade: "Búlgaro"
+  },
+  {
+    nome: "Saad",
+    significado: "Saad, de origem árabe, significa 'felicidade, sorte'. Este nome está associado a prosperidade, boa sorte e um destino feliz, simbolizando alegria e boa fortuna na vida.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Heriberto",
+    significado: "Heriberto, de origem germânica, significa 'exército brilhante'. O nome evoca a imagem de um líder forte e corajoso, alguém que se destaca em sua liderança e habilidade estratégica.",
+    nacionalidade: "Germânica"
+  },
+  {
+    nome: "Zlatko",
+    significado: "Zlatko, de origem croata, significa 'dourado, valioso'. Este nome está associado à riqueza, beleza e grande valor, refletindo algo ou alguém de grande estima e importância.",
+    nacionalidade: "Croata"
+  },
+  {
+    nome: "Marcio",
+    significado: "Marcio, de origem portuguesa, significa 'guerreiro, dedicado a Marte'. Este nome está associado à força, coragem e à energia guerreira, refletindo a bravura e a determinação.",
+    nacionalidade: "Portuguêsa"
+  },
+  {
+    nome: "Stefan",
+    significado: "Stefan, de origem russa, significa 'coroado, vitorioso'. O nome é associado à vitória, sendo uma representação de alguém que é reconhecido por suas conquistas e méritos.",
+    nacionalidade: "Russa"
+  },
+  {
+    nome: "Ravil",
+    significado: "Ravil, de origem russa, significa 'radiante, luminoso'. O nome está relacionado à luz e ao brilho, simbolizando uma pessoa que ilumina os ambientes e as vidas ao seu redor.",
+    nacionalidade: "Russa"
+  },
+  {
+    nome: "Berend",
+    significado: "O nome Berend é de origem holandesa e significa 'forte como um urso'. Este nome é associado à força e à coragem, simbolizando uma pessoa robusta e resistente, como um urso, com grande habilidade em enfrentar desafios.",
+    nacionalidade: "Holandêsa"
+  },
+  {
+    nome: "Hugo",
+    significado: "Hugo, de origem alemã, significa 'pensador, mente brilhante'. Este nome é relacionado à inteligência e sabedoria, refletindo uma pessoa com grande capacidade de reflexão e discernimento.",
+    nacionalidade: "Alemã"
+  },
+  {
+    nome: "Augustýn",
+    significado: "Augustýn, de origem latina, significa 'majestoso, reverenciado'. Este nome é associado à grandeza e respeito, refletindo uma pessoa que inspira admiração por sua dignidade e nobreza.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Ilídio",
+    significado: "Ilídio, de origem portuguesa, significa 'abençoado, protegido'. Este nome evoca a ideia de ser agraciado com bênçãos divinas, simbolizando alguém sob a proteção de forças superiores.",
+    nacionalidade: "Portuguesa"
+  },
+  {
+    nome: "Yoel",
+    significado: "Yoel, de origem hebraica, significa 'Yahweh é Deus'. Este nome carrega um profundo significado espiritual, associando a pessoa com a fé em Deus, sendo uma expressão de devoção e fé religiosa.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Masaru",
+    significado: "Masaru, de origem japonesa, significa 'vitorioso, excelência'. Este nome está relacionado à conquista e ao sucesso, refletindo uma pessoa que se destaca pela excelência em suas ações e realizações.",
+    nacionalidade: "Japonesa"
+  },
+  {
+    nome: "Gerhardt",
+    significado: "Gerhardt, de origem alemã, significa 'lança valente, forte'. Este nome é associado à força e coragem, evocando a imagem de um guerreiro determinado e valente, pronto para defender e proteger.",
+    nacionalidade: "Alemã"
+  },
+  {
+    nome: "Severino",
+    significado: "Severino, de origem latina, significa 'rigoroso, austero'. Este nome está associado à disciplina, seriedade e força de caráter, refletindo uma pessoa com personalidade firme e postura resoluta.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Nizar",
+    significado: "Nizar, de origem árabe, significa 'pequeno, minucioso'. Este nome transmite a ideia de uma pessoa detalhista, atenta aos pequenos aspectos e com uma abordagem cuidadosa e precisa.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Levent",
+    significado: "Levent, de origem turca, significa 'elegante, bonito'. Este nome está associado à beleza e sofisticação, evocando a imagem de uma pessoa de aparência graciosa e com grande charme.",
+    nacionalidade: "Turca"
+  },
+  {
+    nome: "Danut",
+    significado: "Danut, de origem romena, significa 'Deus é meu juiz'. Este nome reflete uma profunda relação com a fé e a crença na justiça divina, sendo um símbolo de retidão e confiança nas leis divinas.",
+    nacionalidade: "Romena"
+  },
+  {
+    nome: "Taner",
+    significado: "Taner, de origem turca, significa 'homem da aurora'. Este nome está associado ao nascer do sol e ao início de um novo ciclo, refletindo uma pessoa com energia renovada e sempre pronta para um novo começo.",
+    nacionalidade: "Turca"
+  },
+  {
+    nome: "Piers",
+    significado: "Piers, de origem inglesa, significa 'pedra, rocha'. Este nome é associado à solidez e à força, refletindo uma pessoa com caráter inabalável, firme e confiável.",
+    nacionalidade: "Inglêsa"
+  },
+  {
+    nome: "Fawzi",
+    significado: "Fawzi, de origem árabe, significa 'vitorioso'. Este nome está relacionado à conquista e ao sucesso, sendo associado a uma pessoa que sempre alcança suas metas e triunfa nos desafios da vida.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Aulus",
+    significado: "Aulus, de origem latina, significa 'favorável, próspero'. Este nome transmite a ideia de alguém abençoado e bem-sucedido, com sorte e boas oportunidades ao longo da vida.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Hilário",
+    significado: "Hilário, de origem latina, significa 'alegre, jovial'. Este nome está associado a uma pessoa de bom humor, divertida e que espalha alegria e otimismo por onde passa.",
+    nacionalidade: "Latina"
+  },
+  {
+    nome: "Matthias",
+    significado: "Matthias, de origem alemã, significa 'presente de Deus'. Este nome simboliza uma pessoa que é vista como uma bênção divina, alguém que foi dado como um presente de Deus para o mundo.",
+    nacionalidade: "Alemã"
+  },
+  {
+    nome: "Jaakko",
+    significado: "Suplantador, substituto. Derivado do nome hebraico Jacob, que significa aquele que substitui ou suplantador. Esse nome carrega a ideia de superação e liderança.",
+    nacionalidade: "Finlandêsa"
+  },
+  {
+    nome: "Sandro",
+    significado: "Protetor do povo. Uma forma abreviada de Alexandre, de origem grega, que significa defensor ou protetor do povo. O nome é associado a uma pessoa com a missão de proteger e servir aos outros.",
+    nacionalidade: "Italiana"
+  },
+  {
+    nome: "Artjom",
+    significado: "Saudável, forte. Uma variação de Artem, que vem de Ártemis, o nome da deusa grega da caça e da saúde. Representa vitalidade e força.",
+    nacionalidade: "Russa"
+  },
+  {
+    nome: "Catriel",
+    significado: "Cordilheira de pedras. De origem mapuche, esse nome está relacionado com a grandeza das montanhas, representando força e resistência.",
+    nacionalidade: "Mapuche"
+  },
+  {
+    nome: "Reinaldo",
+    significado: "Conselheiro sábio. Derivado do nome germânico Raginwald, que significa 'governante sábio'. Este nome evoca liderança e sabedoria.",
+    nacionalidade: "Portuguêsa"
+  },
+  {
+    nome: "Vegard",
+    significado: "Guardião da floresta. De origem nórdica, esse nome é associado a uma pessoa que protege e cuida da natureza, especialmente das florestas.",
+    nacionalidade: "Norueguês"
+  },
+  {
+    nome: "Yunes",
+    significado: "Pomba, símbolo de paz. De origem árabe, o nome Yunes é associado à calma, à serenidade e à paz, com a pomba sendo um símbolo universal de harmonia.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Cristiano",
+    significado: "Seguidor de Cristo. Nome que carrega um significado de fé cristã, representando alguém que segue os ensinamentos de Cristo.",
+    nacionalidade: "Portuguêsa"
+  },
+  {
+    nome: "Petros",
+    significado: "Pedra, rochedo. De origem grega, esse nome é associado à força e estabilidade, sendo uma metáfora para algo firme e inabalável.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Aristóteles",
+    significado: "O melhor dos fins. De origem grega, esse nome é conhecido por ser o nome de um dos maiores filósofos da história. Ele simboliza sabedoria e excelência.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Valter",
+    significado: "Comandante do exército. De origem germânica, esse nome simboliza força, autoridade e liderança, especialmente no contexto de batalhas e comando.",
+    nacionalidade: "Alemã"
+  },
+  {
+    nome: "Mitar",
+    significado: "Devotado à deusa Deméter. De origem grega, esse nome tem raízes na mitologia e está associado à fertilidade e ao culto da deusa Deméter.",
+    nacionalidade: "Croata"
+  },
+  {
+    nome: "Erland",
+    significado: "Homem nobre, protetor. De origem sueca, esse nome é relacionado a uma pessoa de caráter elevado, que protege os outros com honra e dignidade.",
+    nacionalidade: "Sueca"
+  },
+  {
+    nome: "Oleh",
+    significado: "Santo, abençoado. De origem ucraniana, esse nome carrega um significado de pureza e bênçãos divinas, associado a uma pessoa escolhida e honrada.",
+    nacionalidade: "Ucraniano"
+  },
+  {
+    nome: "Rostislav",
+    significado: "Aumenta a glória. De origem eslava, esse nome está associado ao crescimento da fama e da honra, sendo dado a pessoas destinadas a alcançar grande respeito e reconhecimento.",
+    nacionalidade: "Russa"
+  },
+  {
+    nome: "Ikram",
+    significado: "Generosidade, honra. De origem árabe, esse nome simboliza uma pessoa com grande generosidade e caráter nobre, associada ao respeito e honra.",
+    nacionalidade: "Árabe"
+  },
+  {
+    nome: "Kestutis",
+    significado: "Leal, fiel. De origem lituana, esse nome representa uma pessoa com forte senso de lealdade e fidelidade, alguém que é confiável e dedicado.",
+    nacionalidade: "Lituana"
+  },
+  {
+    nome: "Gabin",
+    significado: "Da região dos gábeos. De origem francesa, esse nome carrega uma conexão histórica com a região de onde se origina, e é um nome que simboliza raízes profundas.",
+    nacionalidade: "Francêsa"
+  },
+  {
+    nome: "Orfeu",
+    significado: "Poeta lendário, encantador de almas. De origem grega, esse nome está associado à mitologia, onde Orfeu era um poeta e músico capaz de encantar todos, até mesmo seres mitológicos.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Kaan",
+    significado: "Governante, rei. De origem turca, este nome está relacionado à realeza e liderança, simbolizando uma pessoa com grande autoridade e poder.",
+    nacionalidade: "Turca"
+  },
+  {
+    nome: "Şahin",
+    significado: "Falcão, ágil, astuto. De origem turca, este nome é associado à agilidade e visão aguçada, como a do falcão, simbolizando uma pessoa perspicaz e rápida em suas ações.",
+    nacionalidade: "Turca"
+  },
+  {
+    nome: "Ezekias",
+    significado: "Deus fortaleceu. De origem hebraica, esse nome reflete a confiança em Deus e o poder divino de fortalecer e proteger.",
+    nacionalidade: "Hebraica"
+  },
+  {
+    nome: "Berilo",
+    significado: "Pedra preciosa, força protetora. De origem grega, esse nome é associado a uma pedra preciosa que simboliza força e proteção.",
+    nacionalidade: "Grega"
+  },
+  {
+    nome: "Dinesh",
+    significado: "Senhor do sol. De origem indiana, esse nome é associado à reverência ao sol, um símbolo de energia vital e poder.",
+    nacionalidade: "Indiana"
+  },
+    {
+        nome: "Abdiel",
+        significado: "Servo de Deus",
+        nacionalidade: "Hebraica"
+    },
+    {
+        nome: "Gregarios",
+        significado: "Alerta, vigilante",
+        nacionalidade: "Grega"
+    },
+    {
+        nome: "Shehu",
+        significado: "Senhor, sábio, líder",
+        nacionalidade: "Nigeriana"
+    },
+    {
+        nome: "Orlando",
+        significado: "Terra famosa, herói célebre",
+        nacionalidade: "Italiana/Espanhola"
+    },
+    {
+        nome: "Dario",
+        significado: "Possuidor do bem",
+        nacionalidade: "Persa"
+    },
+    {
+        nome: "Sadiq",
+        significado: "Sincero, leal",
+        nacionalidade: "Árabe"
+    },
+    {
+        nome: "Conrad",
+        significado: "Conselheiro ousado",
+        nacionalidade: "Alemã"
+    },
+    {
+        nome: "Aviv",
+        significado: "Primavera, renovação",
+        nacionalidade: "Hebraica"
+    },
+    {
+        nome: "Magnus",
+        significado: "O grande, poderoso",
+        nacionalidade: "Latina"
+    },
+    {
+        nome: "Rupert",
+        significado: "Fama brilhante, ilustre",
+        nacionalidade: "Inglêsa"
+    },
+    {
+        nome: "Suleiman",
+        significado: "Homem de paz, tranquilo",
+        nacionalidade: "Turca"
+    },
+    {
+        nome: "Raoni",
+        significado: "Líder, chefe",
+        nacionalidade: "Tupi"
+    },
+    {
+        nome: "Ismail",
+        significado: "Deus ouviu",
+        nacionalidade: "Hebraica"
+    },
+  {nome: "Natálio", significado: "Nascido no Natal. Derivado do latim 'natalis', que significa 'nascimento'. Este nome está associado ao nascimento de Jesus Cristo, simbolizando renovação e celebração da vida.", nacionalidade: "Espanhola"},
+  {nome: "Albano", significado: "Branco como a aurora. De origem latina, derivado de 'Albanus', que significa 'natural de Alba Longa', uma cidade histórica do Lácio. O nome evoca pureza e luminosidade.", nacionalidade: "Latina"},
+  {nome: "Dirk", significado: "Governante do povo. Variante do nome germânico 'Theodorik', que significa 'governante do povo' ou 'poderoso entre o povo'. Este nome reflete liderança e autoridade.", nacionalidade: "Alemã"},
+  {nome: "Zahir", significado: "Ilustre, evidente. De origem árabe, derivado da raiz 'z-h-r', que significa 'aparente' ou 'evidente'. O nome simboliza clareza e destaque.", nacionalidade: "Árabe"},
+  {nome: "Tito", significado: "Defensor, estimado. De origem latina, possivelmente derivado de 'tata', que significa 'pai', ou do latim 'titulus', que significa 'honrado'. Este nome carrega conotações de respeito e liderança.", nacionalidade: "Latina"},
+  {nome: "Ansgar", significado: "Lança de Deus, protetor divino. De origem nórdica, composto por 'ans' (deus) e 'gar' (lança). Este nome é associado à proteção divina e força espiritual.", nacionalidade: "Nórdica"},
+  {nome: "Eneas", significado: "Louvável, digno de louvor. De origem grega, derivado de 'Aineias'. Na mitologia clássica, Eneias foi um herói troiano que fundou a cidade de Roma.", nacionalidade: "Grega"},
+  {nome: "Gustave", significado: "Bastão dos godos, protetor. De origem germânica, derivado de 'Gustaf', que significa 'bastão dos godos' ou 'protetor glorioso'. Este nome reflete liderança e força.", nacionalidade: "Francêsa"},
+  {nome: "Yves", significado: "Arco de teixo, lavrador. De origem francesa, derivado do latim 'Ivo', que significa 'teixo'. Este nome está associado à natureza e ao trabalho agrícola.", nacionalidade: "Francêsa"},
+  {nome: "Pranav", significado: "Sagrado, letra OM. De origem sânscrita, 'Pranav' é uma sílaba sagrada no hinduísmo, representando o som primordial 'OM'. Este nome simboliza espiritualidade e divindade.", nacionalidade: "Indiana"},
+  {nome: "Uwe", significado: "Herança, ancestral. De origem alemã, derivado de 'Wend', que significa 'herança' ou 'ancestral'. Este nome está associado à tradição e à linhagem familiar.", nacionalidade: "Alemã"},
+  {nome: "Sanjay", significado: "Triunfante, sempre vitorioso. De origem sânscrita, 'Sanjay' significa 'vencedor' ou 'conquistador'. Este nome é associado à vitória e ao sucesso contínuo.", nacionalidade: "Indiana"},
+  {nome: "Teon", significado: "Dádiva de Deus. De origem grega, 'Teon' significa 'dom de Deus'. Este nome carrega conotações de bênção divina e gratidão.", nacionalidade: "Grega"},
+  {nome: "Johann", significado: "Deus é gracioso. Variante alemã do nome hebraico Yochanan (יוחנן), que significa 'Yahweh é gracioso'.", nacionalidade: "Alemã"},
+  {nome: "Luís Filipe", significado: "Guerreiro ilustre e amigo dos cavalos. 'Luís' vem do germânico 'Chlodovech', significando 'guerreiro famoso', e 'Filipe' do grego 'Philippos', significando 'amigo dos cavalos'.", nacionalidade: "Portuguêsa"},
+  {nome: "Seraphim", significado: "Anjo ardente, cheio de luz. Derivado do hebraico 'seraphim' (שׂרָפִים), significando 'seres celestiais ardentes' ou 'aqueles que queimam'.", nacionalidade: "Hebraica"},
+  {nome: "Emyr", significado: "Rei, governante. Nome galês que significa 'rei' ou 'governante'.", nacionalidade: "Galês"},
+  {nome: "Santos", significado: "Consagrado, sagrado. Derivado do latim 'sanctus', significando 'santo' ou 'sagrado'.", nacionalidade: "Espanhola"},
+  {nome: "Baltazar", significado: "Deus protege o rei. Variante do aramaico 'Bel-shar-uzur', significando 'Bel protege o rei'.", nacionalidade: "Aramaico"},
+  {nome: "Agron", significado: "Habitante dos campos férteis. Nome albanês que pode derivar do grego 'agros', significando 'campo', ou do albanês 'ag', significando 'aurora'.", nacionalidade: "Albanês"},
+  {nome: "Tarek", significado: "Quem bate à porta, estrela da manhã. Derivado do árabe 'ṭāriq' (طارق), significando 'aquele que bate à porta' ou 'estrela da manhã'.", nacionalidade: "Árabe"},
+  {nome: "Nicolae", significado: "Vitória do povo. Variante romena do grego 'Nikolaos', significando 'vitória do povo'.", nacionalidade: "Romena"},
+  {nome: "Joost", significado: "Justo, reto. Variante holandesa do nome latino 'Justus', significando 'justo' ou 'reto'.", nacionalidade: "Holandêsa"},
+  {nome: "Ghassan", significado: "Jovem, vigoroso. Nome árabe que significa 'jovem' ou 'vigoroso'.", nacionalidade: "Árabe"},
+  {nome: "Alcides", significado: "Força de Hércules, poderoso. Derivado do grego 'Alkides', significando 'força' ou 'poder'.", nacionalidade: "Portuguêsa"},
+  {nome: "Yahel", significado: "Brilho, ser iluminado. Nome hebraico que significa 'brilho' ou 'iluminação'.", nacionalidade: "Hebraica"},
+  {nome: "Ori", significado: "Minha luz, iluminado. Nome hebraico que significa 'minha luz' ou 'iluminado'.", nacionalidade: "Hebraica"},
+  {nome: "Federico", significado: "Derivado do germânico 'Frithurik', composto por 'frithu' (paz) e 'ric' (governante ou rei), significando 'governante pacífico' ou 'rei da paz'.", nacionalidade: "Italiana"},
+  {nome: "Nahuel", significado: "Origem mapuche, 'nawel' significa 'tigre', 'jaguar' ou 'felino poderoso', simbolizando força e bravura na cultura mapuche.", nacionalidade: "Mapuche"},
+  {nome: "Akira", significado: "Nome japonês que pode significar 'brilhante', 'luz', 'clareza', 'próspero' ou 'bom outono', dependendo dos caracteres kanji utilizados.", nacionalidade: "Japonêsa"},
+  {nome: "Olívio", significado: "Vem do latim 'oliva', que significa 'azeitona' ou 'oliveira'. A oliveira é símbolo de paz, sabedoria e prosperidade.", nacionalidade: "Portuguêsa"},
+  {nome: "Valmir", significado: "Nome albanês que pode ser interpretado como 'famoso por sua bravura' ou 'ilustre em sua força'.", nacionalidade: "Albanês"},
+  {nome: "Heródoto", significado: "Do grego 'Herodotos', significando 'dádiva de Hera'. Heródoto foi um historiador grego conhecido como o 'pai da história'.", nacionalidade: "Grega"},
+  {nome: "Florian", significado: "Derivado do latim 'flor', significando 'florido' ou 'florescente'. Está associado à chegada da primavera e ao renascimento da natureza.", nacionalidade: "Latina"},
+  {nome: "Kleber", significado: "De origem germânica, significa 'aquele que é encarregado de pequenos terrenos' ou 'proprietário de terras'.", nacionalidade: "Alemã"},
+  {nome: "Zayd", significado: "Nome árabe que significa 'crescimento', 'aumento' ou 'prosperidade'.", nacionalidade: "Árabe"},
+  {nome: "Breno", significado: "Nome celta que significa 'príncipe' ou 'chefe'. Também é associado a um líder celta que conquistou Roma.", nacionalidade: "Celta/Portuguêsa"},
+  {nome: "Patricio", significado: "Derivado do latim 'patricius', significando 'nobre', 'filho de nobre'.", nacionalidade: "Espanhola"},
+  {nome: "Jean Lucca", significado: "Jean é a forma francesa de João, que significa 'Deus é gracioso'. Lucca é derivado do latim 'lux', significando 'luz'.", nacionalidade: "Francêsa"},
+  {nome: "Neven", significado: "Nome croata que significa 'flor', 'renovação' ou 'novo'.", nacionalidade: "Croata"},
+  {nome: "Lindomar", significado: "Nome brasileiro que combina 'lindo' e 'mar', significando 'belo como o mar' ou 'beleza do mar'.", nacionalidade: "Brasileira"},
+  {nome: "Caleb", significado: "Nome hebraico que significa 'fiel como cão' ou 'devoto'.", nacionalidade: "Hebraica"},
+  {nome: "Ernesto", significado: "Nome de origem germânica que significa 'sério', 'determinado' ou 'resoluto'.", nacionalidade: "Portuguêsa"},
+  {nome: "Peregrino", significado: "Derivado do latim 'peregrinus', significando 'estrangeiro' ou 'viajante'. Originalmente, referia-se a quem viajava por terras estrangeiras, especialmente por motivos religiosos. Com o tempo, passou a designar aqueles que realizam peregrinações a lugares sagrados.", nacionalidade: "Latina"},
+  {nome: "Denis", significado: "Nome de origem francesa, derivado do grego 'Dionysios', que significa 'consagrado a Dionísio', o deus grego do vinho, festividades e teatro. Também pode ser interpretado como 'espírito das águas' ou 'o céu e as águas'.", nacionalidade: "Francêsa"},
+  {nome: "Mustapha", significado: "Nome árabe que significa 'o escolhido'. É um dos epítetos atribuídos ao profeta Maomé, significando 'aquele que foi escolhido por Deus'.", nacionalidade: "Árabe"},
+  {nome: "Arkadi", significado: "Nome de origem russa que significa 'feliz' ou 'próspero'. Está associado à região da Arcádia, na Grécia, que simboliza um lugar idílico e pastoral.", nacionalidade: "Russa"},
+  {nome: "Thierry", significado: "Nome francês derivado do germânico 'Theodoric', composto por 'theod' (povo) e 'ric' (governante), significando 'governante do povo'.", nacionalidade: "Francêsa"},
+  {nome: "Aleš", significado: "Nome de origem tcheca que significa 'defensor dos homens'. É uma forma diminutiva de 'Alexandre' ou 'Alexis'.", nacionalidade: "Tcheca"},
+  {nome: "Bartolomeu", significado: "Nome de origem aramaica, 'Bar-Talmai', significando 'filho de Talmai'. Talmai é um nome próprio que significa 'agricultor'.", nacionalidade: "Aramaica"},
+  {nome: "Enéas", significado: "Nome de origem grega, 'Eneas', que significa 'louvável' ou 'admirável'. É associado ao herói troiano da Eneida, de Virgílio.", nacionalidade: "Grega"},
+  {nome: "Ulisse", significado: "Versão italiana do nome grego 'Odysseus', que significa 'o irritado'. Ulisses é o herói da obra 'Odisseia', de Homero, conhecido por suas aventuras e astúcia.", nacionalidade: "Italiana"},
+  {nome: "Nikos", significado: "Nome grego derivado de 'Nikolaos', composto por 'nike' (vitória) e 'laos' (povo), significando 'vitória do povo'.", nacionalidade: "Grega"},
+  {nome: "Zsolt", significado: "Nome húngaro que significa 'senhor' ou 'governante'. É um nome tradicional na Hungria.", nacionalidade: "Húngara"},
+  {nome: "Kurt", significado: "Nome de origem germânica que significa 'conselheiro valente'. É uma forma curta de 'Konrad' ou 'Konradin'.", nacionalidade: "Alemã"},
+  {nome: "Virgil", significado: "Nome de origem latina, 'Virgilius', que significa 'florescente' ou 'verdejante'. É associado ao poeta romano Virgílio, autor da 'Eneida'.", nacionalidade: "Latina"},
+  {nome: "Emílio", significado: "Nome de origem latina, 'Aemilius', que significa 'rival' ou 'trabalhador'. É associado à antiga família romana dos Emílios.", nacionalidade: "Latina"},
+  {nome: "Miklos", significado: "Nome húngaro derivado de 'Nikolaos', composto por 'nike' (vitória) e 'laos' (povo), significando 'vitória do povo'.", nacionalidade: "Húngara"},
+  {nome: "Teun", significado: "Nome de origem holandesa, diminutivo de 'Antonius', que significa 'de valor imensurável'.", nacionalidade: "Holandesa"},
+  {nome: "Matej", significado: "Nome de origem eslava, variante de 'Mateus', que significa 'presente de Deus'.", nacionalidade: "Eslava"},
+  {nome: "Lucien", significado: "Variante francesa de Luciano, derivado do latim 'Lucianus', que significa 'da natureza do luminoso' ou 'nascido na luz'.", nacionalidade: "Francêsa"},
+  {nome: "Djalma", significado: "Origem no nome islandês Hjalmar, composto por 'hjalm' (capacete, proteção) e 'herr' (exército), significando 'capacete do exército' ou 'aquele que protege'.", nacionalidade: "Tupi"},
+  {nome: "Joanes", significado: "Variante basca de João, derivado do hebraico 'Yochanan', que significa 'Deus é gracioso' ou 'agraciado por Deus'.", nacionalidade: "Basco"},
+  {nome: "Edegar", significado: "Origem germânica, composto por 'ead' (riqueza, fortuna) e 'gar' (lança), significando 'lança rica' ou 'lança próspera'.", nacionalidade: "Germânica"},
+  {nome: "Antônio", significado: "Origem no latim 'Antonius', com possíveis significados de 'valioso', 'de valor inestimável' ou 'alimentado de flores'.", nacionalidade: "Portuguêsa"},
+  {nome: "Malik", significado: "Origem árabe, significando 'rei', 'chefe' ou 'líder poderoso'. Também pode ser uma variante de 'Maalik', que significa 'dono' ou 'possuidor'.", nacionalidade: "Árabe"},
+  {nome: "Marius", significado: "Origem latina, possivelmente derivado de 'Mars', o deus romano da guerra, significando 'guerreiro' ou 'masculino'.", nacionalidade: "Latina"},
+  {nome: "Svyatoslav", significado: "Origem eslava, composto por 'svjat' (santo) e 'slav' (glória), significando 'santo de glória' ou 'glória abençoada'.", nacionalidade: "Russ"},
+  {nome: "Kilian", significado: "Origem irlandesa, derivado do gaélico 'Cillian', significando 'pequeno guerreiro' ou 'pequeno batalhador'.", nacionalidade: "Irlandêsa"},
+  {nome: "Jürgen", significado: "Origem alemã, variante de 'Georg', que significa 'fazendeiro' ou 'trabalhador da terra'.", nacionalidade: "Alemã"},
+  {nome: "Asaf", significado: "Origem hebraica, significando 'coletor' ou 'aquele que recolhe'.", nacionalidade: "Hebraica"},
+  {nome: "Risto", significado: "Origem finlandesa, variante de 'Kristo', que significa 'cristão' ou 'seguidor de Cristo'.", nacionalidade: "Finlandêsa"},
+  {nome: "Pius", significado: "Origem latina, significando 'piedoso' ou 'devoto'.", nacionalidade: "Latina"},
+  {nome: "Kostya", significado: "Diminutivo russo de 'Konstantin', que significa 'estável' ou 'firme'.", nacionalidade: "Russa"},
+  {nome: "Pascoal", significado: "Origem latina 'Paschalis', significando 'relativo à Páscoa' ou 'nascimento de Cristo'.", nacionalidade: "Portuguêsa"},
+  {nome: "Ilia", significado: "Origem russa, variante de 'Elias', que significa 'O Senhor é meu Deus'.", nacionalidade: "Russa"},
+  {nome: "Baruch", significado: "Origem hebraica, significando 'abençoado' ou 'próspero'.", nacionalidade: "Hebraica"}
+      ],
+  femininos: [
+    {nome: "Roseane", significado: "Nome originado do latim 'rosa', simbolizando beleza e amor eterno, uma das flores mais amadas mundialmente.", nacionalidade: "Latina"},
+  {nome: "Suri", significado: "Nome de origem hebraica, variante de Sara, que significa 'princesa'. Também pode ter origem persa, significando 'rosa vermelha'.", nacionalidade: "Persa"},
+  {nome: "Inaya", significado: "Nome de origem árabe que significa 'cuidado', 'proteção' ou 'atenção divina'. Representa a ideia de cuidar e apoiar os outros, uma característica valiosa na cultura árabe.", nacionalidade: "Árabe"},
+  {nome: "Francisca", significado: "Nome de origem latina, derivado de 'Franciscus', que significa 'francesa livre' ou 'mulher livre'. É a versão feminina de Francisco.", nacionalidade: "Latina"},
+  {nome: "Antônia", significado: "Nome de origem latina, derivado de 'Antonius', que significa 'valiosa', 'sem preço' ou 'de valor inestimável'.", nacionalidade: "Latina"},
+  {nome: "Joana", significado: "Nome de origem hebraica, derivado de 'Yehohanan', que significa 'Deus é cheio de graça' ou 'agraciada por Deus'.", nacionalidade: "Hebraica"},
+  {nome: "Alexandra", significado: "Nome de origem grega, derivado de 'Alexandros', que significa 'protetora do homem' ou 'defensora da humanidade'.", nacionalidade: "Grega"},
+  {nome: "Rodriga", significado: "Nome feminino derivado de Rodrigo, que tem origem germânica e significa 'governante famoso' ou 'príncipe poderoso'.", nacionalidade: "Germânica"},
+  {nome: "Leonarda", significado: "Nome de origem germânica, feminino de Leonardo, que significa 'valente como um leão' ou 'forte como um leão'.", nacionalidade: "Germânica"},
+  {nome: "Henriqueta", significado: "Nome de origem germânica, feminino de Henrique, que significa 'governante da casa' ou 'senhora soberana'.", nacionalidade: "Germânica"},
+  {nome: "Hannah", significado: "Nome de origem hebraica, que significa 'graça' ou 'favor'.", nacionalidade: "Hebraica"},
+  {nome: "Ava", significado: "Nome de origem hebraica, derivado de 'Chava', que significa 'vida' ou 'vivente'.", nacionalidade: "Hebraica"},
+  {nome: "Luana", significado: "Nome de origem havaiana, que significa 'luz' ou 'iluminada'.", nacionalidade: "Havaiana"},
+  {nome: "Katherine", significado: "Nome de origem grega, derivado de 'Aikaterine', que significa 'pura' ou 'casta'.", nacionalidade: "Grega"},
+  {nome: "Quinn", significado: "Nome de origem irlandesa, que significa 'inteligente' ou 'sábia'.", nacionalidade: "Irlandesa"},
+  {nome: "Rafaela", significado: "Nome de origem hebraica, feminino de Rafael, que significa 'Deus curou' ou 'cura divina'.", nacionalidade: "Hebraica"},
+  {nome: "Ursula", significado: "Pequena ursa, derivado de 'ursus' que significa ursa ou urso em latim, remetendo a uma figura pequena e forte.", nacionalidade: "Latina"},
+  {nome: "Wanda", significado: "Peregrina, nome derivado do germânico, simbolizando uma mulher que viaja ou se desloca, uma espécie de viajante.", nacionalidade: "Germânica"},
+  {nome: "Ximena", significado: "Ouvinte, derivado do nome espanhol 'Simón', que vem do hebraico 'Shimon' e significa aquele que ouve ou escuta.", nacionalidade: "Espanhola"},
+  {nome: "Alice", significado: "De qualidade nobre, derivado do germânico 'Adalheidis' que significa 'nobre' ou 'de linhagem nobre'.", nacionalidade: "Germânica"},
+  {nome: "Laura", significado: "Loureiro, vitoriosa, originário do latim 'laurus', que simboliza a vitória e a honra.", nacionalidade: "Latina"},
+  {nome: "Maria Alice", significado: "Senhora soberana de linhagem nobre, Maria significa 'senhora soberana' e Alice é derivado de 'Adalheidis', nobreza.", nacionalidade: "Germânica"},
+  {nome: "Maria Clara", significado: "Senhora soberana clara, 'Maria' é senhora soberana e 'Clara' vem do latim, que significa 'brilhante' ou 'iluminada'.", nacionalidade: "Latina"},
+  {nome: "Maria Cecília", significado: "Senhora soberana cega, Cecília tem origem no latim e significa 'cega', referindo-se à virtude e à perseverança em tempos difíceis.", nacionalidade: "Latina"},
+  {nome: "Maria Júlia", significado: "Senhora soberana jovem, 'Júlia' vem do latim 'Iulia', que é derivado de uma linhagem romana antiga, representando a juventude.", nacionalidade: "Latina"},
+  {nome: "Sophia", significado: "Sabedoria, nome de origem grega que significa 'sabedoria', com forte associação à filosofia e inteligência.", nacionalidade: "Grega"},
+  {nome: "Melissa", significado: "Abelha, mel, de origem grega 'melissa', associado à doçura e ao trabalho em equipe, com referência à abelha.", nacionalidade: "Grega"},
+  {nome: "Jéssica", significado: "Deus contempla, derivado do hebraico 'Yiskah' que significa 'olhar, ver, contemplar'.", nacionalidade: "Hebraica"},
+  {nome: "Olivia", significado: "Oliveira, paz, proveniente do latim 'oliva', que simboliza paz, prosperidade e força em tempos de dificuldade.", nacionalidade: "Latina"},
+  {nome: "Rachel", significado: "Ovelha, a graça de Deus, derivado do hebraico 'Rahel', que significa 'ovelha', simbolizando a bondade e a graça.", nacionalidade: "Hebraica"},
+  {nome: "Rose", significado: "Rosa, amor, nome originado do latim 'rosa', simbolizando beleza e amor eterno, uma das flores mais amadas mundialmente.", nacionalidade: "Latina"},
+  {nome: "Virginia", significado: "Castidade, pureza, de origem latina 'Virgo', representando a virgindade, pureza e o caráter intocável.", nacionalidade: "Latina"},
+  {nome: "Wendy", significado: "Amiga abençoada, originado do inglês, 'Wendy' foi criado por J.M. Barrie para o personagem de 'Peter Pan', simbolizando uma amiga leal e bondosa.", nacionalidade: "Inglesa"},
+  { nome: "Winifred", significado: "Amiga da paz, derivado do antigo inglês 'Winefrith', significando amiga ou protetora da paz.", nacionalidade: "Galesa" },
+  { nome: "Emily", significado: "Esforçada, ambiciosa, proveniente do latim 'Aemilia', que significa aquela que é rival, trabalhadora e dedicada ao que faz.", nacionalidade: "Latina" },
+  { nome: "Chiara", significado: "Clara, brilhante, vem do latim 'Clarus', significando brilhante, ilustre, radiante, ou luminosa.", nacionalidade: "Italiana" },
+  { nome: "Alessia", significado: "Defensora, protetora, do grego 'Alexios', que significa alguém que defende ou protege.", nacionalidade: "Italiana" },
+  { nome: "Francesca", significado: "Francesa, livre, do latim 'Franciscus', que significa pertencente à França ou liberdade.", nacionalidade: "Italiana" },
+  { nome: "Martina", significado: "Guerreira, dedicada a Marte, proveniente do latim 'Martinus', relacionado ao deus da guerra, Marte.", nacionalidade: "Latina" },
+  { nome: "Elena", significado: "Tocha reluzente, raio de sol, derivado do grego 'Helene', significando 'tocha', 'luminosa' ou 'raio de sol'.", nacionalidade: "Grega" },
+  { nome: "Sara", significado: "Princesa, nobre, proveniente do hebraico 'Sarah', significando senhora, princesa ou dama.", nacionalidade: "Hebraica" },
+  { nome: "Beatrice", significado: "Aquela que faz os outros felizes, vem do latim 'Beatrix', significando 'aquela que traz felicidade'.", nacionalidade: "Latina" },
+  { nome: "Giorgia", significado: "Agricultora, trabalhadora da terra, derivado do grego 'Georgios', significando aquele que trabalha a terra ou faz o bem.", nacionalidade: "Grega" },
+  { nome: "Anna", significado: "Cheia de graça, misericordiosa, originado do hebraico 'Hannah', significando graça ou favor divino.", nacionalidade: "Hebraica" },
+  { nome: "Emma", significado: "Universal, completa, de origem germânica 'Ermengard', significando íntegra, completa, ou universal.", nacionalidade: "Germânica" },
+  { nome: "Caterina", significado: "Pura, imaculada, derivado do grego 'Aikaterine', significando 'pura', 'incontaminada' ou 'sem defeito'.", nacionalidade: "Grega" },
+  { nome: "Ludovica", significado: "Famosa na guerra, derivado do germânico 'Ludwig', significando 'lutar', 'guerreira famosa'.", nacionalidade: "Germânica" },
+  { nome: "Eleonora", significado: "Luz brilhante, derivado do grego 'Elenos', significa 'luz' ou 'brilho'.", nacionalidade: "Grega" },
+  { nome: "Lucia", significado: "Luz, iluminação, proveniente do latim 'Lux', significando 'luz' ou 'iluminação'.", nacionalidade: "Latina" },
+  { nome: "Camilla", significado: "Jovem cerimonialista, vem do latim 'Camillus', significando uma jovem que serve em rituais religiosos ou cerimoniais.", nacionalidade: "Latina" },
+  { nome: "Arianna", significado: "Santa, pura, derivado do grego 'Ariadne', significa 'santa' ou 'pura'.", nacionalidade: "Grega" },
+  { nome: "Angelica", significado: "Anjo, mensageira divina, do grego 'Angelos', que significa 'mensageiro de Deus' ou 'anjo'.", nacionalidade: "Latina" },
+  { nome: "Alessandra", significado: "Defensora, protetora do homem, derivado do grego 'Alexandra', que significa 'protetora dos homens'.", nacionalidade: "Grega" },
+  { nome: "Viola", significado: "Violeta, flor simbólica da humildade, do latim 'Viola', que significa a flor violeta, representando humildade e modéstia.", nacionalidade: "Latina" },
+  { nome: "Simona", significado: "Ouvinte, obediente, originado do hebraico 'Shimon', significando 'ouvir' ou 'obedecer'.", nacionalidade: "Hebraica" },
+  { nome: "Carlotta", significado: "Homem livre, derivado do germânico 'Karl', significando 'homem livre' ou 'homem forte'.", nacionalidade: "Germânica" },
+  { nome: "Roberta", significado: "Brilhante, famosa, vem do germânico 'Robert', que significa 'brilhante' ou 'famoso'.", nacionalidade: "Germânica" },
+  { nome: "Giuliana", significado: "Jovem, cheia de vida, derivado do latim 'Julianus', significando 'jovem', 'cheia de vida' ou 'saudável'.", nacionalidade: "Italiana" },
+  { nome: "Letizia", significado: "Alegria, felicidade, originado do latim 'Laetitia', que significa 'felicidade' ou 'alegria'.", nacionalidade: "Latina" },
+  { nome: "Adelaide", significado: "Nobre, de linhagem nobre, do germânico 'Adalheidis', significando 'nobre', 'de linhagem nobre' ou 'de boa origem'.", nacionalidade: "Germânica" },
+  { nome: "Daniela", significado: "Deus é meu juiz, originado do hebraico 'Daniyyel', significando 'Deus é meu juiz'.", nacionalidade: "Hebraica" },
+  { nome: "Isotta", significado: "Promessa, juramento, do germânico 'Isolde', significando 'promessa' ou 'juramento'.", nacionalidade: "Germânica" },
+  { nome: "Miriam", significado: "Rebelde, obstinada, originado do hebraico 'Miryam', significando 'rebelde' ou 'aquela que se opõe'.", nacionalidade: "Hebraica" },
+  { nome: "Erica", significado: "Regras eternas, líder poderosa, derivado do germânico 'Eirikr', que significa 'líder eterno' ou 'poderoso'.", nacionalidade: "Germânica" },
+  { nome: "Simara", significado: "Planta espinhosa, do árabe 'Simara', referindo-se a uma planta com espinhos ou agulhas.", nacionalidade: "Árabe" },
+  { nome: "Svea", significado: "Reino da Suécia, derivado do sueco antigo, significa 'da terra da Suécia' ou 'suédoa'.", nacionalidade: "Sueca" },
+  { nome: "Aeliana", significado: "Sol, do latim 'Aelius', que está relacionado com o Sol ou com o brilho radiante do sol.", nacionalidade: "Latina" },
+  { nome: "Calantha", significado: "Flor bonita, do grego 'Kalanthos', significando 'bela flor'.", nacionalidade: "Grega" },
+  { nome: "Diantha", significado: "Flor divina, do grego 'Dianthos', significando 'flor divina' ou 'deusa da flor'.", nacionalidade: "Grega" },
+  { nome: "Galatea", significado: "Branca como leite, derivado do grego 'Galatea', que significa 'branco como o leite'.", nacionalidade: "Grega" },
+  { nome: "Ianthe", significado: "Flor roxa, do grego 'Ianthe', que significa 'flor roxa'.", nacionalidade: "Grega" },
+  { nome: "Lysandra", significado: "Defensora do homem, do grego 'Lysandra', significando 'defensora' ou 'libertadora do homem'.", nacionalidade: "Grega" },
+  { nome: "Melantha", significado: "Flor escura, do grego 'Melanthos', que significa 'flor escura'.", nacionalidade: "Grega" },
+  { nome: "Persephone", significado: "A que destrói a luz, do grego 'Persephone', associada com a destruição da luz, deusa da agricultura e do submundo.", nacionalidade: "Grega" },
+  { nome: "Rosalind", significado: "Rosa suave, do latim 'Rosalind', que significa 'rosa suave' ou 'cabelos como rosas'.", nacionalidade: "Inglesa" },
+  { nome: "Celestia", significado: "Celestial, do latim 'Caelestis', significando 'celestial' ou 'do céu'.", nacionalidade: "Latina" },
+  { nome: "Eurydice", significado: "Justiça ampla, do grego 'Eurydice', que significa 'justiça ampla' ou 'direção justa'.", nacionalidade: "Grega" },
+  { nome: "Aurelie", significado: "Dourada, derivado do latim 'Aurelia', significando 'dourada' ou 'brilhante como ouro'.", nacionalidade: "Latina" },
+  { nome: "Evangeline", significado: "Portadora de boas notícias, do grego 'Evangelia', que significa 'mensageira de boas novas'.", nacionalidade: "Grega" },
+  { nome: "Isabeau", significado: "Juramento de Deus, derivado do francês antigo, significa 'Deus é o meu juramento'.", nacionalidade: "Francesa" },
+  { nome: "Sunniva", significado: "Dádiva do sol, origem nórdica, significa 'dádiva solar' ou 'presente do sol'.", nacionalidade: "Nórdica" },
+  { nome: "Odessa", significado: "Longa jornada, do grego, é associada à viagem e aventura, inspirado pela obra 'Odisseia'.", nacionalidade: "Grega" },
+  { nome: "Cerelia", significado: "Celestial, derivado do latim, relacionada com 'Ceres', a deusa romana da agricultura, significando algo divino ou celestial.", nacionalidade: "Latina" },
+  { nome: "Cassiane", significado: "Doce como mel, do latim 'cassia', uma planta aromática, associada ao mel e à doçura.", nacionalidade: "Latina" },
+  { nome: "Lyonesse", significado: "Ilha da juventude, inspirada na lenda celta, é associada a um lugar mítico de beleza eterna e juventude.", nacionalidade: "Celta" },
+  { nome: "Eulalie", significado: "Bem-falante, do grego 'Eulalia', que significa 'boa fala', 'bem dito', ou 'eloquente'.", nacionalidade: "Grega" },
+  { nome: "Zinnia", significado: "Flor, derivado da planta zínia, simbolizando a amizade, a memória e a beleza eterna.", nacionalidade: "Latina" },
+  { nome: "Yuki", significado: "Neve, do japonês, significa 'neve' ou 'beleza pura e tranquila'.", nacionalidade: "Japonesa" },
+  { nome: "Kiko", significado: "Filha feliz, um nome japonês que é associado à felicidade e alegria.", nacionalidade: "Japonesa" },
+  { nome: "Rei", significado: "Espírito, no japonês, representa 'espírito', 'alma' ou 'força interior'.", nacionalidade: "Japonesa" },
+  { nome: "Yui", significado: "União, 'yui' em japonês significa 'união', 'ligação', ou 'vínculo'.", nacionalidade: "Japonesa" },
+  { nome: "Yuna", significado: "Razão, no japonês, representa 'razão', 'próposito' ou 'intenção'.", nacionalidade: "Japonesa" },
+  { nome: "Natsumi", significado: "Beleza do verão, um nome japonês que evoca a beleza do verão e das flores dessa estação.", nacionalidade: "Japonesa" },
+  { nome: "Mei", significado: "Broto, no japonês, 'mei' significa broto, jovem ou algo novo que está surgindo.", nacionalidade: "Japonesa" },
+    { nome: "Kohana", significado: "Pequena flor, um nome japonês que evoca a imagem delicada e bela de uma flor pequena.", nacionalidade: "Japonesa" },
+    { nome: "Ayumi", significado: "Caminho, significa 'caminho' ou 'passo', associando o nome com a jornada ou o caminho da vida.", nacionalidade: "Japonesa" },
+    { nome: "Sora", significado: "Céu, um nome japonês que significa 'céu' e simboliza grandeza e liberdade.", nacionalidade: "Japonesa" },
+    { nome: "Yuriko", significado: "Filha do lírio, o nome é associado a uma flor bonita, simbolizando pureza e elegância.", nacionalidade: "Japonesa" },
+    { nome: "Nao", significado: "Honestidade, um nome japonês que transmite virtudes como sinceridade e integridade.", nacionalidade: "Japonesa" },
+    { nome: "Yuuki", significado: "Coragem, um nome que representa força, coragem e a superação de obstáculos.", nacionalidade: "Japonesa" },
+    { nome: "Kana", significado: "Perfume, evoca a ideia de uma fragrância doce e agradável.", nacionalidade: "Japonesa" },
+    { nome: "Miko", significado: "Filha bonita, refere-se a uma jovem ou filha de grande beleza e virtude.", nacionalidade: "Japonesa" },
+    { nome: "Kokoro", significado: "Coração, significa 'coração' ou 'alma', associando ao centro das emoções e sentimentos.", nacionalidade: "Japonesa" },
+    { nome: "Yumeko", significado: "Filha dos sonhos, um nome que reflete a beleza e a esperança de um futuro encantador.", nacionalidade: "Japonesa" },
+    { nome: "Himawari", significado: "Girassol, o nome reflete a beleza do girassol, simbolizando luz e otimismo.", nacionalidade: "Japonesa" },
+    { nome: "Fuyumi", significado: "Beleza de inverno, o nome remete à serenidade e beleza da estação do inverno.", nacionalidade: "Japonesa" },
+    { nome: "Fujiko", significado: "Filha do Monte Fuji, o nome é inspirado no famoso monte Fuji, símbolo de grandeza no Japão.", nacionalidade: "Japonesa" },
+    { nome: "Asuka", significado: "Perfume do amanhã, um nome que carrega a ideia de algo futurista e fragrante como uma flor.", nacionalidade: "Japonesa" },
+    { nome: "Akiko", significado: "Filha de luz, significa 'aquela que vem com a luz', associando com clareza e sabedoria.", nacionalidade: "Japonesa" },
+    { nome: "Aimi", significado: "Amor e beleza, um nome que combina os conceitos de amor puro e a beleza encantadora.", nacionalidade: "Japonesa" },
+    { nome: "Ayano", significado: "Cor do campo, um nome que remete à cor das plantas e da natureza.", nacionalidade: "Japonesa" },
+    { nome: "Hanako", significado: "Menina flor, nome que evoca a imagem de uma bela flor em uma jovem menina.", nacionalidade: "Japonesa" },
+    { nome: "Haruki", significado: "Árvore da primavera, simbolizando a renovação e a beleza da estação da primavera.", nacionalidade: "Japonesa" },
+    { nome: "Hayami", significado: "Beleza rara, refere-se a uma beleza única e preciosa, fora do comum.", nacionalidade: "Japonesa" },
+    { nome: "Yumi", significado: "Arco, relacionado com o arco de um arco e flecha, simbolizando precisão e força.", nacionalidade: "Japonesa" },
+    { nome: "Yuri", significado: "Lírio, simbolizando pureza e beleza delicada.", nacionalidade: "Japonesa" },
+    { nome: "Yoko", significado: "Menina do sol, trazendo a ideia de uma criança que ilumina o ambiente, associada à luz e calor.", nacionalidade: "Japonesa" },
+    { nome: "Chihiro", significado: "Mil perguntas, um nome que sugere curiosidade infinita e busca pelo conhecimento.", nacionalidade: "Japonesa" },
+    { nome: "Miyu", significado: "Belo e gentil, um nome que reflete uma beleza suave e graciosa.", nacionalidade: "Japonesa" },
+    { nome: "Miyuki", significado: "Bela neve, representando a beleza pura e tranquila da neve.", nacionalidade: "Japonesa" },
+    { nome: "Miyako", significado: "Capital, um nome que representa importância e grandeza, como a capital de uma cidade.", nacionalidade: "Japonesa" },
+    { nome: "Moe", significado: "Broto, representando o crescimento e o início de uma nova vida, um símbolo de renovação.", nacionalidade: "Japonesa" },
+    { nome: "Aiko", significado: "Filha amada, expressando carinho e afeto por uma filha querida.", nacionalidade: "Japonesa" },
+    { nome: "Akane", significado: "Vermelho profundo, simbolizando a cor vibrante e intensa do vermelho, como um amanhecer.", nacionalidade: "Japonesa" },
+    { nome: "Akemi", significado: "Beleza brilhante, refletindo uma beleza radiante e luminosa.", nacionalidade: "Japonesa" },
+    { nome: "Ami", significado: "Amiga, representando a amizade e a lealdade entre as pessoas.", nacionalidade: "Japonesa" },
+    { nome: "Anzu", significado: "Damasco, uma fruta doce e refrescante que simboliza a doçura e a leveza.", nacionalidade: "Japonesa" },
+    { nome: "Asami", significado: "Beleza do amanhecer, evocando uma imagem suave e luminosa do começo do dia.", nacionalidade: "Japonesa" },
+    { nome: "Ayaka", significado: "Flor colorida, representando uma flor vibrante e cheia de vida.", nacionalidade: "Japonesa" },
+    { nome: "Ayane", significado: "Som colorido, sugerindo uma melodia alegre e cheia de harmonia, como um som colorido.", nacionalidade: "Japonesa" },
+    { nome: "Azusa", significado: "Árvore de cedro, símbolo de força, durabilidade e resistência.", nacionalidade: "Japonesa" },
+    { nome: "Chika", significado: "Mil flores, simbolizando a beleza abundante e a delicadeza de muitas flores.", nacionalidade: "Japonesa" },
+    { nome: "Chinatsu", significado: "Mil verões, sugerindo a ideia de uma longa estação de calor e alegria.", nacionalidade: "Japonesa" },
+    { nome: "Chiyo", significado: "Mil gerações, um nome que reflete longevidade, tradição e continuidade familiar.", nacionalidade: "Japonesa" },
+    { nome: "Emi", significado: "Sorriso bonito, refletindo a beleza de um sorriso encantador e cativante.", nacionalidade: "Japonesa" },
+    { nome: "Eri", significado: "Bênção, simbolizando a graça divina e a proteção.", nacionalidade: "Japonesa" },
+    { nome: "Etsuko", significado: "Filha da alegria, representando uma criança trazida pela felicidade e a celebração.", nacionalidade: "Japonesa" },
+    { nome: "Fumiko", significado: "Filha da beleza afortunada, refletindo uma criança que é tanto bela quanto abençoada com sorte.", nacionalidade: "Japonesa" },
+    { nome: "Fuyuko", significado: "Filha do inverno, simbolizando uma criança nascida no frio e associada à estação do inverno.", nacionalidade: "Japonesa" },
+    { nome: "Hana", significado: "Flor, representando uma flor delicada e bela.", nacionalidade: "Japonesa" },
+    { nome: "Hanae", significado: "Flor pequena, uma flor graciosa e de tamanho delicado.", nacionalidade: "Japonesa" },
+    { nome: "Haruko", significado: "Filha da primavera, evocando a frescura e renovação trazidas pela estação da primavera.", nacionalidade: "Japonesa" },
+    { nome: "Hatsune", significado: "Primeiro som, simbolizando o início de algo novo e vibrante.", nacionalidade: "Japonesa" },
+    { nome: "Himari", significado: "Girassol, representando um girassol radiante e otimista.", nacionalidade: "Japonesa" },
+    { nome: "Hinata", significado: "Lugar ensolarado, simbolizando um lugar de luz e calor, acolhedor e radiante.", nacionalidade: "Japonesa" },
+    { nome: "Hiroko", significado: "Filha generosa, representando uma pessoa que é generosa e carinhosa, dedicada a ajudar os outros.", nacionalidade: "Japonesa" },
+    { nome: "Hoshi", significado: "Estrela, simbolizando brilho, orientação e uma presença luminosa no céu.", nacionalidade: "Japonesa" },
+    { nome: "Ichika", significado: "Mil flores, sugerindo a beleza abundante e a delicadeza de muitas flores, representando diversidade e harmonia.", nacionalidade: "Japonesa" },
+    { nome: "Iori", significado: "Templo, associando a serenidade e a paz de um lugar de culto e reflexão.", nacionalidade: "Japonesa" },
+    { nome: "Isuna", significado: "Verão, simbolizando a estação quente e vibrante, associada à energia e ao crescimento.", nacionalidade: "Japonesa" },
+    { nome: "Izumi", significado: "Fonte, representando uma fonte de vida, água fresca e renovadora.", nacionalidade: "Japonesa" },
+    { nome: "Kaho", significado: "Fragrância, evocando o aroma suave e doce de flores ou perfumes.", nacionalidade: "Japonesa" },
+    { nome: "Kanon", significado: "Som, associando-se ao som harmonioso e agradável, algo que toca e envolve.", nacionalidade: "Japonesa" },
+    { nome: "Kari", significado: "Coração, representando uma pessoa com um coração generoso e cheio de emoções.", nacionalidade: "Japonesa" },
+    { nome: "Kayo", significado: "Filha da geração, representando uma linhagem ou uma continuidade, com um papel importante na família e na sociedade.", nacionalidade: "Japonesa" },
+    { nome: "Keiko", significado: "Filha respeitável, associada a uma pessoa de grande honra e respeito dentro da sua comunidade.", nacionalidade: "Japonesa" },
+    { nome: "Kiku", significado: "Crisântemo, simbolizando uma flor que representa a longevidade, a nobreza e a beleza.", nacionalidade: "Japonesa" },
+    { nome: "Kimi", significado: "Nobre, representando uma pessoa com dignidade, honra e caráter distinto.", nacionalidade: "Japonesa" },
+    { nome: "Kiyomi", significado: "Beleza pura, associando uma beleza sem igual, genuína e imaculada.", nacionalidade: "Japonesa" },
+    { nome: "Kiyoko", significado: "Filha pura, simbolizando pureza e inocência, uma pessoa com espírito limpo e verdadeiro.", nacionalidade: "Japonesa" },
+    { nome: "Kumi", significado: "Bela, representando beleza física ou interior, um charme sereno e gracioso.", nacionalidade: "Japonesa" },
+    { nome: "Kumiko", significado: "Filha da beleza, associando-se à beleza pura e refinada, uma pessoa de grande elegância e graça.", nacionalidade: "Japonesa" },
+    { nome: "Mai", significado: "Dança, evocando movimento, harmonia e expressão artística, associando a leveza e alegria da dança.", nacionalidade: "Japonesa" },
+    { nome: "Maki", significado: "Verdade, representando sinceridade, confiança e autenticidade, sendo uma pessoa com caráter forte e verdadeiro.", nacionalidade: "Japonesa" },
+    { nome: "Manami", significado: "Beleza afetuosa, simbolizando uma beleza que não só é física, mas também cheia de carinho e ternura.", nacionalidade: "Japonesa" },
+    { nome: "Mariko", significado: "Filha verdadeira, associando uma pessoa fiel, honesta e de caráter íntegro, alguém que é verdadeiro e confiável.", nacionalidade: "Japonesa" },
+    { nome: "Masami", significado: "Beleza elegante, uma combinação de uma beleza serena e sofisticada, com um toque de distinção.", nacionalidade: "Japonesa" },
+    { nome: "Masayo", significado: "Certo e correto, representando alguém que busca a verdade e a moralidade em suas ações e decisões.", nacionalidade: "Japonesa" },
+    { nome: "Michiko", significado: "Filha sábia, associando alguém com sabedoria, visão clara e inteligência profunda.", nacionalidade: "Japonesa" },
+    { nome: "Mika", significado: "Fragrância bonita, associando uma pessoa com uma presença doce e encantadora, como um perfume delicado.", nacionalidade: "Japonesa" },
+    { nome: "Miku", significado: "Futuro, simbolizando esperança, potencial e possibilidades para o que está por vir.", nacionalidade: "Japonesa" },
+    { nome: "Mimi", significado: "Bonita, referindo-se à beleza atraente e encantadora, tanto no exterior quanto no interior.", nacionalidade: "Japonesa" },
+    { nome: "Mina", significado: "Amiga, uma pessoa leal, confiável e querida pelos outros, que compartilha companheirismo e afeto.", nacionalidade: "Japonesa" },
+    { nome: "Mio", significado: "Cerejeira, simbolizando a beleza efêmera e a delicadeza da natureza, especialmente associada à flor de cerejeira.", nacionalidade: "Japonesa" },
+    { nome: "Nagi", significado: "Calma, representando serenidade, tranquilidade e a paz interior que emana de uma pessoa equilibrada.", nacionalidade: "Japonesa" },
+    { nome: "Nana", significado: "Sete, simbolizando a perfeição e a totalidade, número significativo em várias culturas.", nacionalidade: "Japonesa" },
+    { nome: "Natsuki", significado: "Estrela de verão, associando brilho, calor e beleza, representando a luminosidade das estrelas no verão.", nacionalidade: "Japonesa" },
+    { nome: "Noa", significado: "Amor, representando afeto profundo, carinho e a pureza do coração, muitas vezes ligado à bondade e compaixão.", nacionalidade: "Japonesa" },
+    { nome: "Nozomi", significado: "Esperança, simbolizando otimismo, fé no futuro e a capacidade de alcançar seus sonhos.", nacionalidade: "Japonesa" },
+    { nome: "Rika", significado: "Jasmim, associando a beleza delicada e a fragrância suave da flor, com conotações de pureza e elegância.", nacionalidade: "Japonesa" },
+    { nome: "Riko", significado: "Jasmim, representando uma flor que emana suavidade e graça, com uma aura de simplicidade e beleza natural.", nacionalidade: "Japonesa" },
+    { nome: "Risa", significado: "Jasmim, simbolizando delicadeza, beleza e um aroma doce e encantador, uma flor que encanta com sua suavidade.", nacionalidade: "Japonesa" },
+    { nome: "Rumi", significado: "Beleza, refletindo uma visão estética e agradável de uma pessoa encantadora e atraente, tanto por dentro quanto por fora.", nacionalidade: "Japonesa" },
+    { nome: "Saki", significado: "Cerejeira, com a simbologia da beleza efêmera da flor de cerejeira, representando a delicadeza e a transitoriedade da vida.", nacionalidade: "Japonesa" },
+    { nome: "Sayaka", significado: "Brilhante, simbolizando uma luz radiante, algo que se destaca pela sua clareza, energia e vivacidade.", nacionalidade: "Japonesa" },
+    { nome: "Sayuri", significado: "Pequeno lírio, associado à pureza, delicadeza e beleza incomparável, como o lírio que é simples e gracioso.", nacionalidade: "Japonesa" },
+    { nome: "Shiori", significado: "Guia, simbolizando orientação, liderança e a capacidade de mostrar o caminho certo para os outros.", nacionalidade: "Japonesa" },
+    { nome: "Shizuka", significado: "Silenciosa, refletindo calma, tranquilidade e a serenidade de uma pessoa ou situação, com uma aura de paz interior.", nacionalidade: "Japonesa" },
+    { nome: "Sumire", significado: "Violeta, simbolizando modestia, moderação e beleza, com uma conotação de elegância sutil e tranquilidade.", nacionalidade: "Japonesa" },
+    { nome: "Suzume", significado: "Passarinho, associando leveza, liberdade e a alegria de um espírito livre, como o canto suave de um pássaro.", nacionalidade: "Japonesa" },
+    { nome: "Araci", significado: "Mãe do dia, representando a aurora e o nascer do sol, em uma alusão ao poder criador feminino.", nacionalidade: "Brasileira" },
+    { nome: "Bartira", significado: "Mulher guerreira, ligada à força e coragem, representando a figura de uma mulher poderosa e batalhadora.", nacionalidade: "Brasileira" },
+    { nome: "Guaraci", significado: "Sol, o deus solar das mitologias indígenas brasileiras, simbolizando a luz, a energia e a vida.", nacionalidade: "Brasileira" },
+    { nome: "Iara", significado: "Senhora das águas, figura mitológica das águas doces, representando as forças naturais e a feminilidade das águas.", nacionalidade: "Brasileira" },
+    { nome: "Iracema", significado: "Lábios de mel, associando a doçura e a beleza de uma mulher encantadora, com um toque de sensualidade.", nacionalidade: "Brasileira" },
+    { nome: "Jaci", significado: "Deusa da lua, ligada à luz noturna, simbolizando o brilho da lua e a proteção mística sobre a noite.", nacionalidade: "Brasileira" },
+    { nome: "Jacira", significado: "Coração, simbolizando o centro emocional, o local de onde brotam as emoções e sentimentos mais profundos.", nacionalidade: "Brasileira" },
+    { nome: "Janaína", significado: "Deusa das águas, associada à força das águas e ao universo feminino, com uma energia protetora e acolhedora.", nacionalidade: "Brasileira" },
+    { nome: "Jandira", significado: "Aquela que é cheia de luz, associando a ideia de clareza, sabedoria e presença iluminadora.", nacionalidade: "Brasileira" },
+    { nome: "Jurema", significado: "Árvore sagrada, representando a espiritualidade, a conexão com a natureza e os mistérios da floresta.", nacionalidade: "Brasileira" },
+    { nome: "Maiara", significado: "Mãe, símbolo de fecundidade, acolhimento e do amor maternal que nutre e protege.", nacionalidade: "Brasileira" },
+    { nome: "Moema", significado: "Pássaro, simbolizando liberdade, leveza e a beleza dos voos livres e da natureza selvagem.", nacionalidade: "Brasileira" },
+    { nome: "Paraguaçu", significado: "Senhora das águas, figura mítica que representa a força, o poder e a sabedoria das águas do rio e do mar.", nacionalidade: "Brasileira" },
+    { nome: "Potira", significado: "Flor, representando a beleza efêmera e delicada das flores que simbolizam a natureza e a pureza feminina.", nacionalidade: "Brasileira" },
+    { nome: "Tainá", significado: "Estrela, associando a beleza celestial e brilhante das estrelas, simbolizando um espírito radiante e iluminado.", nacionalidade: "Brasileira" },
+    { nome: "Cristina", significado: "Cristã, simbolizando a fé cristã e os valores de amor, compaixão e solidariedade.", nacionalidade: "Brasileira" },
+    { nome: "Eduarda", significado: "Guardiana das riquezas, associando proteção, sabedoria e o poder de manter e preservar o que é valioso e sagrado.", nacionalidade: "Brasileira" },
+    { nome: "Eliane", significado: "Bela como o sol, associada à beleza radiante e à energia positiva, assim como o sol ilumina e aquece a terra.", nacionalidade: "Brasileira" },
+    { nome: "Fernanda", significado: "Ousada na paz, representando uma mulher corajosa, determinada e que busca equilíbrio e harmonia em suas ações.", nacionalidade: "Brasileira" },
+    { nome: "Geovana", significado: "Deus é gracioso, refletindo uma pessoa cheia de graça, generosidade e bondade, abençoada pela presença divina.", nacionalidade: "Brasileira" },
+    { nome: "Karina", significado: "Querida, associando uma pessoa amada, respeitada e admirada por todos ao seu redor, sempre afetuosa e carinhosa.", nacionalidade: "Brasileira" },
+    { nome: "Luísa", significado: "Famosa guerreira, trazendo a imagem de uma mulher forte, corajosa e determinada a enfrentar desafios com grande habilidade.", nacionalidade: "Brasileira" },
+    { nome: "Maitê", significado: "Amada, simbolizando uma pessoa que é extremamente querida e adorada por sua ternura e bondade.", nacionalidade: "Brasileira" },
+    { nome: "Michele", significado: "Quem é como Deus?, questionando a grandeza divina e associando à humildade e sabedoria de quem é semelhante ao Criador.", nacionalidade: "Brasileira" },
+    { nome: "Natália", significado: "Nascimento, trazendo à mente a renovação, o renascimento e a ideia de um novo começo, com um espírito cheio de vitalidade.", nacionalidade: "Brasileira" },
+    { nome: "Sandra", significado: "Protetora da humanidade, simbolizando uma pessoa forte e protetora, sempre disposta a ajudar os outros com coragem e compaixão.", nacionalidade: "Brasileira" },
+    { nome: "Cora", significado: "Donzela, virgem, refletindo pureza, inocência e um espírito que é livre e imaculado, com uma natureza delicada e admirável.", nacionalidade: "Grega" },
+    { nome: "Elizabeth", significado: "Consagrada a Deus, representando uma pessoa devota, ligada à fé e dedicada a viver em serviço divino e espiritual.", nacionalidade: "Hebraica" },
+    { nome: "Guilhermina", significado: "Protetora determinada, um nome que traz à tona imagens de força, coragem e proteção, com uma personalidade resoluta e firme.", nacionalidade: "Germânica" },
+    { nome: "Josefina", significado: "Deus acrescenta, associando à bênção divina que traz crescimento e prosperidade, tanto espiritualmente quanto materialmente.", nacionalidade: "Hebraica" },
+    { nome: "Regina", significado: "Rainha, simbolizando a realeza, o domínio e o poder feminino, associado ao comando, respeito e liderança sábia.", nacionalidade: "Latina" },
+    { nome: "Augusta", significado: "Sagrada, venerável, associada a uma mulher de grande dignidade, respeito e honra, cuja presença é reverenciada.", nacionalidade: "Latina" },
+    { nome: "Dorotéia", significado: "Presente de Deus, simbolizando uma dádiva divina que traz bênçãos e gratidão, como um presente celestial enviado para a vida das pessoas.", nacionalidade: "Grega" },
+    { nome: "Eva", significado: "A que vive, associada à vida e à vitalidade, representando a origem da humanidade e a força de renovação e crescimento.", nacionalidade: "Hebraica" },
+    { nome: "Maria Clara", significado: "Senhora soberana clara, representando uma mulher com grande autoridade e clareza, irradiando luz e sabedoria em sua presença.", nacionalidade: "Hebraica" },
+    { nome: "Maria José", significado: "Senhora soberana e Deus acrescenta, simbolizando uma mulher com grande poder e autoridade, além de ser uma bênção divina para todos ao seu redor.", nacionalidade: "Hebraica" },
+    { nome: "Mônica", significado: "Conselheira, uma mulher que transmite sabedoria e orientações valiosas, sempre com a intenção de ajudar e guiar os outros.", nacionalidade: "Latina" },
+    { nome: "Sônia", significado: "Sabedoria, associando a uma pessoa com profunda sabedoria e inteligência, capaz de oferecer conselhos valiosos para os outros.", nacionalidade: "Grega" },
+    { nome: "Zélia", significado: "Aquela que é zelosa, uma pessoa atenta e cuidadosa, dedicada a preservar e cuidar de todos ao seu redor com carinho e diligência.", nacionalidade: "Latina" },
+    { nome: "Albertina", significado: "Nobre, brilhante, representando uma mulher de alta posição e respeito, com grande inteligência e brilho em sua vida e ações.", nacionalidade: "Germânica" },
+    { nome: "Arlete", significado: "Aquela que vem do bosque, simbolizando uma mulher com uma conexão profunda com a natureza, trazendo frescor e serenidade em sua presença.", nacionalidade: "Francesa" },
+    { nome: "Benedita", significado: "Bendita, associando a uma pessoa que é abençoada e favorecida por Deus, irradiando bondade e graça em todas as suas ações.", nacionalidade: "Latina" },
+    { nome: "Carlota", significado: "Mulher do povo, representando uma mulher forte e humilde, que mantém a simplicidade e o espírito de comunidade em seu coração.", nacionalidade: "Germânica" },
+    { nome: "Eugênia", significado: "Bem-nascida, uma mulher de boa origem e linhagem, com grande dignidade e respeito por seus ancestrais.", nacionalidade: "Grega" },
+    { nome: "Charlotte", significado: "Mulher livre, simbolizando uma mulher independente, com um espírito de liberdade e força para tomar suas próprias decisões.", nacionalidade: "Inglesa" },
+    { nome: "Lily", significado: "Lírio, associando a uma pessoa pura e delicada, com uma beleza suave e uma personalidade encantadora, como a flor de lírio.", nacionalidade: "Inglesa" },
+    { nome: "Ella", significado: "Fada, associada à beleza mágica e encantadora, simbolizando graça e delicadeza como uma fada encantada que cativa todos ao seu redor.", nacionalidade: "Inglesa" },
+    { nome: "Grace", significado: "Graça, simbolizando a elegância, a bondade e a beleza divina, representando uma mulher cheia de graça e carisma em todas as suas ações.", nacionalidade: "Inglesa" },
+    { nome: "Amelia", significado: "Trabalhadora, representando uma mulher de grande empenho, persistência e dedicação ao trabalho, simbolizando o esforço contínuo e a perseverança.", nacionalidade: "Inglesa" },
+    { nome: "Isla", significado: "Ilha, simbolizando um refúgio tranquilo, um lugar sereno e afastado das agitações do mundo, onde a paz e a calma reinam.", nacionalidade: "Inglesa" },
+    { nome: "Sophie", significado: "Sabedoria, representando uma mulher com grande entendimento, discernimento e inteligência, sendo uma fonte de conhecimento para os outros.", nacionalidade: "Inglesa" },
+    { nome: "Abigail", significado: "Alegria do pai, associando a uma filha que traz felicidade e contentamento ao coração do pai, sendo um símbolo de alegria e harmonia familiar.", nacionalidade: "Inglesa" },
+    { nome: "Madison", significado: "Filha de Maud, associada à linhagem nobre e respeitável, representando uma mulher forte e decidida que carrega o legado de sua família.", nacionalidade: "Inglesa" },
+    { nome: "Harper", significado: "Tocadora de harpa, simbolizando uma mulher com habilidade artística e musical, que encanta a todos com sua música suave e melodiosa.", nacionalidade: "Inglesa" },
+    { nome: "Evelyn", significado: "Vida, associando a uma mulher cheia de energia vital, que transmite alegria, entusiasmo e vitalidade a todos que a rodeiam.", nacionalidade: "Inglesa" },
+    { nome: "Zoe", significado: "Vida, simbolizando uma mulher cheia de vigor e energia, trazendo vida, renovação e crescimento para todos ao seu redor.", nacionalidade: "Inglesa" },
+    { nome: "Scarlett", significado: "Vermelha, associando a uma cor vibrante e poderosa, simbolizando paixão, força e determinação em todas as suas ações.", nacionalidade: "Inglesa" },
+    { nome: "Victoria", significado: "Vitória, simbolizando uma mulher triunfante, que alcança o sucesso com coragem e determinação, superando desafios e obstáculos com grande força.", nacionalidade: "Inglesa" },
+    { nome: "Lucy", significado: "Luz, representando uma mulher iluminada, que espalha clareza e sabedoria ao seu redor, sendo uma fonte de luz e inspiração para todos.", nacionalidade: "Inglesa" },
+    { nome: "Ruby", significado: "Rubi, simbolizando uma mulher preciosa e rara, cheia de brilho e paixão, como a pedra preciosa que carrega em seu nome.", nacionalidade: "Inglesa" },
+    { nome: "Megan", significado: "Pérola, simbolizando uma mulher rara e preciosa, como a pedra que é formada sob pressão e que brilha com uma beleza única.", nacionalidade: "Inglesa" },
+    { nome: "Holly", significado: "Ilex, uma planta tradicionalmente associada ao Natal, simbolizando a imortalidade e a força, sempre verde mesmo nas épocas mais duras.", nacionalidade: "Inglesa" },
+    { nome: "Lydia", significado: "Mulher da Lídia, uma região histórica na Ásia Menor, simbolizando uma mulher forte e com raízes profundas em um passado próspero e culturalmente rico.", nacionalidade: "Inglesa" },
+    { nome: "Eleanor", significado: "Luz brilhante, representando uma mulher iluminada, cheia de sabedoria e graça, cuja presença transmite clareza e inspiração aos outros.", nacionalidade: "Inglesa" },
+    { nome: "Leah", significado: "Cansada, simbolizando uma mulher resiliente que, apesar das dificuldades e cansaço, permanece forte e firme em sua jornada pela vida.", nacionalidade: "Inglesa" },
+    { nome: "Natalie", significado: "Nascimento, associada ao nascimento de uma nova vida e a energia renovadora, simbolizando uma mulher cheia de vida e de novas possibilidades.", nacionalidade: "Inglesa" },
+    { nome: "Violet", significado: "Violeta, uma flor delicada que simboliza a modéstia, a humildade e a simplicidade, com uma beleza tranquila e calmante.", nacionalidade: "Inglesa" },
+    { nome: "Sadie", significado: "Princesa, simbolizando uma mulher de grande dignidade e graça, com uma presença real e uma atitude de liderança nobre e bondosa.", nacionalidade: "Inglesa" },
+    { nome: "Margaret", significado: "Pérola, representando uma mulher rara e preciosa, de valor imensurável, com uma beleza interna que brilha de forma serena e eterna.", nacionalidade: "Inglesa" },
+    { nome: "Audrey", significado: "Nobre força, simbolizando uma mulher de grande coragem, dignidade e nobreza, que enfrenta os desafios da vida com determinação e graça.", nacionalidade: "Inglesa" },
+    { nome: "Caroline", significado: "Mulher forte, simbolizando uma mulher com grande resistência e força interior, pronta para enfrentar qualquer desafio com coragem e integridade.", nacionalidade: "Inglesa" },
+    { nome: "Georgina", significado: "Agricultora, trabalhadora da terra, representando uma mulher com conexão profunda com a natureza e com o trabalho árduo e produtivo que alimenta a terra.", nacionalidade: "Inglesa" },
+    { nome: "Harriet", significado: "Senhora do lar, simbolizando uma mulher que é a base e o alicerce de sua família, com uma forte presença e autoridade no seu ambiente doméstico.", nacionalidade: "Inglesa" },
+    { nome: "Jane", significado: "Deus é cheia de graça, representando uma mulher que emana graça divina, cheia de bondade e benevolência, com uma energia que inspira todos ao seu redor.", nacionalidade: "Inglesa" },
+    { nome: "Mabel", significado: "Amável, de coração gentil e doce, símbolo de alguém que traz alegria e compaixão para os outros.", nacionalidade: "Inglesa" },
+    { nome: "Madeline", significado: "Torre de Deus, uma referência ao apoio e força divina, representando uma mulher firme, elevada em sua fé e segurança.", nacionalidade: "Inglesa" },
+    { nome: "Maisie", significado: "Pérola, uma joia preciosa que brilha com beleza e é rara, representando alguém delicado, de grande valor e pureza.", nacionalidade: "Inglesa" },
+    { nome: "Martha", significado: "Senhora, simbolizando uma mulher respeitável, de autoridade, com grande responsabilidade e nobreza em suas ações.", nacionalidade: "Inglesa" },
+    { nome: "Mary", significado: "Amada, simbolizando uma mulher profundamente amada e querida, com um coração generoso e afetuoso.", nacionalidade: "Inglesa" },
+    { nome: "Matilda", significado: "Guerreira poderosa, simbolizando uma mulher forte, destemida e pronta para enfrentar qualquer desafio com coragem e determinação.", nacionalidade: "Inglesa" },
+    { nome: "Nancy", significado: "Graça, representando uma mulher graciosa, charmosa, com um espírito amável e cativante que encanta todos ao seu redor.", nacionalidade: "Inglesa" },
+    { nome: "Poppy", significado: "Papoula, uma flor que simboliza a beleza efêmera, mas encantadora, representando uma mulher com leveza e uma energia vibrante.", nacionalidade: "Inglesa" },
+    { nome: "Sarah", significado: "Princesa, uma mulher com grande dignidade, nobreza e força, sendo uma líder natural com um coração generoso.", nacionalidade: "Inglesa" },
+    { nome: "Susan", significado: "Lírio, uma flor que simboliza a pureza e a beleza, representando uma mulher graciosa e delicada em sua essência.", nacionalidade: "Inglesa" },
+    { nome: "Camille", significado: "Jovem ritual ou mensageira, simbolizando uma mulher com um papel de importância, conduzindo sabedoria e coragem em sua jornada.", nacionalidade: "Francesa" },
+    { nome: "Élise", significado: "Deus é promessa, uma mulher com fé inabalável, cujo nome representa a confiança em promessas divinas e a esperança renovada.", nacionalidade: "Francesa" },
+    { nome: "Léa", significado: "Vaca selvagem, simbolizando a força da natureza, uma mulher independente e corajosa, com uma presença forte e resiliente.", nacionalidade: "Francesa" },
+    { nome: "Aurélie", significado: "Dourada ou luminosa, simbolizando uma mulher brilhante, radiante e cheia de vitalidade, com uma aura de alegria e clareza.", nacionalidade: "Francesa" },
+    { nome: "Claire", significado: "Brilhante ou luminosa, uma mulher de grande inteligência e clareza, que ilumina os caminhos de outros com sua sabedoria e bondade.", nacionalidade: "Francesa" },
+    { nome: "Juliette", significado: "Jovem, simbolizando uma mulher de espírito jovem e vigoroso, cheia de vida e energia para conquistar o mundo ao seu redor.", nacionalidade: "Francesa" },
+    { nome: "Louise", significado: "Guerreira famosa ou Combatente gloriosa, uma mulher com grande coragem e fama, que conquista respeito através de sua força e habilidades de luta.", nacionalidade: "Francesa" },
+    { nome: "Sylvie", significado: "Da floresta ou Selvagem, simbolizando uma mulher conectada à natureza, que possui um espírito livre e selvagem, em harmonia com os elementos naturais.", nacionalidade: "Francesa" },
+    { nome: "Zoé", significado: "Vida, representando uma pessoa cheia de vitalidade e energia, com uma presença que transmite a sensação de renovação e vigor.", nacionalidade: "Francesa" },
+    { nome: "Nathalie", significado: "Dia do nascimento, significando o começo de uma nova vida, alguém com um impacto significativo desde o nascimento e com grandes expectativas pela frente.", nacionalidade: "Francesa" },
+    { nome: "Élodie", significado: "Escolhido por Deus, uma pessoa que tem um destino especial, sendo vista como uma dádiva divina, escolhida para cumprir um grande propósito.", nacionalidade: "Francesa" },
+    { nome: "Inès", significado: "Pura ou Casta, um nome que simboliza uma mulher com um coração puro, que vive com integridade e clareza de propósito, sem corromper seus princípios.", nacionalidade: "Francesa" },
+    { nome: "Lucie", significado: "Luz, uma mulher que ilumina o caminho dos outros, trazendo clareza, sabedoria e calor com sua presença radiante.", nacionalidade: "Francesa" },
+    { nome: "Mathilde", significado: "Poderosa em batalha, uma mulher forte e determinada, que enfrenta qualquer adversidade com coragem e se destaca em momentos de luta e desafio.", nacionalidade: "Francesa" },
+    { nome: "Isabelle", significado: "Deus é juramento, uma mulher que representa um compromisso divino, com fé inabalável e uma personalidade cheia de promessa e dedicação.", nacionalidade: "Francesa" },
+    { nome: "Lilou", significado: "Lírio, uma flor que simboliza a pureza, a beleza delicada e a graça, representando uma mulher suave e elegante, com uma presença encantadora.", nacionalidade: "Francesa" },
+    { nome: "Marine", significado: "Do mar ou Marinho, simbolizando a imensidão e a serenidade do oceano, uma mulher com espírito livre e profundo, refletindo tranquilidade e força.", nacionalidade: "Francesa" },
+    { nome: "Chloé", significado: "Verde brotando ou Verdinho, uma mulher que simboliza o frescor e a renovação, com uma conexão profunda com a natureza e a juventude da primavera.", nacionalidade: "Francesa" },
+    { nome: "Léonie", significado: "Leoa ou Valente como um leão, representando força, coragem e dignidade, uma mulher com um espírito destemido e vigoroso.", nacionalidade: "Francesa" },
+    { nome: "Mélanie", significado: "Negra ou Escura, representando uma mulher com uma personalidade profunda e misteriosa, com uma força que vem da sombra e da noite.", nacionalidade: "Francesa" },
+    { nome: "Romane", significado: "Romano ou Da cidade de Roma, simbolizando uma mulher com raízes profundas, com dignidade e influência que remonta à antiguidade e às tradições romanas.", nacionalidade: "Francesa" },
+    { nome: "Thaïs", significado: "Aquela que será admirada, uma mulher que exala charme, sabedoria e dignidade, destinada a ser admirada por sua grandeza e beleza interior.", nacionalidade: "Francesa" },
+    { nome: "Agathe", significado: "Boa ou Virtuosa, um nome que simboliza uma mulher com qualidades morais elevadas, que vive de acordo com princípios éticos e espirituais, sendo admirada por sua bondade e integridade.", nacionalidade: "Francesa" },
+    { nome: "Céline", significado: "Céu, evocando a imensidão e serenidade do céu, um nome que traz uma sensação de calma, liberdade e ligação espiritual com o infinito.", nacionalidade: "Francesa" },
+    { nome: "Eloïse", significado: "Saudável, referindo-se a uma pessoa vigorosa, cheia de vida e energia, com uma saúde robusta e uma natureza cheia de vitalidade e bem-estar.", nacionalidade: "Francesa" },
+    { nome: "Léna", significado: "Tocha ou Luz, simbolizando clareza, brilho e a capacidade de iluminar o caminho dos outros, trazendo esperança e orientação como uma tocha acesa na escuridão.", nacionalidade: "Francesa" },
+    { nome: "Morgane", significado: "Brilhante ou Nascida do mar, um nome que invoca a beleza e mistério das águas, simbolizando uma mulher com uma personalidade radiante e uma conexão profunda com a natureza.", nacionalidade: "Francesa" },
+    { nome: "Océane", significado: "Do oceano ou Marinho, representando a vastidão e a serenidade do mar, uma mulher com a alma calma, profunda e cheia de força, com uma presença tranquila e poderosa.", nacionalidade: "Francesa" },
+    { nome: "Valentine", significado: "Forte ou Valente, um nome que evoca coragem, resistência e determinação, caracterizando uma mulher que enfrenta adversidades com bravura e um espírito inquebrantável.", nacionalidade: "Francesa" },
+    { nome: "Violette", significado: "Violeta, uma flor que simboliza a delicadeza e a elegância, representando uma mulher com beleza suave e uma personalidade refinada, como a flor que seu nome remete.", nacionalidade: "Francesa" },
+    { nome: "Esméralda", significado: "Esmeralda, uma pedra preciosa verde que simboliza a beleza rara e valiosa, representando uma mulher com uma natureza preciosa e encantadora.", nacionalidade: "Francesa" },
+    { nome: "Fleur", significado: "Flor, simbolizando a beleza, a fragilidade e o renascimento, uma mulher que exala suavidade e encanto, com uma presença que floresce onde quer que vá.", nacionalidade: "Francesa" },
+    { nome: "Ada", significado: "Beleza, um nome que reflete a elegância e a graciosidade de uma mulher com um charme natural e uma presença fascinante.", nacionalidade: "Hebraica" },
+    { nome: "Agar", significado: "Fugitiva, simbolizando uma mulher forte que sobreviveu ao abandono e superou adversidades, com um espírito independente e resiliente.", nacionalidade: "Egípcia" },
+    { nome: "Atalia", significado: "Deus é exaltado, uma mulher cuja presença e ações refletem a grandeza divina, sempre em busca da glória de Deus e da espiritualidade em tudo que faz.", nacionalidade: "Hebraica" },
+    { nome: "Betânia", significado: "Casa dos figos, representando uma mulher que traz consigo uma abundância de frutos, prosperidade e prosperidade espiritual e material.", nacionalidade: "Hebraica" },
+    { nome: "Betel", significado: "Casa de Deus, simbolizando um lar sagrado e uma mulher que carrega consigo uma conexão profunda com o divino, sendo um espaço de espiritualidade e acolhimento.", nacionalidade: "Hebraica" },
+    { nome: "Betsabé", significado: "Casa do juramento, uma mulher cuja palavra é fiel e verdadeira, que honra seus compromissos com sinceridade e compromisso com o que promete.", nacionalidade: "Hebraica" },
+    { nome: "Carmela", significado: "Jardim de Deus, evocando uma mulher que é a personificação do cuidado divino e da beleza natural, como uma pessoa que cultiva e nutre um jardim repleto de vida.", nacionalidade: "Hebraica" },
+    { nome: "Cleópatra", significado: "Glória do pai, um nome que carrega a majestade e a força de uma mulher que foi considerada uma das maiores governantes do Egito antigo, simbolizando poder, inteligência e uma figura de grande influência política e histórica.", nacionalidade: "Egípcia" },
+    { nome: "Cloé", significado: "Verde broto, representando a renovação da natureza e a juventude, um nome que evoca frescor, crescimento e a beleza da vida em sua forma mais pura, assim como as folhas verdes que surgem na primavera.", nacionalidade: "Grega" },
+    { nome: "Eunice", significado: "Boa vitória, simbolizando uma mulher vitoriosa, que conquista com bondade e virtude. Seu nome carrega uma força tranquila, conquistando o respeito e a admiração com sua sabedoria e caráter.", nacionalidade: "Grega" },
+    { nome: "Hagar", significado: "Fugitiva, representando a coragem e a força de uma mulher que, apesar das adversidades, busca a liberdade e a independência. Uma mulher que sobrevive à fuga, superando obstáculos com resiliência e determinação.", nacionalidade: "Egípcia" },
+    { nome: "Hanna", significado: "Graça, um nome que simboliza a benevolência e a bondade divina. Refere-se a uma mulher graciosa e generosa, dotada de um espírito compassivo e amoroso que traz paz e harmonia aos outros.", nacionalidade: "Hebraica" },
+    { nome: "Isabel", significado: "Deus é juramento, um nome que transmite a firmeza e a confiança em Deus, simbolizando uma mulher com grande fé, que se dedica à promessa divina e é fiel às suas convicções espirituais.", nacionalidade: "Hebraica" },
+    { nome: "Jemima", significado: "Pomba, representando paz, pureza e a suavidade do espírito. Um nome que carrega consigo a imagem de serenidade e harmonia, de uma mulher que irradia gentileza e compaixão por onde passa.", nacionalidade: "Hebraica" },
+    { nome: "Raabe", significado: "Amiga, simbolizando uma mulher hospitaleira e acolhedora, que se destaca por sua amizade leal e generosa, sempre pronta a apoiar aqueles ao seu redor, oferecendo um lar seguro e caloroso.", nacionalidade: "Cananeia" },
+    { nome: "Susana", significado: "Lírio, uma flor que simboliza a pureza e a beleza, representando uma mulher graciosa e delicada, que emana bondade e sinceridade, com um caráter virtuoso e uma alma pura como a flor que seu nome carrega.", nacionalidade: "Hebraica" },
+    { nome: "Tamar", significado: "Palmeira, uma árvore que simboliza a força e a resistência, representando uma mulher com uma personalidade robusta, capaz de resistir às tempestades da vida, sendo forte e sólida em sua fé e caráter.", nacionalidade: "Hebraica" },
+    { nome: "Tércia", significado: "Terceira, representando a ideia de ser a terceira em uma série, mas com grande importância e valor, simbolizando uma mulher com a sabedoria e a serenidade adquiridas através da experiência e da vivência.", nacionalidade: "Latina" },
+    { nome: "Uriela", significado: "Deus é minha luz, um nome que transmite uma conexão divina, simbolizando uma mulher iluminada pela graça de Deus, que é capaz de guiar os outros com seu brilho interior e fé inabalável.", nacionalidade: "Hebraica" },
+    { nome: "Zípora", significado: "Pássaro, simbolizando liberdade e leveza. Refere-se a uma mulher graciosa, com uma natureza livre e elevada, que voa acima das dificuldades e traz um espírito de liberdade e alegria para aqueles ao seu redor.", nacionalidade: "Hebraica" },
+    { nome: "Chloe", significado: "Broto verde; nova flor, representando renovação e a beleza da natureza, simboliza a juventude, o frescor da primavera e a pureza que acompanha uma nova fase da vida.", nacionalidade: "Grega" },
+    { nome: "Aisha", significado: "Vivaz, cheia de vida, um nome que transmite energia e vitalidade, simbolizando uma mulher cheia de brilho e positividade, com uma presença alegre e contagiante.", nacionalidade: "Árabe" },
+    { nome: "Sakura", significado: "Flor de cerejeira, símbolo da beleza efêmera da vida, representando a delicadeza e a transitoriedade das coisas, com um profundo vínculo com a natureza e a cultura japonesa.", nacionalidade: "Japonêsa" },
+    { nome: "Fatima", significado: "Mulher que desmamou o filho; mulher jovem, um nome que carrega consigo a pureza e a dedicação de uma mãe, além de simbolizar a juventude, a força e o cuidado feminino.", nacionalidade: "Árabe" },
+    { nome: "Yara", significado: "Senhora, dona do lar; pequena borboleta, símbolo de transformação e liberdade. Um nome associado à feminilidade, à proteção e à leveza, carregando uma energia que remete à natureza e à renovação.", nacionalidade: "Tupi" },
+    { nome: "Greta", significado: "Pérola preciosa, simbolizando algo raro e valioso, que brilha com intensidade. Refere-se a uma pessoa de grande valor e beleza, algo que é estimado por sua singularidade.", nacionalidade: "Alemã" },
+    { nome: "Lúcia", significado: "Nascida na luz, luminosa, simbolizando clareza, brilho e verdade. Um nome que carrega o significado de alguém que ilumina o caminho dos outros, oferecendo esperança e sabedoria.", nacionalidade: "Latina" },
+    { nome: "Amahle", significado: "Bonita, bela, um nome que carrega a essência da beleza externa e interna, representando uma mulher encantadora em todos os aspectos, com uma energia positiva que reflete sua aparência e caráter.", nacionalidade: "Zulu" },
+    { nome: "Niamh", significado: "Brilhante, radiante, um nome associado à luz e à beleza celestial, simbolizando alguém que irradia uma luz interior, capaz de cativar e inspirar todos ao seu redor.", nacionalidade: "Irlandêsa" },
+    { nome: "Leilani", significado: "Flor do céu, criança celestial, representando uma mulher de beleza angelical, um ser de pureza que vem para trazer luz e felicidade ao mundo, sendo uma bênção divina na vida de quem a conhece.", nacionalidade: "Havaiana" },
+    { nome: "Kimiko", significado: "Criança respeitável, símbolo de honra e respeito. Representa uma pessoa que traz dignidade e uma forte ética de vida, sendo admirada por sua integridade e caráter refinado.", nacionalidade: "Japonêsa" },
+    { nome: "Xochitl", significado: "Flor, símbolo de beleza, natureza e vida. Refere-se a uma mulher que tem a suavidade e a fragilidade de uma flor, com uma energia que transmite paz e harmonia.", nacionalidade: "Náuatle" },
+    { nome: "Elena", significado: "Radiante, deslumbrante, um nome que evoca uma imagem de luz intensa e beleza impressionante, simbolizando uma mulher que brilha com sua presença e encanta todos ao seu redor.", nacionalidade: "Espanhola" },
+    { nome: "Valentina", significado: "Valente, forte, saudável, um nome que carrega uma energia de coragem, poder e resiliência, representando uma mulher que enfrenta os desafios da vida com força e determinação.", nacionalidade: "Latina" },
+    { nome: "Imani", significado: "Fé, crença, simbolizando uma mulher com uma forte ligação espiritual, alguém que tem confiança inabalável em seus próprios valores e naqueles que a rodeiam.", nacionalidade: "Suaíli" },
+    { nome: "Ona", significado: "Pérola; onda, simbolizando a beleza pura e a fluidez da vida. Refere-se a alguém precioso e delicado, com uma energia suave e acolhedora que encanta como o som de uma onda tranquila.", nacionalidade: "Basco" },
+    { nome: "Zara", significado: "Flor, princesa, radiante, associando-se a uma pessoa que é fonte de luz, beleza e poder. Um nome com uma forte conotação de realeza e de algo que brilha e se destaca no meio da multidão.", nacionalidade: "Árabe" },
+    { nome: "Manuela", significado: "Deus está conosco, um nome que transmite confiança e segurança, simbolizando uma mulher com uma forte fé, que leva a presença divina onde quer que vá, trazendo paz e tranquilidade.", nacionalidade: "Portuguêsa" },
+    {nome: "Ekene", significado: "Ação de graças, expressando gratidão e reconhecimento pela vida e pelas bênçãos recebidas. Um nome que transmite uma atitude positiva e grata, simbolizando humildade e apreço pela vida.", nacionalidade: "Nigériana"},
+    {nome: "Freya", significado: "Deusa do amor e da fertilidade, representante da beleza, da paixão e da prosperidade na mitologia nórdica. Associada à força feminina, ao amor incondicional e à renovação da vida.", nacionalidade: "Nórdica"},
+    {nome: "Carla", significado: "Mulher livre; forte, com um caráter independente e determinado. Representa a coragem de uma mulher que luta pela sua liberdade e pelos seus valores, sendo uma figura de força e perseverança.", nacionalidade: "Germânica"},
+    {nome: "Selena", significado: "Lua; deusa da lua, associando-se à beleza etérea e à calmaria da noite. Representa o mistério, a luz suave da lua e a proteção divina, sendo um nome que traz tranquilidade e serenidade.", nacionalidade: "Grega"},
+    {nome: "Gloria", significado: "Glória, honra, um nome que simboliza o reconhecimento e a dignidade. Carrega a conotação de uma pessoa que vive com honra, que traz respeito e luz por onde passa, sendo uma pessoa admirada.", nacionalidade: "Espanhola"},
+    {nome: "Lola", significado: "Dor, sofrimento; forte, simboliza alguém que, apesar das adversidades e desafios da vida, é resiliente, corajosa e capaz de superar os obstáculos com determinação e força interior.", nacionalidade: "Espanhola"},
+    {nome: "Roxana", significado: "Aurora, brilhante, um nome associado à luz da manhã, representando uma pessoa que traz clareza, brilho e novas perspectivas. Refere-se à beleza radiante e ao frescor de um novo começo.", nacionalidade: "Persa"},
+    {nome: "Elsa", significado: "Consagrada a Deus, simbolizando uma mulher que vive em devoção e em fé. Representa pureza, espiritualidade e um coração que está sempre disposto a servir aos outros com bondade e generosidade.", nacionalidade: "Alemã"},
+    {nome: "Cleo", significado: "Glória do pai, associando-se à honra e ao reconhecimento. Representa uma figura admirável, reverenciada por sua nobreza e caráter, alguém que carrega a dignidade de seu nome e de sua linhagem.", nacionalidade: "Grega"},
+    {nome: "Haruka", significado: "Primavera, fragrância, distante, simbolizando a suavidade da estação que traz vida nova e fragrâncias delicadas. Refere-se a uma pessoa que é gentil, mas que também possui um certo mistério, como a primavera distante.", nacionalidade: "Japonêsa"},
+    {nome: "Hala", significado: "Nimbo lunar; auréola, simbolizando a luz suave e radiante que emana de uma pessoa de espírito elevado. Representa alguém com uma aura espiritual, irradiando paz e serenidade, como um halo divino.", nacionalidade: "Árabe"},
+    {nome: "Julieta", significado: "Juventude sublime, simbolizando uma jovem cheia de graça, beleza e vitalidade. Representa um ideal de pureza e inocência, um nome que remete à jovialidade e ao encanto natural da juventude.", nacionalidade: "Latina"},
+    {nome: "Adele", significado: "Nobre, graciosa, simboliza uma mulher com grande elegância, dignidade e charme. Representa a nobreza de espírito e de caráter, alguém que se destaca pela sua beleza interior e pela sua gentileza.", nacionalidade: "Alemã"},
+    {nome: "Lamia", significado: "Radiante, brilhante, associando-se à luz intensa e à beleza deslumbrante. Um nome que evoca a ideia de uma pessoa que se destaca, que ilumina o ambiente com sua presença e energia vibrante.", nacionalidade: "Árabe"},
+    {nome: "Ingrid", significado: "Linda, amada; filha de um herói, simbolizando a beleza em sua forma mais pura e a força herdada de uma linhagem nobre. Representa alguém admirado por sua aparência e também por sua grandeza de espírito.", nacionalidade: "Escandinava"},
+    {nome: "Jael", significado: "Força de Deus, representando a coragem e a determinação divinas. Um nome que carrega um simbolismo de força inabalável, que remete ao poder e à proteção divina em todos os aspectos da vida.", nacionalidade: "Hebraica"},
+    {nome: "Béatrice", significado: "Aquela que traz felicidade, simbolizando uma mulher que ilumina o ambiente ao seu redor, espalhando alegria e luz. Representa alguém que tem o dom de fazer os outros sorrirem e sentir-se felizes.", nacionalidade: "Francêsa"},
+    {nome: "Yasmine", significado: "Flor de jasmim, simbolizando a delicadeza, a beleza e a suavidade. Representa uma pessoa de espírito leve, graciosa e encantadora, assim como a flor que exala um perfume doce e agradável.", nacionalidade: "Árabe"},
+    {nome: "Ruth", significado: "Companheira, amiga leal, representando uma mulher que é fiel, confiável e sempre disposta a oferecer suporte aos outros. Um nome associado à amizade verdadeira e ao valor de ser um pilar de confiança e amor.", nacionalidade: "Hebraica"},
+    {nome: "Lavinia", significado: "Mulher pura; mítica rainha da Itália, associada à nobreza, integridade e força. Um nome com raízes profundas na mitologia romana, evocando a imagem de uma mulher virtuosa e de importância histórica.", nacionalidade: "Latina"},
+    {nome: "Dafne", significado: "Loureiro, vitória. Este nome está intimamente ligado à mitologia grega, onde Dafne foi uma ninfa transformada em loureiro como símbolo de vitória e resistência. Representa pureza, proteção e força.", nacionalidade: "Grega"},
+    {nome: "Danai", significado: "Membro do povo grego antigo. Refere-se às mulheres de Dáfnia, um nome associado à antiga Grécia e simboliza uma conexão com a herança cultural e histórica do povo grego.", nacionalidade: "Grega"},
+    {nome: "Anya", significado: "Graciosa, cheia de graça. Um nome que transmite a ideia de uma mulher encantadora, com uma beleza delicada e um espírito gentil e amável, amplamente utilizado nas culturas eslava e russa.", nacionalidade: "Russa"},
+    {nome: "Montserrat", significado: "Monte serrado; local catalão sagrado, inspirado no famoso monastério de Montserrat na Espanha. O nome carrega conotações de devoção, fé e o poder da natureza nas montanhas sagradas.", nacionalidade: "Espanhola"},
+    {nome: "Kenza", significado: "Tesouro, valiosa. Um nome de origem árabe que transmite a ideia de uma pessoa preciosa, um verdadeiro tesouro que traz riqueza emocional e espiritual para aqueles ao seu redor.", nacionalidade: "Árabe"},
+    {nome: "Violeta", significado: "Flor violeta, um símbolo de modéstia e serenidade, e é associada à beleza delicada das flores e à nobreza de caráter. Representa uma mulher elegante e refinada, com grande sensibilidade e charme.", nacionalidade: "Latina"},
+    {nome: "Ailsa", significado: "De Ailsa Craig, ilha escocesa, associando-se à natureza intransigente e à força das ilhas. Este nome transmite uma conexão com a terra e o poder das paisagens escocesas, sendo único e culturalmente rico.", nacionalidade: "Escocêsa"},
+    {nome: "Maëlle", significado: "Príncesa, líder. Um nome francês que evoca liderança, dignidade e nobreza. Associado à força feminina e à capacidade de influenciar e guiar com sabedoria e compaixão.", nacionalidade: "Francêsa"},
+    {nome: "Hoang", significado: "Brilhante, dourada. Refere-se à luz do sol, a um brilho radiante e poderoso. Um nome vietnamita que simboliza a riqueza, a grandeza e a beleza que vêm da luz e do ouro.", nacionalidade: "Vietnamita"},
+    {nome: "Milena", significado: "Amor, gentileza. Um nome com raízes eslavas que representa bondade, ternura e compaixão. Refere-se a uma pessoa de coração generoso e uma alma carinhosa, sempre atenta ao bem-estar dos outros.", nacionalidade: "Eslava"},
+    {nome: "Rina", significado: "Júbilo, alegria. Um nome japonês que simboliza felicidade, celebração e harmonia. Refere-se àqueles momentos de pura alegria e satisfação, evocando positividade e luz.", nacionalidade: "Japonêsa"},
+    {nome: "Ariadne", significado: "Castíssima, puríssima. Um nome da mitologia grega que simboliza pureza, força interior e uma pessoa imaculada. Associado à deusa da sabedoria e do conhecimento, sempre pronta a guiar com sabedoria.", nacionalidade: "Grega"},
+    {nome: "Shirin", significado: "Doce, charmosa. Um nome persa que evoca uma mulher encantadora, com grande beleza exterior e interior. Representa suavidade, elegância e um espírito amável, de coração generoso.", nacionalidade: "Persa"},
+    {nome: "Cecilia", significado: "Cega; aquela que é humilde, associado à santa Cecilia, padroeira dos músicos. O nome transmite a ideia de humildade, harmonia e pureza espiritual, sendo um símbolo de devoção e serenidade.", nacionalidade: "Latina"},
+    { nome: "Junko", significado: "Obediência, pureza, infantil. Um nome japonês que transmite a ideia de uma pessoa pura, obediente e cheia de inocência, frequentemente associada à infância e à virtude. Junko evoca qualidades de bondade e zelo.", nacionalidade: "Japonêsa" },
+    { nome: "Fiona", significado: "Branca, justa. De origem irlandesa, o nome Fiona carrega conotações de pureza, justiça e beleza. Tradicionalmente, é um nome que transmite força e a busca pela virtude.", nacionalidade: "Irlandêsa" },
+    { nome: "Parisa", significado: "Como uma fada. Um nome persa que evoca uma imagem mágica, associando a pessoa à beleza etérea e ao encanto das fadas. Parisa é um nome que denota um ser gracioso e encantador.", nacionalidade: "Persa" },
+    { nome: "Esra", significado: "Viagem noturna sagrada. Um nome turco que se associa a viagens espirituais ou místicas, carregando um significado de transformação, mistério e a busca pela iluminação.", nacionalidade: "Turca" },
+    { nome: "Giselle", significado: "Refém, voto; promessa. Um nome de origem alemã que remonta à ideia de compromisso e dedicação, muitas vezes associado a um juramento ou promessa feita de forma voluntária.", nacionalidade: "Alemã" },
+    { nome: "Florence", significado: "Próspera, florescente. Um nome tradicionalmente inglês que transmite a ideia de crescimento, prosperidade e sucesso. É associado à força da natureza e à beleza das flores em pleno florescimento.", nacionalidade: "Inglêsa" },
+    { nome: "Esther", significado: "Estrela, sorte. De origem hebraica, Esther simboliza luz, brilho e orientação. É um nome que representa a ideia de sorte e de ser uma fonte de luz e esperança para os outros.", nacionalidade: "Hebraica" },
+    { nome: "Margot", significado: "Pérola, reluzente. Um nome francês que evoca a ideia de uma pessoa rara e preciosa, assim como uma pérola. Margot simboliza algo único, reluzente e digno de admiração.", nacionalidade: "Francêsa" },
+    { nome: "Pamela", significado: "Doce como o mel. De origem grega, Pamela transmite a ideia de suavidade, doçura e graça. Um nome que evoca uma natureza amável e uma presença cativante e acolhedora.", nacionalidade: "Grega" },
+    { nome: "Brigid", significado: "Força, virtude, poder. De origem irlandesa, Brigid é um nome associado à deusa celta da força e da sabedoria. Representa resistência, virtude e um poder interior inabalável.", nacionalidade: "Irlandêsa" },
+    { nome: "Laila", significado: "Noite; beleza da noite. Um nome árabe que simboliza a serenidade da noite, transmitindo uma imagem de calma, mistério e a beleza profunda associada ao período noturno.", nacionalidade: "Árabe" },
+    { nome: "Nevena", significado: "Flor de calêndula. Um nome sérvio que remete à beleza da natureza e à simplicidade das flores, especialmente a calêndula, que é considerada uma flor de cura e proteção.", nacionalidade: "Sérvia" },
+    { nome: "Odalys", significado: "Riqueza, fortuna. Um nome francês que transmite a ideia de prosperidade e abundância, associado a uma pessoa que traz felicidade e riqueza para os outros.", nacionalidade: "Francêsa" },
+    { nome: "Graciela", significado: "Cheia de graça. Um nome espanhol que transmite a ideia de elegância e gentileza, com uma beleza interior que reflete bondade e suavidade. Graciela evoca compaixão e sensibilidade.", nacionalidade: "Espanhola" },
+    { nome: "Senja", significado: "Noite, escurecer. Um nome de origem finlandesa que simboliza a tranquilidade e o mistério da noite. Refere-se à calma e à beleza do anoitecer, um nome que exala serenidade.", nacionalidade: "Finlandêsa" },
+    { nome: "Araceli", significado: "Altar do céu. Um nome latino que remete à pureza celestial e espiritual, significando um lugar elevado e sagrado, um altar dedicado àquilo que é puro e divino.", nacionalidade: "Latina" },
+    { nome: "Mirna", significado: "Pacífica, gentil. Um nome eslavo que simboliza harmonia, tranquilidade e a beleza da paz interior. Mirna é uma pessoa que irradia calma e serenidade, sendo uma presença suave e agradável.", nacionalidade: "Eslava" },
+    {nome:"Ivy",significado:"Hera, fidelidade. Um nome de origem inglesa associado à planta hera, que simboliza fidelidade e lealdade. A hera é uma planta que cresce de maneira persistente, simbolizando a resistência e a fidelidade. Este nome é frequentemente ligado à constância e à confiança em relacionamentos.",nacionalidade:"Inglêsa"},
+    {nome:"Ophelia",significado:"Ajuda, auxílio. De origem grega, o nome Ophelia é associado a ajuda e apoio. Tradicionalmente, o nome é ligado à ideia de ser alguém que oferece suporte e amparo aos outros. O nome ficou famoso através da obra 'Hamlet' de Shakespeare, representando uma personagem com uma personalidade tocante e compassiva.",nacionalidade:"Grega"},
+    {nome:"Anaïs",significado:"Graciosa, cheia de graça. De origem francesa, o nome Anaïs transmite a ideia de uma pessoa graciosa e cheia de charme. É um nome popular em várias culturas e é associado à beleza interior, sensibilidade e delicadeza. Representa alguém que irradia beleza e simpatia.",nacionalidade:"Francêsa"},
+    {nome:"Veronica",significado:"Portadora da vitória. Um nome de origem grega que significa 'portadora da vitória'. É frequentemente associado à força interior, coragem e a capacidade de conquistar obstáculos. Também tem conotações religiosas, sendo o nome de uma santa popular na tradição cristã.",nacionalidade:"Grega"},
+    {nome:"Zeina",significado:"Bela, adorável. De origem árabe, Zeina significa 'bela' ou 'adorável'. Este nome é comumente dado a meninas e carrega um significado de graça, charme e beleza. Ele transmite a ideia de alguém que é agradável à vista e ao coração, refletindo uma beleza radiante.",nacionalidade:"Árabe"},
+    {nome:"Vesna",significado:"Primavera, renovação. De origem eslava, Vesna é o nome da deusa da primavera e da renovação. Este nome é simbolicamente associado ao renascimento, ao despertar da natureza e ao frescor da nova estação. Representa a mudança e a vitalidade que chegam com a primavera.",nacionalidade:"Eslava"},
+    {nome:"Anouk",significado:"Graça, cheia de graça. Um nome de origem holandesa que remete à graça e beleza. Anouk é comumente associado a um charme delicado e uma suavidade de espírito. A simplicidade e a elegância estão presentes em pessoas com esse nome.",nacionalidade:"Holandêsa"},
+    {nome:"Aysha",significado:"Vida, viva. De origem árabe, o nome Aysha significa 'vida' ou 'viva'. É um nome que denota energia e vitalidade, sendo frequentemente associado a pessoas dinâmicas, cheias de vida e entusiasmo. Também é um nome que representa um espírito jovem e cheio de vigor.",nacionalidade:"Árabe"},
+    {nome:"Galina",significado:"Serena, calma. De origem russa, Galina transmite a ideia de serenidade e tranquilidade. Este nome é associado a uma personalidade calma, que transmite paz e harmonia para os outros. Pessoas chamadas Galina são vistas como equilibradas e suaves.",nacionalidade:"Russa"},
+    {nome:"Ariane",significado:"Castíssima, muito pura. De origem francesa, Ariane é um nome que transmite pureza e castidade. É frequentemente associado a mulheres de caráter forte e virtuoso, representando a ideia de alguém com um espírito puro e sem máculas.",nacionalidade:"Francêsa"},
+    {nome:"Luciana",significado:"Iluminada, cheia de luz. Um nome de origem portuguesa, Luciana está diretamente relacionado à luz e clareza. É um nome que evoca sabedoria, iluminação e a capacidade de trazer clareza onde há escuridão. Representa uma pessoa que ilumina o caminho dos outros com sua presença.",nacionalidade:"Portuguêsa"},
+    {nome:"Nova",significado:"Nova, inovadora. De origem latina, o nome Nova significa 'nova' ou 'inovadora', representando algo fresco, diferente e revolucionário. Este nome é associado à ideia de renovação e de trazer algo novo ao mundo, simbolizando mudança e transformação positiva.",nacionalidade:"Latina"},
+    {nome:"Yasmin",significado:"Flor de jasmim. De origem árabe, Yasmin é o nome da flor de jasmim, conhecida por seu aroma delicado e suave. É um nome associado à beleza, suavidade e graça. Também simboliza a pureza e a naturalidade das coisas belas da vida.",nacionalidade:"Árabe"},
+    {nome:"Linnea",significado:"Flor do bosque nórdico. Um nome sueco associado a uma flor que cresce nas florestas nórdicas. Linnea representa a beleza da natureza e é frequentemente associado à simplicidade e pureza das flores selvagens. Um nome popular na Suécia, simbolizando elegância natural.",nacionalidade:"Sueca"},
+    {nome:"Bianka",significado:"Branca, pura. De origem polonesa, Bianka significa 'branca' ou 'pura', e é associada à ideia de pureza e inocência. Este nome transmite uma imagem de clareza e serenidade, representando uma pessoa com um caráter honesto e uma personalidade radiante.",nacionalidade:"Polonêsa"},
+    {nome:"Ewa",significado:"A que vive, cheia de vida. Um nome de origem polonesa, Ewa significa 'a que vive'. Este nome é associado à vitalidade e ao vigor, simbolizando uma pessoa cheia de energia e força de vida. Representa renovação e prosperidade, trazendo luz e frescor ao mundo.",nacionalidade:"Polonêsa"},
+    {nome:"Salma",significado:"Paz, saudável. De origem árabe, Salma significa 'paz' ou 'saudável', evocando uma pessoa que traz tranquilidade e harmonia. Este nome também é associado à saúde e ao bem-estar, representando uma pessoa de espírito calmo e que promove a paz ao seu redor.",nacionalidade:"Árabe"},
+    {nome:"Kira",significado:"Senhora, governante; sol; trono. De origem japonesa, Kira significa 'senhora', 'governante', e também é associada ao sol e ao trono, símbolos de poder e liderança. O nome transmite uma sensação de autoridade e importância, com uma forte conexão com a luz e o poder.",nacionalidade:"Japonêsa"},
+    {nome:"Mali",significado:"Flor de jasmim. De origem tailandesa, Mali significa 'flor de jasmim', associando a pessoa ao símbolo de beleza, pureza e delicadeza que a flor de jasmim representa. Este nome é frequentemente dado a meninas que possuem uma natureza suave e encantadora.",nacionalidade:"Tailandêsa"},
+    {nome:"Nadia",significado:"Esperança; cheia de esperança. De origem árabe, Nadia significa 'esperança', simbolizando uma pessoa cheia de otimismo e de expectativa positiva para o futuro. Este nome é frequentemente associado a pessoas que inspiram fé e confiança nos outros.",nacionalidade:"Árabe"},
+    {nome:"Penelope",significado:"Mulher tecelã fiel. De origem grega, Penelope significa 'mulher tecelã', e está associada à fidelidade e paciência. O nome tem uma conotação mitológica, sendo uma referência à personagem Penélope da obra 'Odisseia', que representava a lealdade e a espera pelo marido ausente.",nacionalidade:"Grega"},
+    {nome:"Íris",significado:"Arco-íris; mensageira dos deuses. De origem grega, Íris é o nome da deusa do arco-íris, mensageira dos deuses. Este nome simboliza a beleza, a luz e a conexão entre o céu e a terra, associando a pessoa ao conceito de harmonia e de ligação com as forças superiores.",nacionalidade:"Grega"},
+    {nome:"Tova",significado:"Boa, agradável. De origem sueca, Tova significa 'boa' ou 'agradável', representando uma pessoa de boa índole, que é amável e bem-intencionada. Este nome é associado a qualidades como bondade, simpatia e agradabilidade, sendo uma escolha popular em países nórdicos.",nacionalidade:"Sueca"},
+    {nome:"Anneliese",significado:"Cheia de graça e devotada a Deus. De origem alemã, Anneliese é uma combinação dos nomes Anna (cheia de graça) e Liese (devotada a Deus). O nome transmite uma imagem de uma pessoa graciosa, gentil e com forte fé religiosa. Representa uma alma devota e pura.",nacionalidade:"Alemã"},
+    {nome:"Júlia",significado:"Jovem, cheia de juventude. De origem latina, Júlia significa 'jovem' ou 'cheia de juventude', evocando uma imagem de vitalidade e frescor. Este nome é associado a características de energia, entusiasmo e uma personalidade jovem, independentemente da idade.",nacionalidade:"Latina"},
+    {nome:"Priya",significado:"Amada, querida. De origem indiana, Priya significa 'amada' ou 'querida'. Este nome é muito comum em várias culturas da Ásia e está associado ao amor, carinho e afeto, representando uma pessoa que é muito estimada e querida por aqueles ao seu redor.",nacionalidade:"Indiana"},
+    {nome:"Salomé",significado:"Pacífica, harmoniosa. De origem hebraica, Salomé significa 'pacífica' ou 'harmoniosa'. Este nome é associado a uma personalidade tranquila e equilibrada, alguém que traz paz aos outros e é capaz de mediar conflitos de forma calma e sensata.",nacionalidade:"Hebraica"},
+    {nome:"Mila",significado:"Graciosa, querida; trabalho e amor. De origem eslava, Mila significa 'graciosa' ou 'querida'. O nome transmite a ideia de uma pessoa afetuosa, amável e carinhosa, que tem a capacidade de trazer alegria e amor ao redor. Também está ligado ao trabalho árduo e à dedicação.",nacionalidade:"Eslava"},
+    {nome:"Avani",significado:"Terra, natureza. De origem indiana, Avani significa 'terra' ou 'natureza', simbolizando uma conexão profunda com o meio ambiente e com a Terra. Este nome reflete uma pessoa que é harmoniosa com o mundo natural e que valoriza a proteção do planeta.",nacionalidade:"Indiana"},
+    {nome:"Leonor",significado:"Luz, chamejante. De origem francesa, Leonor significa 'luz' ou 'chamejante', evocando uma imagem de uma pessoa que brilha, ilumina os outros e traz clareza onde há escuridão. Este nome também está associado a uma personalidade forte e vibrante.",nacionalidade:"Francêsa"},
+    {nome:"Giulia",significado:"Jovem, fofa, cheia de juventude. De origem italiana, Giulia significa 'jovem' e está associada à ideia de vitalidade e frescor. Este nome simboliza a juventude, a energia e a capacidade de renovar, refletindo uma personalidade cheia de vida e encantamento.",nacionalidade:"Italiana"},
+    {nome:"Chantal",significado:"Pedra, do castelo. De origem francesa, Chantal é derivado do francês antigo e significa 'pedra' ou 'do castelo'. O nome transmite a ideia de uma pessoa sólida, forte e confiável, alguém que é uma base segura para os outros, como uma pedra ou uma fortaleza.",nacionalidade:"Francêsa"},
+    {nome:"Mireya",significado:"Admirável, digna de louvor. De origem espanhola, Mireya significa 'admirável' ou 'digna de louvor', refletindo uma pessoa com grande caráter e qualidades que merecem reconhecimento e respeito. Este nome transmite uma sensação de elegância e sofisticação.",nacionalidade:"Espanhola"},
+    {nome:"Yelena",significado:"Radiante, luminosa. De origem russa, Yelena significa 'radiante' ou 'luminosa', evocando uma pessoa com uma presença iluminada que irradia calor e energia positiva. Este nome é associado à beleza e à energia brilhante de uma pessoa cheia de vida e luz.",nacionalidade:"Russa"},
+    {nome:"Rosalie",significado:"Bela como uma rosa. De origem francesa, Rosalie significa 'bela como uma rosa', refletindo uma pessoa que é delicada, elegante e cheia de charme. Este nome é frequentemente associado à feminilidade, graça e a beleza natural que se destaca no mundo ao redor.",nacionalidade:"Francêsa"},
+    {nome:"Tina",significado:"Pequena, graciosa. De origem italiana, Tina é um nome que deriva de 'Christina' e significa 'pequena' ou 'graciosa'. Este nome é associado a uma pessoa que possui um charme delicado e um jeito suave, representando suavidade e elegância. Tende a evocar a ideia de uma personalidade acolhedora e encantadora.",nacionalidade:"Italiana"},
+    {nome:"Kaori",significado:"Fragrância, perfume. De origem japonesa, Kaori significa 'perfume' ou 'fragrância'. Este nome simboliza uma pessoa com uma presença doce e encantadora, que deixa uma impressão duradoura e agradável aos outros. Também pode refletir uma pessoa sensível e elegante.",nacionalidade:"Japonêsa"},
+    {nome:"Ekaterina",significado:"Pura, casta. De origem russa, Ekaterina é uma forma do nome Catarina e significa 'pura' ou 'casta'. Este nome é associado à virtude, à pureza de espírito e à força interior. A personalidade representada por Ekaterina é muitas vezes associada à sabedoria e à serenidade.",nacionalidade:"Russa"},
+    {nome:"Yael",significado:"Cabra montês, forte, persistente. De origem hebraica, Yael significa 'cabra montês' e é associada à força, coragem e persistência. Este nome evoca uma pessoa resiliente e determinada, que possui grande habilidade em superar desafios e obstáculos.",nacionalidade:"Hebraica"},
+    {nome:"Elisabete",significado:"Consagrada a Deus. De origem hebraica e portuguesa, Elisabete significa 'consagrada a Deus'. Este nome transmite uma forte ligação com a espiritualidade, refletindo uma pessoa devota e dedicada ao serviço divino. É um nome clássico e reverenciado em muitas culturas.",nacionalidade:"Hebraica/Portuguêsa"},
+    {nome:"Nuria",significado:"Iluminada pela luz. De origem árabe e espanhola, Nuria significa 'iluminada pela luz'. Este nome está associado à clareza, sabedoria e iluminação interior, evocando uma pessoa com grande visão espiritual e capacidade de guiar outros com sua luz e sabedoria.",nacionalidade:"Árabe/Espanhola"},
+    {nome:"Gaia",significado:"Terra, mãe da Terra. De origem grega, Gaia é o nome da deusa primordial que representa a Terra. Este nome está associado à natureza, à fertilidade e à criação. Gaia simboliza uma conexão profunda com o planeta e os elementos naturais, refletindo uma pessoa que é protetora do meio ambiente e ligada à terra.",nacionalidade:"Grega"},
+    {nome:"Magali",significado:"Pérola. De origem francesa, Magali significa 'pérola', simbolizando uma pessoa preciosa, rara e única. Este nome é associado à elegância e à beleza natural, refletindo uma pessoa que traz luz e brilho para o mundo ao seu redor.",nacionalidade:"Francêsa"},
+    {nome:"Milagros",significado:"Milagres, graça divina. De origem espanhola, Milagros significa 'milagres' ou 'graça divina'. Este nome é associado a um ser abençoado, alguém que é visto como uma manifestação de graça e boas ações. Reflete uma pessoa com uma natureza bondosa e encantadora, que irradia positividade e esperança.",nacionalidade:"Espanhola"},
+    {nome:"Aurelia",significado:"Dourada, resplandecente. De origem latina, Aurelia significa 'dourada' ou 'resplandecente'. Este nome simboliza alguém com uma personalidade brilhante, iluminada e cheia de energia positiva. É uma escolha associada à beleza, sofisticação e poder de atração.",nacionalidade:"Latina"},
+    {nome:"Delphine",significado:"Do Delfos; mulher do mar. De origem francesa, Delphine significa 'mulher do mar' ou 'do Delfos', uma referência à cidade grega famosa. Este nome é associado à sabedoria, à conexão com a natureza e ao mar, refletindo uma pessoa que é intuitiva e profunda em seu entendimento do mundo.",nacionalidade:"Francêsa"},
+    {nome:"Kyra",significado:"Senhora, trono, luz do sol. De origem grega, Kyra significa 'senhora', 'trono' e é associada à luz do sol. Este nome evoca poder, liderança e elegância, transmitindo a ideia de uma pessoa que ocupa uma posição de destaque e irradiando uma energia vibrante e positiva.",nacionalidade:"Grega"},
+    {nome:"Lis",significado:"Lírio, pureza. De origem francesa, Lis significa 'lírio', simbolizando pureza, beleza e graça. Este nome reflete uma pessoa que é vista como um símbolo de virtude e serenidade, com uma natureza suave e encantadora.",nacionalidade:"Francêsa"},
+    {nome:"Adelina",significado:"Nobre, graciosa. De origem alemã, Adelina significa 'nobre' e 'graciosa'. Este nome está associado a uma pessoa de origem nobre, com um caráter refinado e uma presença encantadora. Reflete uma mulher de dignidade e respeito, com grande elegância e charme.",nacionalidade:"Alemã"},
+    {nome:"Ines",significado:"Pura, casta. De origem portuguesa, Ines significa 'pura' ou 'casta'. Este nome é relacionado à virtude e à integridade, evocando uma personalidade que representa pureza de espírito e ação. É frequentemente associado a uma natureza calma e serena.",nacionalidade:"Portuguêsa"},
+    {nome:"Anat",significado:"Deusa da fertilidade, alegria. De origem hebraica, Anat significa 'deusa da fertilidade', simbolizando abundância e alegria. Este nome está associado a uma pessoa que traz felicidade e prosperidade, com um espírito vibrante e generoso.",nacionalidade:"Hebraica"},
+    {nome:"Mia",significado:"Minha, amada. De origem dinamarquesa, Mia significa 'minha' ou 'amada'. Este nome reflete um forte vínculo de amor e carinho, sendo associado a uma pessoa querida, afetuosa e muito estimada pelos outros.",nacionalidade:"Dinamarquês"},
+    {nome:"Astrid",significado:"Beleza divina, amada por Deus. De origem sueca, Astrid significa 'beleza divina' e é associada a alguém que é amada por Deus. Este nome transmite a ideia de uma pessoa com uma presença sublime e encantadora, além de ser profundamente adorada e respeitada.",nacionalidade:"Sueca"},
+    {nome:"Yesenia",significado:"Flor do deserto, rara. De origem espanhola, Yesenia significa 'flor do deserto', simbolizando a raridade e a beleza única de uma pessoa que brilha e se destaca em um ambiente árido e desafiador. Este nome evoca resiliência e beleza rara.",nacionalidade:"Espanhola"},
+    {nome:"Amara",significado:"Eterna, imortal. De origem latina, Amara significa 'eterna' ou 'imortal', representando uma pessoa com uma grande conexão espiritual e atemporal. Este nome reflete a ideia de longevidade e continuidade, evocando algo que não morre com o tempo.",nacionalidade:"Latina"},
+    {nome:"Tatiana",significado:"Rainha das fadas, altíssima. De origem russa, Tatiana é um nome tradicionalmente associado a grandeza e nobreza. O nome sugere uma personalidade forte e poderosa, ligada à realeza e à magia das fadas, como uma figura feminina altíssima, imponente e cheia de graça. Representa alguém com grande dignidade e presença.",nacionalidade:"Russa"},
+    {nome:"Letícia",significado:"Felicidade, alegria. De origem latina, Letícia significa 'felicidade' ou 'alegria'. Este nome evoca uma pessoa que traz leveza e prazer, simbolizando uma natureza feliz e positiva. É um nome associado a alguém que irradia alegria, trazendo luz e felicidade ao seu redor.",nacionalidade:"Latina"},
+    {nome:"Zulema",significado:"Pacífica, tranquila. De origem espanhola, Zulema significa 'pacífica' ou 'tranquila'. Este nome está associado a uma personalidade serena, calma e equilibrada, refletindo uma pessoa que tem um espírito pacífico e que transmite calma e harmonia aos outros.",nacionalidade:"Espanhola"},
+    {nome:"Rebeca",significado:"União, aquela que une. De origem hebraica, Rebeca significa 'união' ou 'aquela que une'. Este nome transmite a ideia de uma pessoa com grande habilidade em criar laços, unir pessoas e criar harmonia nos relacionamentos. Reflete uma mulher com um coração acolhedor e um papel unificador.",nacionalidade:"Hebraica"},
+    {nome:"Cecília",significado:"Cega, humilde. De origem latina, Cecília significa 'cega'. Este nome é associado a uma humildade profunda e a uma conexão com a música (Santa Cecília é a padroeira dos músicos). Reflete uma pessoa com uma natureza modesta e uma visão interna mais profunda do que as aparências externas.",nacionalidade:"Latina"},
+    {nome:"Darya",significado:"Possuidora de bens, rica. De origem russa, Darya significa 'possuidora de bens' ou 'rica'. Este nome é associado à prosperidade, riqueza e sucesso material. Representa uma pessoa que é bem-sucedida e tem grande capacidade de atrair recursos e felicidade.",nacionalidade:"Russa"},
+    {nome:"Valéria",significado:"Forte, corajosa. De origem latina, Valéria significa 'forte' ou 'corajosa'. Este nome evoca uma personalidade resiliente e determinada, com uma grande força interior e coragem para enfrentar qualquer adversidade. Reflete uma mulher que é imbatível e cheia de poder.",nacionalidade:"Latina"},
+    {nome:"Lea",significado:"Cansada, portadora de boas notícias. De origem hebraica, Lea significa 'cansada' ou 'portadora de boas notícias'. Este nome simboliza uma pessoa que traz esperança e boas novas, muitas vezes trazendo consolo e tranquilidade para aqueles ao seu redor. Reflete uma pessoa resiliente e portadora de palavras de conforto.",nacionalidade:"Hebraica"},
+    {nome:"Sibel",significado:"Profetisa, oráculo. De origem turca, Sibel significa 'profetisa' ou 'oráculo'. Este nome está associado a uma pessoa com grande sabedoria e visão espiritual, frequentemente associada ao papel de uma conselheira ou líder espiritual. Representa uma mulher com um dom de premonição e sabedoria.",nacionalidade:"Turca"},
+    {nome:"Mirabel",significado:"Maravilhosa, admirável. De origem latina, Mirabel significa 'maravilhosa' ou 'admirável'. Este nome evoca uma pessoa que se destaca pela sua beleza, inteligência e caráter, alguém que é verdadeiramente admirada por aqueles ao seu redor e que traz maravilhas para a vida dos outros.",nacionalidade:"Latina"},
+    {nome:"Shanaya",significado:"Primeira luz do dia, sortuda. De origem indiana, Shanaya significa 'primeira luz do dia' ou 'sortuda'. Este nome está associado a uma pessoa que traz luz e felicidade, representando uma nova esperança e oportunidade, como o nascer do sol que traz um novo começo.",nacionalidade:"Indiana"},
+    {nome:"Tallulah",significado:"Água saltitante, riacho. De origem americana, Tallulah significa 'água saltitante' ou 'riacho'. Este nome evoca a imagem de algo vibrante e fluido, com grande energia e movimento. Representa uma pessoa com grande vitalidade e espírito livre.",nacionalidade:"Americana"},
+    {nome:"Amaya",significado:"Chuva noturna, fim de um sonho. De origem japonesa, Amaya significa 'chuva noturna' ou 'fim de um sonho'. Este nome está associado a uma pessoa que traz frescor e renovação, com uma sensibilidade profunda e uma conexão com a natureza. Reflete alguém que tem um espírito introspectivo e poético.",nacionalidade:"Japonêsa"},
+    {nome:"Nikita",significado:"Aquela que vence, vitoriosa. De origem russa, Nikita significa 'aquela que vence' ou 'vitoriosa'. Este nome está associado a uma personalidade forte e determinada, alguém que sempre consegue superar obstáculos e alcançar seus objetivos com sucesso.",nacionalidade:"Russa"},
+    {nome:"Zenaide",significado:"Filha de Zeus, divina. De origem grega, Zenaide significa 'filha de Zeus' ou 'divina'. Este nome é associado à grandeza, poder e conexão com o divino, representando uma pessoa que tem uma presença impressionante e uma natureza majestosa.",nacionalidade:"Grega"},
+    {nome:"Dulce",significado:"Doce, amorosa. De origem latina, Dulce significa 'doce' ou 'amorosa'. Este nome evoca uma pessoa com uma natureza amável e gentil, alguém que irradia carinho e ternura para os outros, sempre proporcionando conforto e doçura em suas interações.",nacionalidade:"Latina"},
+    {nome:"Muriel",significado:"Mar brilhante. De origem celta, Muriel significa 'mar brilhante'. Este nome é associado à força e serenidade do mar, refletindo uma pessoa calma e graciosa, com uma luz interna que ilumina os outros ao seu redor.",nacionalidade:"Celta"},
+    {nome:"Sabine",significado:"Da tribo dos sabinos. De origem francesa, Sabine significa 'da tribo dos sabinos'. Este nome está associado à história antiga e à nobreza de uma tribo italiana. Reflete uma pessoa com raízes históricas profundas e um caráter forte, representando alguém com grande sabedoria e dignidade.",nacionalidade:"Francêsa"},
+    {nome:"Cláudia",significado:"Manca, aquela que claudica. De origem latina, Cláudia significa 'manca' ou 'aquela que claudica'. Este nome está associado a uma pessoa que enfrenta desafios com coragem e determinação. Pode também simbolizar uma pessoa com grande perseverança e resiliência.",nacionalidade:"Latina"},
+    {nome:"Flora",significado:"Flor, deusa das flores. De origem latina, Flora significa 'flor'. Este nome evoca a imagem de uma flor delicada, mas forte e exuberante. Flora também é o nome da deusa romana da primavera e das flores, associada à renovação e ao florescimento, simbolizando beleza e vitalidade. Este nome representa alguém que traz beleza e frescor à vida dos outros.",nacionalidade:"Latina"},
+    {nome:"Amélia",significado:"Trabalhadora, esforçada. De origem germânica, Amélia significa 'trabalhadora' ou 'esforçada'. Este nome é associado a uma pessoa com grande ética de trabalho, determinação e resiliência. Reflete uma mulher dedicada, que se empenha para alcançar seus objetivos, e que muitas vezes assume responsabilidades com afinco e competência.",nacionalidade:"Germânica"},
+    {nome:"Isolda",significado:"A desejada, heroína lendária. De origem celta, Isolda significa 'a desejada'. Este nome é famoso devido à lenda de Tristão e Isolda, na qual Isolda é uma heroína trágica e admirada por sua beleza e caráter. Reflete uma mulher desejada e reverenciada, com uma história forte e apaixonante.",nacionalidade:"Celta"},
+    {nome:"Elora",significado:"Deus é luz, reluzente. De origem hebraica, Elora significa 'Deus é luz'. Este nome carrega uma conotação divina e iluminada, simbolizando uma pessoa que traz luz e clareza para o mundo ao seu redor. Reflete alguém com grande espiritualidade e que ilumina a vida das pessoas com sua presença radiante.",nacionalidade:"Hebraica"},
+    {nome:"Giovanna",significado:"Deus é gracioso. De origem italiana, Giovanna significa 'Deus é gracioso'. Este nome tem uma forte ligação com a espiritualidade e a bondade divina, evocando uma pessoa com um espírito generoso, amável e com uma presença que transmite paz e graça. Representa alguém que reflete a bondade e a bondade divina.",nacionalidade:"Italiana"},
+    {nome:"Selene",significado:"Deusa da lua, brilhante. De origem grega, Selene é o nome da deusa da lua, associada à luz suave e misteriosa que ilumina a noite. Este nome está relacionado a uma mulher que é introspectiva, cheia de mistério e magia, e que traz uma aura de serenidade e tranquilidade para os outros ao seu redor.",nacionalidade:"Grega"},
+    {nome:"Oriane",significado:"Dourada, radiante como o sol nascente. De origem francesa, Oriane significa 'dourada'. Este nome simboliza brilho e luz, associando a pessoa a uma energia radiante e poderosa. Oriane traz a ideia de uma pessoa cheia de vitalidade e força, como o sol nascente que irradia calor e luz para o mundo.",nacionalidade:"Francêsa"},
+    {nome:"Liora",significado:"Luz, portadora de luz. De origem hebraica, Liora significa 'minha luz'. Este nome simboliza uma pessoa que traz clareza, sabedoria e orientação para aqueles ao seu redor, iluminando caminhos com seu brilho interior. Reflete uma pessoa com grande presença, capaz de espalhar bondade e luz.",nacionalidade:"Hebraica"},
+    {nome:"Alina",significado:"Brilhante, bela. De origem russa, Alina significa 'brilhante' ou 'bela'. Este nome é associado à ideia de uma beleza radiante e iluminada, refletindo uma pessoa com um caráter forte e uma aparência impressionante. Representa uma mulher que é admirada e que tem uma beleza tanto exterior quanto interior.",nacionalidade:"Russa"},
+    {nome:"Siobhán",significado:"Deus é graciosa. De origem irlandesa, Siobhán significa 'Deus é graciosa'. Este nome está associado a uma pessoa com grande graça e bondade, uma mulher com uma personalidade encantadora e afetuosa. Reflete uma natureza gentil, sensível e profundamente espiritual.",nacionalidade:"Irlandêsa"},
+    {nome:"Anita",significado:"Cheia de graça. De origem espanhola, Anita significa 'cheia de graça'. Este nome evoca uma pessoa com uma personalidade encantadora e amável, alguém que é adorada e respeitada por sua gentileza e graça natural. Reflete uma mulher com um charme especial e uma alma gentil.",nacionalidade:"Espanhola"},
+    {nome:"Ariella",significado:"Leoa de Deus. De origem hebraica, Ariella significa 'leoa de Deus'. Este nome é associado a uma pessoa corajosa, forte e protetora, com uma natureza feroz e determinada. Reflete uma mulher de grande coragem, que enfrenta desafios com valentia e é reconhecida por sua força interior.",nacionalidade:"Hebraica"},
+    {nome:"Marlene",significado:"Combinação de Maria e Madalena; torre alta do mar. De origem alemã, Marlene é uma combinação de Maria e Madalena, com significado associado à força e à devoção. Também pode ser interpretado como 'torre alta do mar', simbolizando estabilidade e força em meio aos desafios. Reflete uma mulher com grande resistência e caráter firme.",nacionalidade:"Alemã"},
+    {nome:"Suzana",significado:"Lírio, flor pura. De origem hebraica, Suzana é um nome associado à pureza e à beleza da flor de lírio. Este nome reflete uma mulher delicada, virtuosa e luminosa, simbolizando a pureza de uma flor que desabrocha com força e graça. Suzana é um nome que exala gentileza e sofisticação, associado ao frescor da natureza.",nacionalidade:"Hebraica"},
+    {nome:"Marcela",significado:"Guerreira, pequena Marte. De origem espanhola, Marcela é um nome associado à força e coragem de uma guerreira. O nome tem raízes no deus romano da guerra, Marte, sugerindo uma mulher com grande determinação e capacidade de lutar por seus ideais. É um nome que transmite poder e força interior.",nacionalidade:"Espanhola"},
+    {nome:"Renata",significado:"Renascida, nascer de novo. De origem latina, Renata significa 'renascida' ou 'nova vida'. Este nome evoca a ideia de um recomeço, de uma nova fase na vida, e é associado à renovação e ao crescimento pessoal. Renata é um nome que carrega um significado de transformação e esperança.",nacionalidade:"Latina"},
+    {nome:"Gláucia",significado:"De olhos claros, azulados. De origem latina, Gláucia significa 'de olhos claros' ou 'azulados'. Este nome é associado a uma pessoa com uma beleza serena e uma personalidade tranquila, refletindo alguém que observa o mundo com calma e sabedoria. O nome evoca imagens de serenidade e clareza.",nacionalidade:"Latina"},
+    {nome:"Ravena",significado:"Corvo, símbolo de mistério. De origem inglesa, Ravena é derivado do corvo, que é um símbolo de mistério, sabedoria e transformação. Este nome traz à mente uma figura enigmática, profunda e que possui uma conexão com a natureza e o desconhecido. É um nome que evoca o poder e a sabedoria ocultos.",nacionalidade:"Inglêsa"},
+    {nome:"Eileen",significado:"Radiante, brilhante. De origem irlandesa, Eileen significa 'radiante' ou 'brilhante'. Este nome é associado a uma pessoa que ilumina a vida dos outros com sua presença. Eileen é um nome que transmite luz e energia positiva, refletindo uma personalidade cheia de alegria e brilho interior.",nacionalidade:"Irlandêsa"},
+    {nome:"Angela",significado:"Anjo, mensageira de Deus. De origem grega, Angela significa 'anjo' ou 'mensageira de Deus'. Este nome carrega a ideia de pureza, bondade e espiritualidade, simbolizando uma pessoa com uma missão divina de espalhar amor e proteção. Angela é uma figura de cuidado e guia para os outros, sempre levando paz e luz ao redor.",nacionalidade:"Grega"},
+    {nome:"Millicent",significado:"Trabalho e força, protetora. De origem inglesa, Millicent significa 'trabalho' ou 'força'. Este nome é associado a uma pessoa com grande ética de trabalho e determinação. Também pode ser visto como símbolo de proteção, refletindo uma mulher forte, que defende aqueles que ama com coragem e perseverança.",nacionalidade:"Inglêsa"},
+    {nome:"Heloísa",significado:"Saudável, famosa em batalhas. De origem francesa, Heloísa significa 'saudável' e também é associada à fama em batalhas. Este nome simboliza uma pessoa com grande força, saúde e capacidade de enfrentar desafios com coragem. Heloísa é um nome que transmite vitalidade e um espírito de superação contínua.",nacionalidade:"Francêsa"},
+    {nome:"Solveig",significado:"Caminho do sol, casa da força. De origem sueca, Solveig significa 'caminho do sol' ou 'casa da força'. Este nome está associado à ideia de uma pessoa que irradia luz e energia positiva. Solveig é alguém com uma presença marcante, que inspira os outros a seguir o caminho da força e da renovação, sempre com coragem e determinação.",nacionalidade:"Sueca"},
+    {nome:"Belinda",significado:"Linda, bela serpente. De origem espanhola, Belinda significa 'linda' ou 'bela'. Este nome é associado a uma pessoa de grande beleza exterior e interior, com uma graça natural. A referência à serpente simboliza transformação e renovação, refletindo uma mulher com poder e sedução, além de uma beleza encantadora.",nacionalidade:"Espanhola"},
+    {nome:"Jasmin",significado:"Flor perfumada, jasmim. De origem persa, Jasmin significa 'flor perfumada'. Este nome é associado à fragrância suave e encantadora da flor de jasmim, simbolizando uma pessoa doce, gentil e adorável. Jasmin é um nome que evoca pureza, beleza e a suavidade do amor e da bondade natural.",nacionalidade:"Persa"},
+    {nome:"Catarina",significado:"Pura, íntegra. De origem portuguesa, Catarina significa 'pura' ou 'íntegra'. Este nome é associado a uma pessoa de caráter forte e honesto, que valoriza a virtude e a justiça. Catarina representa a pureza de espírito e a integridade moral, refletindo uma mulher que é respeitada e admirada por sua sinceridade e caráter.",nacionalidade:"Portuguêsa"},
+    {nome: "Paloma", significado: "Pomba da paz. De origem espanhola, o nome Paloma é associado à figura da pomba, símbolo universal da paz e da tranquilidade. Este nome evoca imagens de leveza, serenidade e harmonia, refletindo uma pessoa que transmite calma e compreensão em todas as situações.", nacionalidade: "Espanhola"},
+    {nome: "Liara", significado: "Portadora de luz, alegre. De origem brasileira, Liara significa 'portadora de luz', uma pessoa radiante e alegre. O nome transmite a ideia de alguém que ilumina a vida dos outros com sua energia positiva e radiante, sempre irradiando felicidade e otimismo.", nacionalidade: "Brasileira"},
+    {nome: "Janina", significado: "Deus é graciosa. De origem polonesa, Janina é uma variação do nome Johanna e significa 'Deus é graciosa'. Este nome reflete a graça divina e está associado a uma pessoa que carrega em si a bondade, a generosidade e o favor divino, irradiando doçura e serenidade.", nacionalidade: "Polonêsa"},
+    {nome: "Nur", significado: "Luz, iluminação. De origem árabe, Nur significa 'luz' ou 'iluminação'. Este nome simboliza a luz da sabedoria, a clareza e a orientação, sendo associado a uma pessoa que traz clareza para os outros e que possui um brilho interior que ilumina tudo ao seu redor.", nacionalidade: "Árabe"},
+    {nome: "Natasha", significado: "Nascimento, nascida no Natal. De origem russa, Natasha é uma forma diminutiva do nome Natalia, que significa 'nascimento' ou 'nascida no Natal'. Este nome é associado à celebração da vida e da alegria de nascer, simbolizando um novo começo ou uma nova esperança.", nacionalidade: "Russa"},
+    {nome: "Rosana", significado: "Cheia de rosas, graciosa. De origem espanhola, Rosana é um nome que significa 'cheia de rosas', um símbolo de beleza, suavidade e graça. Este nome é associado à feminilidade e à delicadeza das flores, refletindo uma pessoa doce, gentil e encantadora como uma rosa.", nacionalidade: "Espanhola"},
+    {nome: "Sumaya", significado: "Elevada, exaltada. De origem árabe, Sumaya significa 'elevada' ou 'exaltada'. Este nome está associado a uma pessoa de grande dignidade e nobreza, alguém que alcança grandes alturas em sua vida, seja física, mental ou espiritualmente.", nacionalidade: "Árabe"},
+    {nome: "Adriana", significado: "Vinda do mar Adriático. De origem italiana, Adriana significa 'vinda do mar Adriático'. Este nome está associado à beleza e serenidade do mar, simbolizando uma pessoa que é calma, profunda e cheia de graça, como as águas do mar Adriático.", nacionalidade: "Italiana"},
+    {nome: "Maíra", significado: "Senhora, mãe, luminosa. De origem tupi, Maíra é um nome que significa 'senhora', 'mãe' e 'luminosa'. Este nome é associado a uma pessoa com sabedoria e força, capaz de iluminar o caminho de outros com seu amor e sua liderança natural, sendo também uma figura maternal e acolhedora.", nacionalidade: "Tupi"},
+    {nome: "Éveline", significado: "Pequena ave, agradabilíssima. De origem francesa, Éveline significa 'pequena ave' e é associada à suavidade e graciosidade das aves. Este nome transmite a ideia de uma pessoa leve e encantadora, com uma personalidade adorável e gentil, como a elegância de um passarinho.", nacionalidade: "Francêsa"},
+    {nome: "Lorena", significado: "Da floresta de louros. De origem latina, Lorena significa 'da floresta de louros', e está associada à nobreza e à vitória, já que o louro é um símbolo de honra e conquistas. Este nome evoca imagens de força e majestade, refletindo uma pessoa com grande dignidade e prestígio.", nacionalidade: "Latina"},
+    {nome: "Ayla", significado: "Lua, brilho lunar e beleza. De origem turca, Ayla significa 'lua', refletindo a beleza do brilho lunar. Este nome é associado a uma pessoa que possui uma beleza serena e mística, com uma luz suave e acolhedora que lembra a tranquilidade e a calma da noite iluminada pela lua.", nacionalidade: "Turca"},
+    {nome: "Cléo", significado: "Glória, fama do pai. De origem grega, Cléo deriva de 'Kléos', que significa 'glória' ou 'fama'. Este nome é associado a alguém que leva em si o legado de seu pai, sendo uma pessoa de destaque, respeitada e admirada, carregando consigo um nome repleto de honra e prestígio.", nacionalidade: "Grega"},
+    {nome: "Zahra", significado: "Brilhante, flor, radiante. De origem árabe, Zahra significa 'flor' ou 'radiante', representando a beleza e o esplendor. É associado à ideia de uma pessoa luminosa, cheia de vida e brilho, trazendo leveza e uma energia positiva a todos ao seu redor.", nacionalidade: "Árabe"},
+    {nome: "Bruna", significado: "Morena, de pele escura. De origem germânica, Bruna está ligada à cor escura ou à pele morena, representando uma pessoa de aparência imponente e natural. Esse nome é associado a alguém de força e vigor, que transmite energia e personalidade marcante.", nacionalidade: "Germânica"},
+    {nome: "Celia", significado: "Celestial, dos céus. De origem latina, Celia significa 'celestial', associado ao céu e às estrelas. Este nome transmite a ideia de uma pessoa etérea, que traz consigo uma aura de serenidade e pureza, alguém com uma personalidade que reflete a grandeza e a paz do universo.", nacionalidade: "Latina"},
+    {nome: "Nayara", significado: "Cidade de milagres, admirável. De origem basca, Nayara tem conotação de algo grandioso e admirável, remetendo a uma cidade de milagres, algo quase divino. Este nome é associado a uma pessoa que irradia algo especial, sendo admirada e respeitada por sua força e determinação.", nacionalidade: "Basco"},
+    {nome: "Helga", significado: "Sagrada, abençoada. De origem alemã, Helga significa 'sagrada' ou 'abençoada', associado a uma pessoa com uma aura de pureza, harmonia e equilíbrio. Este nome reflete alguém que é iluminado, com uma forte conexão com o espiritual e que transmite um senso de paz e bênçãos a quem está por perto.", nacionalidade: "Alemã"},
+    {nome: "Kiara", significado: "Clara, iluminada. De origem italiana, Kiara significa 'clara', 'brilhante' ou 'iluminada', transmitindo a ideia de uma pessoa cheia de luz, com uma aura que brilha intensamente. Este nome é associado à clareza de espírito e à capacidade de iluminar os caminhos de outras pessoas com sabedoria e bondade.", nacionalidade: "Italiana"},
+    {nome: "Selina", significado: "Luz, lua, brilhante. De origem grega, Selina está ligada à lua e ao brilho. Este nome reflete uma pessoa radiante, serena e luminosa, associada a uma beleza suave e natural, como a luz da lua à noite, trazendo uma sensação de paz e tranquilidade aos outros.", nacionalidade: "Grega"},
+    {nome: "Raíssa", significado: "Facilitadora, adaptável. De origem grega, Raíssa significa 'facilitadora' ou 'adaptável', associado a uma pessoa que sabe se moldar às situações da vida e que é capaz de ajudar os outros a superarem desafios com facilidade e graça. Este nome é sinônimo de flexibilidade e inteligência emocional.", nacionalidade: "Grega"},
+    {nome: "Jana", significado: "Deus é graciosa. De origem variada, Jana é uma forma de 'Joana' que significa 'Deus é graciosa', refletindo a bondade e a graça divina em uma pessoa. Este nome é associado a uma mulher gentil, com um coração cheio de compaixão e amor, sendo agraciada pelo favor divino.", nacionalidade: "Diversas origens"},
+    {nome: "Amanda", significado: "Digna de ser amada. De origem portuguesa, Amanda significa 'digna de ser amada', associada a uma pessoa cuja presença desperta carinho, afeto e respeito. Este nome transmite a ideia de alguém que é naturalmente amável, encantadora e cheia de luz.", nacionalidade: "Portuguêsa"},
+    {nome: "Elka", significado: "Deus é juramento. De origem hebraica e polonesa, Elka significa 'Deus é juramento', transmitindo a ideia de alguém que é fiel, leal e devoto. Este nome está associado a uma pessoa com uma forte fé, cujas ações e palavras são sempre confiáveis e comprometidas com seus princípios.", nacionalidade: "Hebraica/Polonêsa"},
+    {nome: "Greice", significado: "Cheia de graça. De origem inglesa, Greice significa 'cheia de graça', sendo associado a uma pessoa graciosa, elegante e encantadora. Este nome reflete a suavidade, a beleza interior e a simpatia, com uma presença que transmite conforto e acolhimento aos outros.", nacionalidade: "Inglêsa"},
+    {nome: "Tatiane", significado: "Altamente louvada, rainha das fadas. De origem latina, Tatiane é um nome que significa 'altamente louvada', associado à imagem de uma figura majestosa e encantadora. Este nome transmite a ideia de uma pessoa que é digna de grandes elogios e que possui uma aura de realeza e poder natural.", nacionalidade: "Latina"},
+    {nome: "Leila", significado: "Noite, beleza noturna. De origem árabe, Leila significa 'noite', simbolizando a beleza e o mistério da noite. Este nome está associado a uma pessoa com uma presença misteriosa e encantadora, com uma beleza que brilha como a lua nas noites tranquilas e serenas.", nacionalidade: "Árabe"},
+    {nome: "Bethânia", significado: "Casa da aflição, casa dos figos. De origem hebraica, Bethânia significa 'casa da aflição' ou 'casa dos figos', associada a uma pessoa que traz consigo uma história de superação, força e espiritualidade, sendo uma fonte de conforto e esperança para aqueles que a cercam.", nacionalidade: "Hebraica"},
+    {nome: "Taís", significado: "Aquela que é admirada. De origem grega, Taís significa 'aquela que é admirada', transmitindo a ideia de uma pessoa que se destaca pela sua beleza, inteligência ou bondade, sendo altamente respeitada e admirada por todos ao seu redor.", nacionalidade: "Grega"},
+    {nome: "Nahla", significado: "O gole d’água fresca. De origem árabe, Nahla significa 'gole de água fresca', simbolizando a suavidade e refrescância. Este nome é associado a uma pessoa que traz alívio, frescor e paz, sendo uma fonte de consolo e revitalização para os outros.", nacionalidade: "Árabe"},
+    {nome: "Stella", significado: "Estrela, brilho celestial. De origem latina, Stella significa 'estrela', simbolizando brilho, luz e orientação. Este nome está associado a uma pessoa que é uma luz para os outros, sendo uma presença radiante que ilumina e guia as pessoas ao seu redor com sua sabedoria e calor." , nacionalidade: "Latina"},
+    {nome: "Maya", significado: "Ilusão, mãe, mágica. De origem espanhola, Maya tem várias interpretações, mas é frequentemente associada à ilusão ou à percepção errada da realidade, como na filosofia hindu. Também é vista como um nome mágico, associado a uma figura materna. Este nome transmite a ideia de alguém com um poder quase mágico sobre as pessoas e as situações.", nacionalidade: "Espanhola"},
+    {nome: "Karine", significado: "Pura, querida, amada. De origem francesa, Karine é uma variante de 'Carine', que significa 'pura'. Este nome está associado a uma pessoa doce, gentil e amável, que conquista os corações daqueles ao seu redor com sua pureza e carinho.", nacionalidade: "Francêsa"},
+    {nome: "Vera", significado: "A verdadeira; fé, primavera. De origem russa, Vera significa 'verdadeira' ou 'fé'. É um nome ligado à sinceridade, lealdade e à força de espírito. Este nome transmite a ideia de alguém que é genuíno e tem uma conexão profunda com a verdade e a fé.", nacionalidade: "Russa"},
+    {nome: "Isidora", significado: "Presente da deusa Ísis. De origem grega, Isidora significa 'presente de Ísis', a deusa egípcia da fertilidade e da maternidade. Este nome é associado à energia feminina, à criatividade e à generosidade. A pessoa com esse nome é vista como alguém que traz presentes espirituais e materiais aos outros.", nacionalidade: "Grega"},
+    {nome: "Daphne", significado: "Loureiro, vitória. De origem grega, Daphne significa 'loureiro', uma árvore associada à vitória e à honra na Grécia antiga. Este nome simboliza uma pessoa que busca o sucesso e a realização, sendo vista como uma vencedora e uma fonte de inspiração para os outros.", nacionalidade: "Grega"},
+    {nome: "Niara", significado: "Com propósito, determinada. De origem bantu, Niara significa 'com propósito', refletindo uma pessoa focada e determinada a alcançar seus objetivos. Este nome transmite força e vontade, uma pessoa que está pronta para lutar por seus sonhos e propósitos na vida.", nacionalidade: "Bantu"},
+    {nome: "Juliana", significado: "Juventude, cheia de juventude. De origem latina, Juliana vem de 'Iulianus', que significa 'pertencente à família de Júlio', associado à juventude e vitalidade. Este nome transmite a ideia de uma pessoa cheia de energia, entusiasmo pela vida e com um espírito jovem.", nacionalidade: "Latina"},
+    {nome: "Taynara", significado: "Flor nobre, destemida. De origem tupi, Taynara é um nome ligado à natureza e à força. A flor nobre simboliza a beleza e a delicadeza, enquanto 'destemida' reflete a coragem e a ousadia dessa pessoa. Este nome carrega em si uma combinação de beleza e força interior.", nacionalidade: "Tupi"},
+    {nome: "Ilona", significado: "Raio de luz, esplendorosa. De origem húngara, Ilona significa 'raio de luz', sendo associado a uma pessoa radiante, cheia de energia positiva. Este nome transmite a ideia de alguém que ilumina o ambiente e traz brilho e clareza para os outros.", nacionalidade: "Húngaro"},
+    {nome: "Lia", significado: "Delicada, portadora de boas notícias. De origem hebraica, Lia significa 'cansada', mas também é associada à 'delicadeza'. Este nome carrega a ideia de uma pessoa suave, gentil e que sempre traz boas notícias e esperança para quem a rodeia.", nacionalidade: "Hebraica"},
+    {nome: "Paola", significado: "Pequena, humilde. De origem italiana, Paola é a forma feminina de Paulo, que significa 'pequeno' ou 'humilde'. Este nome está associado à simplicidade, humildade e à suavidade de caráter, representando uma pessoa modesta e gentil.", nacionalidade: "Italiana"},
+    {nome: "Isabela", significado: "Consagrada a Deus. De origem espanhola e portuguesa, Isabela significa 'consagrada a Deus'. Este nome carrega em si a ideia de uma pessoa devota e comprometida com a espiritualidade, sendo considerada uma fonte de inspiração e fé para os outros.", nacionalidade: "Espanhola/Portuguêsa"},
+    {nome: "Oksana", significado: "Brasileira, estrangeira. De origem ucraniana, Oksana significa 'bela' e é frequentemente associado à ideia de uma mulher forte e destemida. Este nome transmite a ideia de alguém que tem raízes fortes, mas que também é vista como uma figura exótica e especial em sua cultura.", nacionalidade: "Ucraniano"},
+    {nome: "Nadine", significado: "Nadadora, cheia de esperança. De origem francesa, Nadine significa 'cheia de esperança' ou 'nadadora'. Este nome transmite a ideia de uma pessoa que traz consigo um espírito otimista, sempre esperando o melhor e capaz de superar qualquer desafio com a força da esperança.", nacionalidade: "Francêsa"},
+    {nome: "Samantha", significado: "Aquela que ouve. De origem aramaica, Samantha significa 'aquela que ouve'. Este nome está associado a uma pessoa atenta e cuidadosa, sempre disposta a ouvir e ajudar os outros com compreensão e empatia. É uma pessoa confiável, com um coração grande e generoso.", nacionalidade: "Aramaico"},
+    {nome: "Zelda", significado: "Feliz, guerreira cinzenta. De origem alemã, Zelda significa 'feliz' ou 'guerreira cinzenta'. Este nome transmite a ideia de uma pessoa forte, resiliente e com uma energia otimista, que sempre encontra felicidade mesmo nas situações mais desafiadoras.", nacionalidade: "Alemã"},
+    {nome: "Marion", significado: "Mãe do Senhor. De origem francesa, Marion é um nome que significa 'mãe do Senhor', associado à devoção, à fé e à pureza. Este nome transmite a ideia de uma pessoa que é profundamente espiritual e com uma natureza maternal e carinhosa, sempre pronta para cuidar e apoiar os outros.", nacionalidade: "Francêsa"},
+    {nome: "Eloá", significado: "Deus, divino. De origem brasileira, Eloá tem raízes hebraicas e significa 'Deus' ou 'divino'. Este nome é associado à luz e à espiritualidade, representando alguém com uma conexão profunda com o divino e uma presença luminosa que traz paz e serenidade.", nacionalidade: "Brasileira"},
+    {nome: "Lorraine", significado: "Da floresta de louros. De origem francesa, Lorraine significa 'floresta de louros'. O nome está associado à natureza e à beleza, refletindo uma pessoa forte, majestosa e com raízes profundas, simbolizando a paz e a serenidade das florestas e das árvores.", nacionalidade: "Francêsa"},
+    {nome: "Carolina", significado: "Doce, mulher forte. De origem latina, Carolina é uma forma feminina de Carlos e significa 'mulher forte'. Este nome é associado a uma pessoa doce, gentil e forte, que transmite segurança e coragem aos outros, além de ter uma grande presença de espírito.", nacionalidade: "Latina"},
+    {nome: "Ziza", significado: "Radiante, brilhante. De origem hebraica, Ziza significa 'radiante' ou 'brilhante'. Este nome transmite a ideia de uma pessoa que brilha com sua energia, inteligência e força interior, iluminando tudo ao seu redor com sua presença.", nacionalidade: "Hebraica"},
+    {nome: "Ágata", significado: "Boa, virtuosa. De origem grega, Ágata significa 'boa' ou 'virtuosa'. Este nome carrega o simbolismo da bondade e da virtude, representando uma pessoa de caráter nobre e generoso, sempre disposta a fazer o bem ao próximo e a viver com ética e dignidade.", nacionalidade: "Grega"},
+    {nome: "Elin", significado: "Tocha radiante. De origem sueca, Elin significa 'tocha radiante', simbolizando uma pessoa que traz luz e clareza para os outros, alguém com uma energia positiva e iluminada, capaz de dissipar as sombras e guiar as pessoas com sabedoria e amor.", nacionalidade: "Sueca"},
+    {nome: "Kalila", significado: "Querida, estimada. De origem árabe, Kalila significa 'querida' ou 'amada'. Este nome é associado a uma pessoa que é profundamente apreciada pelos outros, alguém que possui um coração generoso e uma presença encantadora que conquista todos ao seu redor.", nacionalidade: "Árabe"},
+    {nome: "Cassiana", significado: "Inspiração, aroma de canela. De origem latina, Cassiana tem conotações de inspiração e doçura, como o aroma da canela. Este nome transmite a ideia de uma pessoa que tem a capacidade de inspirar os outros e trazer conforto e calor com sua presença.", nacionalidade: "Latina"},
+    {nome: "Rochelle", significado: "Pequena rocha, força. De origem francesa, Rochelle significa 'pequena rocha'. Este nome simboliza uma pessoa firme, forte e resiliente, com uma personalidade sólida e segura, capaz de resistir às adversidades e se manter inabalável diante das dificuldades.", nacionalidade: "Francêsa"},
+    {nome: "Silvana", significado: "Proveniente da floresta. De origem portuguesa, Silvana significa 'proveniente da floresta'. Este nome é associado à natureza, à calma e à tranquilidade das florestas, simbolizando uma pessoa que se sente em harmonia com a natureza e tem uma energia serena e pacífica.", nacionalidade: "Portuguêsa"},
+    {nome: "Ivete", significado: "Arco, teixo, perseverança. De origem francesa, Ivete é associada ao simbolismo do arco e do teixo, plantas resistentes que representam perseverança e força. Este nome transmite a ideia de uma pessoa determinada, resiliente e com grande capacidade de superação.", nacionalidade: "Francêsa"},
+    {nome: "Candice", significado: "Brilhante, luz resplandecente. De origem inglesa, Candice significa 'brilhante' ou 'luz resplandecente'. Este nome é associado à energia positiva e à luz que uma pessoa irradia ao seu redor, simbolizando uma pessoa encantadora, cheia de vitalidade e com um brilho único.", nacionalidade: "Inglêsa"},
+    {nome: "Naomi", significado: "Agradável, aquela que encanta. De origem japonesa, Naomi significa 'agradável' ou 'aquela que encanta'. Este nome transmite a ideia de uma pessoa doce, encantadora e que tem a capacidade de atrair todos com sua personalidade afável e cativante.", nacionalidade: "Japonêsa"},
+    {nome: "Paula", significado: "Pequena, humilde. De origem espanhola, Paula é uma forma feminina de Paulo e significa 'pequena'. Este nome está associado a uma pessoa humilde, modesta e com uma natureza gentil e carinhosa, que se destaca pela sua simplicidade e pureza de caráter.", nacionalidade: "Espanhola"},
+    {nome: "Farah", significado: "Alegria, felicidade. De origem árabe, Farah significa 'alegria' ou 'felicidade'. Este nome simboliza uma pessoa que é naturalmente positiva e que traz felicidade e boas vibrações para todos ao seu redor. Ela é vista como alguém que irradia luz e contentamento.", nacionalidade: "Árabe"},
+    {nome: "Bianca", significado: "Branca, pura. De origem italiana, Bianca significa 'branca' ou 'pura'. Este nome é associado à pureza, simplicidade e à beleza natural, refletindo uma pessoa que é genuína, verdadeira e transparente em suas ações e intenções.", nacionalidade: "Italiana"},
+    {nome: "Edith", significado: "Rica em guerras, abençoada em combate. De origem alemã, Edith significa 'rica em guerras' ou 'abençoada em combate'. Este nome é associado a uma pessoa forte, corajosa e determinada, que é capaz de enfrentar desafios com bravura e superá-los com sabedoria e habilidade.", nacionalidade: "Alemã"},
+    {nome: "Amélie", significado: "Trabalhadora, diligente. De origem francesa, Amélie significa 'trabalhadora' ou 'diligente'. Este nome é associado a uma pessoa que é persistente, dedicada e responsável, com um forte senso de dever e uma ética de trabalho notável. Representa a dedicação e o empenho em alcançar seus objetivos.", nacionalidade: "Francêsa"},
+    {nome: "Olívia", significado: "Oliveira, símbolo de paz. De origem latina, Olívia significa 'oliveira', uma árvore que simboliza paz e harmonia. Este nome é associado à tranquilidade e à serenidade, refletindo uma pessoa calma e pacífica, que busca harmonia e equilíbrio nas relações e na vida.", nacionalidade: "Latina"},
+    {nome: "Matilde", significado: "Forte na batalha. De origem germânica, Matilde significa 'forte na batalha'. Este nome é associado a uma pessoa com grande força de caráter e determinação, capaz de superar qualquer desafio com coragem e perseverança, sendo um símbolo de bravura e resiliência.", nacionalidade: "Germânica"},
+    {nome: "Camila", significado: "Jovem cerimonialista, auxiliadora. De origem portuguesa, Camila significa 'jovem cerimonialista' ou 'auxiliadora'. Este nome carrega a ideia de uma pessoa que é sempre atenciosa e prestativa, com uma natureza gentil e disposta a ajudar os outros em suas necessidades, sendo uma verdadeira fonte de apoio.", nacionalidade: "Portuguêsa"},
+    {nome: "Carina", significado: "Amada, querida. De origem latina, Carina significa 'amada' ou 'querida'. Este nome é associado a uma pessoa que é profundamente amada e estimada por aqueles ao seu redor, com uma personalidade encantadora e calorosa que atrai a afeição e o carinho dos outros.", nacionalidade: "Latina"},
+    {nome: "Elis", significado: "Deus é plenitude. De origem grega, Elis significa 'Deus é plenitude'. Este nome é carregado de espiritualidade e simboliza uma pessoa que é uma expressão da completude divina, uma alma que vive em harmonia com a sabedoria e a paz que emana de sua fé.", nacionalidade: "Grega"},
+    {nome: "Beatriz", significado: "Aquela que traz felicidade. De origem portuguesa, Beatriz significa 'aquela que traz felicidade'. Este nome é associado a uma pessoa que espalha alegria e luz ao seu redor, alguém com uma personalidade radiante que é capaz de transformar os ambientes com sua felicidade e positividade.", nacionalidade: "Portuguêsa"},
+    {nome: "Luna", significado: "Lua, iluminada. De origem latina, Luna significa 'lua'. Este nome está diretamente ligado à luz e ao mistério da lua, simbolizando uma pessoa que traz clareza e iluminação, além de possuir uma aura misteriosa e encantadora, como o brilho da lua no céu noturno.", nacionalidade: "Latina"},
+    {nome: "Cíntia", significado: "Da montanha Cinto, da lua. De origem grega, Cíntia significa 'da montanha Cinto' e também está relacionado à lua. Este nome carrega a simbologia da beleza e da sabedoria lunar, representando uma pessoa com uma aura mística e encantadora, ligada à natureza e à força do cosmos.", nacionalidade: "Grega"},
+    {nome: "Angélica", significado: "Semelhante a anjo, angelical. De origem latina, Angélica significa 'semelhante a um anjo' ou 'angelical'. Este nome está associado a uma pessoa com uma natureza pura, gentil e espiritual, que irradia bondade e é vista como uma fonte de conforto e apoio para aqueles ao seu redor.", nacionalidade: "Latina"},
+    {nome: "Selma", significado: "Protetora divina. De origem germânica, Selma significa 'protetora divina'. Este nome é associado a uma pessoa com uma forte presença protetora, alguém que é vista como um guardião espiritual, cuidando e protegendo os outros com seu amor incondicional e sua força interior.", nacionalidade: "Germânica"},
+    {nome: "Júlia", significado: "Juventude, cheia de vigor. De origem latina, Júlia significa 'juventude'. Este nome carrega a ideia de uma pessoa cheia de energia, entusiasmo e vitalidade, simbolizando a alegria de viver e a força do espírito jovem, sempre com disposição para crescer e aprender.", nacionalidade: "Latina"},
+    {nome: "Érika", significado: "Eterna, poderosa. De origem germânica, Érika significa 'eterna' ou 'poderosa'. Este nome é associado a uma pessoa com grande força de vontade e determinação, que possui uma natureza imbatível e está sempre em busca de sucesso e realização pessoal, com uma grande capacidade de liderança e perseverança.", nacionalidade: "Germânica"},
+    {nome: "Mira", significado: "Admirável, paz, destino. De origem russa, Mira significa 'admirável' ou 'paz'. Este nome transmite a ideia de uma pessoa pacífica, mas ao mesmo tempo admirada e respeitada por sua sabedoria e serenidade. Mira também pode simbolizar a harmonia com o destino e a aceitação da vida como ela é.", nacionalidade: "Russa"},
+    {nome: "Carole", significado: "Canção, alegria. De origem francesa, Carole significa 'canção' ou 'alegria'. Este nome está associado à música e à felicidade, simbolizando uma pessoa alegre e vibrante, que espalha alegria por onde passa, como uma melodia doce e contagiante.", nacionalidade: "Francêsa"},
+    {nome: "Gabriela", significado: "Mulher de Deus, força de Deus. De origem portuguesa, Gabriela significa 'mulher de Deus' ou 'força de Deus'. Este nome carrega uma conotação espiritual poderosa, simbolizando uma pessoa com uma conexão divina forte, capaz de agir com a força e a coragem que emana de sua fé e devoção.", nacionalidade: "Portuguêsa"},
+    {nome:"Rute", significado:"Companheira, amiga leal. De origem hebraica, Rute significa 'companheira' ou 'amiga leal'. Este nome é associado a uma pessoa confiável, fiel e dedicada às relações que cultiva, sendo uma verdadeira amiga, companheira nas dificuldades da vida. Na Bíblia, Rute é conhecida por sua lealdade à sua sogra, o que simboliza o significado do nome.", nacionalidade:"Hebraica"},
+    {nome:"Marília", significado:"Pérola reluzente. De origem portuguesa, Marília significa 'pérola reluzente'. Este nome é associado a uma pessoa valiosa e rara, como uma pérola, que brilha com seu próprio encanto e singularidade. Representa também uma beleza pura e brilhante, cheia de sofisticação e gracejo.", nacionalidade:"Portuguêsa"},
+    {nome:"Dóris", significado:"Dádiva, presente magnificente. De origem grega, Dóris significa 'dádiva' ou 'presente magnificente'. Este nome carrega a ideia de alguém que é um presente para os outros, alguém generoso e precioso em sua natureza. Representa uma pessoa que traz alegria e valor aos outros através de sua presença e ações.", nacionalidade:"Grega"},
+    {nome:"Penélope", significado:"A que tece com fidelidade. De origem grega, Penélope significa 'a que tece com fidelidade'. Este nome é associado à paciência e à fidelidade, simbolizando alguém que é dedicado e constante, assim como Penélope, personagem da mitologia grega, que aguardava com fidelidade o retorno de seu marido, Odisseu.", nacionalidade:"Grega"},
+    {nome:"Clarissa", significado:"Ilustre, brilhante. De origem latina, Clarissa significa 'ilustre' ou 'brilhante'. Este nome está associado a uma pessoa de grande destaque, alguém que irradia luz e sabedoria em sua vida. Clarissa é uma pessoa respeitada, de caráter ilustre, e cujo brilho é notado por todos ao seu redor.", nacionalidade:"Latina"},
+    {nome:"Mara", significado:"Amargura, amarga. De origem hebraica, Mara significa 'amargura' ou 'amarga'. Este nome é associado a uma pessoa que pode ter vivido muitas dificuldades ou desafios, mas que, mesmo em momentos de dor, mantém a força para seguir em frente. É um nome que traz à tona a resiliência diante das adversidades da vida.", nacionalidade:"Hebraica"},
+    {nome:"Larissa", significado:"Cheia de alegria, natural de Larissa. De origem grega, Larissa significa 'cheia de alegria' ou 'natural de Larissa', uma cidade grega. Este nome é associado a uma pessoa com uma personalidade vibrante e cheia de vida, que irradia felicidade e tem o poder de contagiar os outros com sua energia positiva.", nacionalidade:"Grega"},
+    {nome:"Malika", significado:"Rainha, majestade. De origem árabe, Malika significa 'rainha' ou 'majestade'. Este nome carrega uma conotação de grandeza, poder e elegância, simbolizando uma mulher digna de respeito e admiração, que exerce autoridade e liderança com graça e sabedoria.", nacionalidade:"Árabe"},
+    {nome:"Verônica", significado:"Portadora da vitória. De origem latina, Verônica significa 'portadora da vitória'. Este nome está associado a uma pessoa que é vitoriosa, que conquista seus objetivos com determinação e perseverança. A figura de Santa Verônica, que ajudou Jesus, também traz um simbolismo de coragem e bondade.", nacionalidade:"Latina"},
+    {nome:"Milene", significado:"Amável, graciosa. De origem portuguesa, Milene significa 'amável' ou 'graciosa'. Este nome está associado a uma pessoa gentil e doce, com um charme natural que encanta a todos ao seu redor. Milene representa a elegância e a beleza interior que se reflete em suas ações e comportamento.", nacionalidade:"Portuguêsa"},
+    {nome:"Ivana", significado:"Deus é graciosa. De origem russa, Ivana significa 'Deus é graciosa'. Este nome transmite a ideia de uma pessoa abençoada por Deus, alguém com uma natureza graciosa e cheia de bondade. Ivana também é um nome que carrega a presença de uma pessoa que inspira e cativa pelo seu caráter e sua leveza.", nacionalidade:"Russa"},
+    {nome:"Esme", significado:"Amada, estimada. De origem francesa, Esme significa 'amada' ou 'estimada'. Este nome está associado a uma pessoa que é profundamente querida pelos outros, alguém que conquista o coração das pessoas ao seu redor com sua personalidade calorosa e sua forma de ser atenciosa e generosa.", nacionalidade:"Francêsa"},
+    {nome:"Tiffany", significado:"Aparição de Deus. De origem inglesa, Tiffany significa 'aparição de Deus'. Este nome é associado a uma pessoa que traz luz e brilho, assim como uma manifestação divina. Tiffany também é um nome elegante e sofisticado, muitas vezes associado a uma pessoa com uma personalidade radiante e encantadora.", nacionalidade:"Inglêsa"},
+    {nome:"Vânia", significado:"Deus é gracioso. De origem russa, Vânia significa 'Deus é graciosa'. Este nome traz consigo a ideia de uma pessoa amada e abençoada, que reflete a bondade divina em sua maneira de ser, uma pessoa com uma natureza carinhosa e generosa, que irradia graça e serenidade.", nacionalidade:"Russa"},
+    {nome:"Moana", significado:"Oceano, mar confortável. De origem havaiana, Moana significa 'oceano' ou 'mar confortável'. Este nome é associado à serenidade e à imensidão do oceano, simbolizando uma pessoa com uma alma tranquila e forte, capaz de navegar pelas dificuldades da vida com coragem e harmonia.", nacionalidade:"Havaiana"},
+    {nome:"Egle", significado:"A reluzente, esplendorosa. De origem lituana, Egle significa 'a reluzente' ou 'esplendorosa'. Este nome é associado a uma pessoa que brilha com intensidade, irradiando luz e beleza, como uma estrela. Egle carrega um simbolismo de graça e radiante energia que encanta todos ao seu redor.", nacionalidade:"Lituana"},
+    {nome:"Rosa", significado:"A flor, beleza e delicadeza. De origem latina, Rosa significa 'flor' ou 'beleza e delicadeza'. Este nome está associado a uma pessoa com uma beleza suave e graciosa, que traz alegria e frescor ao ambiente, como uma flor que desabrocha e exala perfume.", nacionalidade:"Latina"},
+    {nome:"Débora", significado:"Abelha, trabalhadora. De origem hebraica, Débora significa 'abelha' ou 'trabalhadora'. Este nome está relacionado a uma pessoa diligente, incansável em seu trabalho e capaz de realizar grandes feitos com dedicação, tal como uma abelha que trabalha arduamente para o bem coletivo.", nacionalidade:"Hebraica"},
+    {nome:"Katya", significado:"Pura, casta. De origem russa, Katya significa 'pura' ou 'casta'. Este nome está associado a uma pessoa de grande pureza e virtude, alguém com um caráter imaculado e uma natureza que irradia bondade e serenidade.", nacionalidade:"Russa"},
+    {nome:"Havva", significado:"A que vive, viva. De origem turca, Havva significa 'a que vive' ou 'viva'. Este nome carrega o simbolismo da vitalidade e da energia de uma pessoa que tem uma presença vibrante e cheia de vida, sempre pronta para trazer entusiasmo e alegria aos outros.", nacionalidade:"Turca"},
+    {nome:"Brígida", significado:"Forte, poderosa. De origem irlandesa, Brígida significa 'forte' ou 'poderosa'. Este nome está associado a uma mulher destemida, com grande força interior, capaz de superar desafios e liderar com coragem, como a deusa Brígida, que simboliza a força e a sabedoria.", nacionalidade:"Irlandêsa"},
+    {nome:"Sonia", significado:"Sabedoria, sábia. De origem russa, Sonia significa 'sabedoria' ou 'sábia'. Este nome está associado a uma pessoa inteligente, reflexiva e perspicaz, que é capaz de tomar decisões sensatas e tem grande habilidade em compreender a vida e os outros.", nacionalidade:"Russa"},
+    {nome:"Victoire", significado:"Vitória, conquistadora. De origem francesa, Victoire significa 'vitória' ou 'conquistadora'. Este nome simboliza uma pessoa vitoriosa, alguém que conquista seus objetivos com determinação e habilidade, superando obstáculos com coragem e força de vontade.", nacionalidade:"Francêsa"},
+    {nome:"Clementina", significado:"Gentil, misericordiosa. De origem latina, Clementina significa 'gentil' ou 'misericordiosa'. Este nome está associado a uma pessoa de caráter suave e bondoso, alguém que tem uma natureza generosa e compassiva, e que faz o bem com humildade e ternura.", nacionalidade:"Latina"},
+    {nome:"Sahar", significado:"Alvorada, início do dia. De origem árabe, Sahar significa 'alvorada' ou 'início do dia'. Este nome é associado ao renascimento e à renovação, como o amanhecer que marca um novo começo. Ele simboliza uma pessoa que traz esperança e luz para os outros.", nacionalidade:"Árabe"},
+    {nome:"Laurette", significado:"Laurelino, coroada de louros. De origem francesa, Laurette significa 'laurelino' ou 'coroada de louros'. Este nome está associado a uma pessoa que foi vitoriosa ou premiada, representando uma conquista ou honra, como alguém que recebe uma coroa de louros por suas realizações.", nacionalidade:"Francêsa"},
+    {nome:"Estela", significado:"Estrela, luminosa. De origem latina, Estela significa 'estrela' ou 'luminosa'. Este nome é associado a uma pessoa brilhante, cheia de luz e esperança, como uma estrela que ilumina a escuridão e guia os outros com seu brilho e sabedoria.", nacionalidade:"Latina"},
+    {nome:"Malu", significado:"Paz, famosa guerreira. De origem brasileira, Malu significa 'paz' ou 'famosa guerreira'. Este nome está associado a uma pessoa forte e resoluta, mas que também traz harmonia e serenidade. Malu representa a combinação de força e delicadeza, uma guerreira pacífica.", nacionalidade:"Brasileira"},
+    {nome:"Ariana", significado:"Puríssima, belíssima. De origem grega, Ariana significa 'puríssima' ou 'belíssima'. Este nome está associado a uma pessoa de grande beleza e pureza, tanto externa quanto interna. Ariana transmite uma aura de elegância e virtude, sendo admirada por sua natureza pura e encantadora.", nacionalidade:"Grega"},
+    {nome:"Cássia", significado:"Canelinha, agradável aroma. De origem grega, Cássia significa 'canelinha' ou 'agradável aroma'. Este nome está relacionado ao perfume doce e refrescante da canela, simbolizando uma pessoa doce, acolhedora e de grande atratividade. Cássia é associada a uma energia suave e envolvente.", nacionalidade:"Grega"},
+    {nome:"Janete", significado:"Deus é graciosa. De origem francesa, Janete significa 'Deus é graciosa'. Este nome está associado a uma pessoa que é abençoada e que reflete a graça divina em suas ações e caráter, sendo uma fonte de bondade e amor para os outros.", nacionalidade:"Francêsa"},
+    {nome:"Raquel", significado:"Ovelha, doce como a lã. De origem hebraica, Raquel significa 'ovelha' ou 'doce como a lã'. Este nome simboliza uma pessoa gentil e terno, com uma natureza amável e carinhosa. Raquel é associada à delicadeza e à suavidade, representando a serenidade e a pureza." , nacionalidade:"Hebraica"},
+    {nome:"Nina", significado:"Pequena menina, sonhadora. De origem espanhola, Nina significa 'pequena menina' ou 'sonhadora'. Este nome está relacionado a uma pessoa jovem e inocente, com grande imaginação e criatividade. Nina carrega o simbolismo da suavidade e da pureza, representando uma alma sonhadora e cheia de potencial.", nacionalidade:"Espanhola"},
+    {nome:"Agnieszka", significado:"Pura, casta. De origem polonesa, Agnieszka significa 'pura' ou 'casta'. Este nome é associado a uma pessoa de grande virtude e integridade, alguém que é imaculada em seus pensamentos, ações e caráter, sendo um símbolo de pureza e devoção." , nacionalidade:"Polonêsa"},
+    {nome:"Zelina", significado:"Brilhante, brilhante como o sol. De origem francesa, Zelina é um nome associado à luz intensa, simbolizando a claridade e a radiação do sol. Esse nome está relacionado a uma pessoa que irradia energia positiva e que ilumina o caminho de outras pessoas com sua presença.", nacionalidade:"Francêsa"},
+    {nome:"Verena", significado:"Verdadeira, sincera. De origem alemã, Verena significa 'verdadeira' ou 'sincera'. Este nome é associado a uma pessoa honesta, genuína e confiável, alguém que sempre fala a verdade e é fiel aos seus princípios. Verena é uma pessoa de caráter firme e inquebrantável.", nacionalidade:"Alemã"},
+    {nome:"Solange", significado:"Solemnidade, digna. De origem francesa, Solange significa 'solemnidade' ou 'digna'. Este nome está associado a uma pessoa que possui uma grande presença, é respeitada por sua dignidade e transmite uma aura de respeito e honra. Solange é uma pessoa que possui grande força moral e caráter.", nacionalidade:"Francêsa"},
+    {nome:"Dulcineia", significado:"Doce, cheia de doçura. De origem portuguesa, Dulcineia significa 'doce' ou 'cheia de doçura'. Este nome está relacionado a uma pessoa amável, gentil e carinhosa, que cativa todos ao seu redor com sua bondade e espírito acolhedor.", nacionalidade:"Portuguêsa"},
+    {nome:"Jazmin", significado:"Flor perfumada, jasmim. De origem espanhola, Jazmin significa 'flor perfumada' ou 'jasmim'. Este nome é associado à suavidade e à beleza da flor de jasmim, simbolizando uma pessoa delicada, refinada e com uma presença envolvente e encantadora.", nacionalidade:"Espanhola"},
+    {nome:"Rosângela", significado:"Rosa angelical. De origem portuguesa, Rosângela significa 'rosa angelical'. Este nome está relacionado a uma pessoa que é pura e graciosa, como uma rosa, e que possui uma natureza angelical, irradiando bondade e luz para os outros.", nacionalidade:"Portuguêsa"},
+    {nome:"Mariana", significado:"Combinação de Maria e Ana. De origem portuguesa, Mariana é a junção de Maria e Ana, e significa 'combinação de Maria e Ana'. Este nome está associado a uma pessoa com grandes virtudes e bondade, além de simbolizar a combinação das qualidades de ambas as figuras bíblicas.", nacionalidade:"Portuguêsa"},
+    {nome:"Saskia", significado:"Protetora do povo, valquíria. De origem alemã, Saskia significa 'protetora do povo' ou 'valquíria'. Este nome é associado a uma mulher forte e guerreira, que protege os mais vulneráveis e combate as injustiças com coragem e determinação.", nacionalidade:"Alemã"},
+    {nome:"Hester", significado:"Estrela, fortaleza. De origem hebraica, Hester significa 'estrela' ou 'fortaleza'. Este nome é associado a uma pessoa que brilha com força, que é um farol de inspiração para os outros, ao mesmo tempo em que é uma fortaleza de coragem e resiliência.", nacionalidade:"Hebraica"},
+    {nome:"Lídia", significado:"Natural da Lídia; melodiosa. De origem grega, Lídia significa 'natural da Lídia' ou 'melodiosa'. Este nome está relacionado a uma pessoa com uma natureza harmoniosa, cujo espírito suave e melódico encanta aqueles ao seu redor.", nacionalidade:"Grega"},
+    {nome:"Keila", significado:"Fortaleza, sólida. De origem hebraica, Keila significa 'fortaleza' ou 'sólida'. Este nome está relacionado a uma pessoa de caráter firme e inquebrantável, alguém que é uma base forte para os outros e que nunca vacila em tempos de dificuldades.", nacionalidade:"Hebraica"},
+    {nome:"Bárbara", significado:"Estrangeira, aquela que vem de fora. De origem grega e portuguesa, Bárbara significa 'estrangeira' ou 'aquela que vem de fora'. Este nome é associado a uma pessoa que se destaca por sua originalidade e autenticidade, alguém que, embora de fora, traz uma nova perspectiva e valor aos ambientes onde está.", nacionalidade:"Grega/Portuguêsa"},
+    {nome:"Serena", significado:"Serena, calma. De origem latina, Serena significa 'serena' ou 'calma'. Este nome está relacionado a uma pessoa tranquila, com uma paz interior que irradia para os outros. Serena é alguém que é capaz de manter a calma em qualquer situação, trazendo serenidade e estabilidade a seu redor.", nacionalidade:"Latina"},
+    {nome:"Simone", significado:"Aquela que ouve, atenção. De origem francesa, Simone significa 'aquela que ouve' ou 'atenção'. Este nome é associado a uma pessoa atenta aos outros, que ouve com o coração e tem grande empatia pelas necessidades e sentimentos dos outros.", nacionalidade:"Francêsa"},
+    {nome:"Graziela", significado:"Cheia de graça, graciosa. De origem italiana, Graziela significa 'cheia de graça' ou 'graciosa'. Este nome está associado a uma pessoa com uma natureza encantadora, que tem um charme natural e sempre age com elegância e sofisticação.", nacionalidade:"Italiana"},
+    {nome:"Judite", significado:"Mulher de Judá, louvada. De origem portuguesa, Judite significa 'mulher de Judá' ou 'louvada'. Este nome está relacionado a uma mulher de grande fé e devoção, alguém que é respeitada e admirada por sua força, coragem e lealdade.", nacionalidade:"Portuguêsa"},
+    {nome:"Andreia", significado:"Corajosa, valente. De origem portuguesa, Andreia significa 'corajosa' ou 'valente'. Este nome é associado a uma pessoa com grande força de caráter, alguém que enfrenta os desafios com coragem e determinação, sem se deixar abalar pelas adversidades.", nacionalidade:"Portuguêsa"},
+    {nome:"Helene", significado:"Radiante, tocha. De origem francesa, Helene significa 'radiante' ou 'tocha'. Este nome está relacionado a uma pessoa que é como uma luz brilhante, capaz de iluminar os caminhos dos outros e transmitir sabedoria e conhecimento.", nacionalidade:"Francêsa"},
+    {nome:"Wanessa", significado:"Borboleta, maravilhosa. De origem brasileira, Wanessa significa 'borboleta' ou 'maravilhosa'. Este nome está relacionado a uma pessoa graciosa e cheia de beleza, como uma borboleta que voa livremente e com suavidade, transmitindo leveza e harmonia.", nacionalidade:"Brasileira"},
+    {nome:"Rebecca", significado:"Unida, aquela que une. De origem hebraica, Rebecca significa 'unida' ou 'aquela que une'. Este nome simboliza uma pessoa que é capaz de conectar os outros, de estabelecer vínculos e promover harmonia entre as pessoas.", nacionalidade:"Hebraica"},
+    {nome: "Shania", significado: "Do meu caminho, em inglês significa alguém que segue seu próprio caminho com determinação e confiança. É um nome associado a uma forte personalidade, com ênfase em independência e autoafirmação.", nacionalidade: "Inglêsa"},
+    {nome: "Manon", significado: "Cheia de graça, graciosa. Manon é uma variação de Marie e é um nome francês que simboliza uma mulher com graça, elegância e charme natural, capaz de conquistar o coração de todos ao seu redor.", nacionalidade: "Francêsa"},
+    {nome: "Paulina", significado: "Pequena, modesta. De origem espanhola, Paulina simboliza alguém com humildade e simplicidade, e é geralmente associada a uma mulher que, apesar de ser modesta, possui uma grande força interior e coragem.", nacionalidade: "Espanhola"},
+    {nome: "Anja", significado: "Graciosa, cheia de graça. Anja é um nome de origem alemã, frequentemente associado à beleza, gentileza e charme. Uma pessoa com esse nome possui um jeito cativante e encantador, transmitindo suavidade e doçura.", nacionalidade: "Alemã"},
+    {nome: "Yvette", significado: "Teixo, arqueira. De origem francesa, Yvette é associado à força e determinação. O teixo, planta resistente, simboliza a longevidade e força, enquanto 'arqueira' faz referência a alguém que tem uma habilidade ou talento direcionado e preciso.", nacionalidade: "Francêsa"},
+    {nome: "Sabrina", significado: "Dama do rio Severn, princesa. Sabrina é um nome de origem celta e está associado ao rio Severn, no Reino Unido. O nome carrega consigo a imagem de uma mulher nobre, com características de graça e liderança.", nacionalidade: "Celta"},
+    {nome: "Émilie", significado: "Trabalhadora, rival. De origem francesa, Émilie deriva de 'Aemilius', que significa 'rival'. Está relacionado com alguém que busca a excelência através do esforço e dedicação, alguém com um espírito competitivo e focado no sucesso.", nacionalidade: "Francêsa"},
+    {nome: "Melanie", significado: "Negra, escura. De origem francesa, Melanie vem do grego 'melas', que significa 'negro' ou 'escuro'. Esse nome é associado à profundidade, mistério e beleza da escuridão, simbolizando uma alma forte e introspectiva.", nacionalidade: "Francêsa"},
+    {nome: "Gilda", significado: "Sacrificada, de valor. De origem germânica, Gilda é associada à ideia de uma mulher nobre e corajosa, que faz sacrifícios por algo maior, possuindo grande valor e dignidade em suas ações e escolhas.", nacionalidade: "Germânica"},
+    {nome: "Laís", significado: "Leoa, cheia de energia. Laís é um nome de origem grega que está associado à força, coragem e proteção. Uma pessoa com esse nome é vista como alguém que possui uma personalidade forte e que tem grande energia e disposição para enfrentar desafios.", nacionalidade: "Grega"},
+    {nome: "Odete", significado: "Riqueza, fortuna, prosperidade. De origem francesa, Odete significa prosperidade e riqueza, sendo um nome associado ao sucesso e à sorte, representando uma pessoa com grande potencial para conquistar o que deseja.", nacionalidade: "Francêsa"},
+    {nome: "Odile", significado: "Rica em meios, próspera. Odile é um nome francês que simboliza riqueza e prosperidade, associado a uma pessoa que está destinada ao sucesso e a conquistar a abundância em sua vida de diversas formas.", nacionalidade: "Francêsa"},
+    {nome: "Marilena", significado: "Combinação de Maria e Helena, esplendorosa. De origem grega, Marilena é a junção dos nomes Maria e Helena, e representa uma pessoa iluminada, cheia de luz e esplendor, com qualidades de sabedoria e grande virtude.", nacionalidade: "Grega"},
+    {nome: "Naiara", significado: "Lugar de milagres, milagreira. De origem espanhola, Naiara significa 'lugar de milagres' ou 'milagreira'. Este nome é associado a uma mulher com grande poder espiritual e um papel importante em transformar e iluminar a vida dos outros.", nacionalidade: "Espanhola"},
+    {nome: "Clotilde", significado: "Famosa na batalha. De origem germânica, Clotilde significa 'famosa na batalha'. Este nome é associado a uma mulher guerreira, alguém que possui grande coragem e destreza, sendo uma líder nata em momentos de desafio.", nacionalidade: "Germânica"},
+    {nome: "Eulália", significado: "Bem-falante, eloquente. De origem grega, Eulália significa 'bem-falante'. Este nome é associado a uma pessoa com grande capacidade de comunicação, alguém eloquente e que possui o dom da persuasão e do discurso cativante.", nacionalidade: "Grega"},
+    {nome: "Vicenta", significado: "Vencedora, triunfadora. De origem espanhola, Vicenta é um nome associado à vitória, representando uma pessoa que sempre vence, que é determinada e resiliente diante das dificuldades, alcançando o sucesso em todas as áreas da vida.", nacionalidade: "Espanhola"},
+    {nome: "Aurea", significado: "Dourada, radiante. De origem latina, Aurea significa 'dourada' ou 'radiante'. Este nome é associado a uma pessoa que irradia luz e energia positiva, alguém que é como o sol, sempre iluminando e aquecendo os outros com sua presença.", nacionalidade: "Latina"},
+    {nome: "Zuleica", significado: "Brilhante, encantadora. De origem árabe, Zuleica significa 'brilhante' ou 'encantadora'. Este nome está relacionado a uma pessoa que tem uma personalidade cativante e uma beleza luminosa, que chama atenção e encanta a todos ao seu redor.", nacionalidade: "Árabe"},
+    {nome: "Célia", significado: "Celestial, dos céus. De origem portuguesa, Célia significa 'celestial' ou 'dos céus'. Este nome está relacionado a uma pessoa que é graciosa e divina, com uma presença etérea que transmite paz e serenidade, como se fosse uma benção enviada dos céus.", nacionalidade: "Portuguêsa"},
+    {nome: "Marina", significado: "Do mar, marinha. Marina é um nome de origem latina que remete à mulher associada ao mar. Está relacionado com tranquilidade, serenidade e beleza, representando alguém com uma personalidade suave e profunda como as águas do oceano.", nacionalidade: "Latina"},
+    {nome: "Sílvia", significado: "Da floresta, selvagem. De origem latina, Silvia significa 'da floresta' ou 'selvagem'. Este nome está intimamente ligado à natureza, simbolizando uma pessoa forte, conectada ao mundo natural e com um espírito livre e indomável.", nacionalidade: "Portuguêsa"},
+    {nome: "Nayra", significado: "Aquela que tem olhos grandes. De origem guanche, Nayra significa 'aquela que tem olhos grandes'. Este nome é associado a uma pessoa de grande visão, com uma habilidade única para perceber o mundo de uma maneira mais profunda e sensível.", nacionalidade: "Guanche"},
+    {nome: "Natalia", significado: "Nascimento, nascida no Natal. De origem russa, Natalia significa 'nascimento', geralmente associado a alguém nascido no Natal. O nome evoca pureza e alegria, simbolizando um novo começo, luz e a celebração da vida.", nacionalidade: "Russa"},
+    {nome: "Cassandra", significado: "Brilho do homem, profetisa. Cassandra é de origem grega e significa 'brilho do homem'. É também o nome de uma personagem da mitologia grega, conhecida por sua habilidade profética. O nome remete à sabedoria e à visão clara do futuro.", nacionalidade: "Grega"},
+    {nome: "Fabiola", significado: "Cultivadora de favas. Fabiola é de origem latina e deriva de 'faba', que significa fava. Este nome está associado ao trabalho árduo, à simplicidade e ao cuidado com as pequenas coisas da vida, refletindo uma pessoa prática e dedicada.", nacionalidade: "Latina"},
+    {nome: "Flávia", significado: "Dourada, cabelos louros. Flávia é de origem latina e significa 'dourada'. Este nome é frequentemente associado a pessoas com cabelos loiros e uma personalidade radiante e calorosa, refletindo luz e brilho em tudo o que fazem.", nacionalidade: "Portuguêsa"},
+    {nome: "Heidi", significado: "De linhagem nobre. Heidi é de origem alemã e significa 'de linhagem nobre'. Este nome é associado à simplicidade e pureza, simbolizando uma pessoa com um grande caráter e uma atitude positiva perante a vida.", nacionalidade: "Alemã"},
+    {nome: "Coline", significado: "Vitória do povo. Coline tem origem francesa e significa 'vitória do povo'. O nome é associado a uma pessoa vitoriosa e de grande caráter, simbolizando liderança e sucesso na superação de desafios.", nacionalidade: "Francêsa"},
+    {nome: "Jade", significado: "Pedra preciosa, pureza. De origem espanhola, Jade significa 'pedra preciosa'. Este nome é associado à beleza e à sabedoria, refletindo a raridade e o valor de uma pessoa que possui uma beleza única e uma alma pura.", nacionalidade: "Espanhola"},
+    {nome: "Naira", significado: "Senhora, mulher poderosa. Naira é de origem tupi e significa 'senhora'. Este nome é associado a uma mulher poderosa, com grande presença e capacidade de liderança, simbolizando força e determinação.", nacionalidade: "Tupi"},
+    {nome: "Jocasta", significado: "Lua brilhante. De origem grega, Jocasta significa 'lua brilhante'. Este nome está associado à luz da lua e simboliza a beleza, mistério e sabedoria, refletindo uma personalidade iluminada e cheia de encantos.", nacionalidade: "Grega"},
+    {nome: "Adélia", significado: "Nobre, graciosa. Adélia tem origem latina e significa 'nobre'. O nome está relacionado a uma mulher com grande dignidade e charme, que é admirada por sua nobreza e caráter íntegro, sempre agindo com graça e elegância.", nacionalidade: "Portuguêsa"},
+    {nome: "Rita", significado: "Pérola, margarida. Rita é de origem italiana e tem significado de 'pérola'. Este nome está associado à beleza pura e simples, simbolizando a delicadeza e a beleza interna, como uma pérola rara e preciosa.", nacionalidade: "Italiana"},
+    {nome: "Petra", significado: "Pedra, roca firme. Petra é de origem grega e significa 'pedra'. Este nome está associado à estabilidade, força e resistência, refletindo uma personalidade firme e confiável, como uma rocha que não se abala perante os desafios.", nacionalidade: "Grega"},
+    {nome: "Celeste", significado: "Celestial, do céu. Celeste é de origem latina e significa 'celestial'. Este nome evoca a ideia de uma pessoa com uma alma pura, serena e iluminada, trazendo uma sensação de paz e tranquilidade aos que a rodeiam.", nacionalidade: "Latina"},
+    {nome: "Samara", significado: "Protegida por Deus, guardiã. Samara é de origem hebraica e significa 'protegida por Deus'. Este nome é associado a uma mulher forte, segura e protetora, como uma guardiã que cuida de tudo ao seu redor com sabedoria e carinho.", nacionalidade: "Hebraica"},
+    {nome: "Loreta", significado: "Coroada de louros, vitoriosa. Loreta tem origem italiana e significa 'coroada de louros'. Este nome remete a uma mulher vitoriosa, que conquistou muitas batalhas na vida, refletindo sucesso, honra e uma personalidade cheia de conquistas.", nacionalidade: "Italiana"},
+    {nome: "Zainab", significado: "Beleza de pai, flor fragrante. Zainab tem origem árabe e significa 'beleza de pai'. É associado a uma flor preciosa e fragrante, simbolizando graça, beleza e um caráter adorável. É um nome que reflete feminilidade e respeito.", nacionalidade: "Árabe"},
+    {nome: "Dominique", significado: "Pertencente ao Senhor. Dominique é de origem francesa e significa 'pertencente ao Senhor'. Este nome tem conotações de dedicação religiosa e uma conexão divina, refletindo uma pessoa com grande fé e compromisso espiritual.", nacionalidade: "Francêsa"},
+    {nome: "Svetlana", significado: "Luminosa, cheia de luz. Svetlana é de origem russa e significa 'luminosa'. O nome está associado a uma pessoa que brilha intensamente, seja por sua beleza interior ou exterior, irradiando luz e calor onde quer que vá.", nacionalidade: "Russa"},
+    {nome: "Gabrielle", significado: "Mulher de Deus, força de Deus. Gabrielle tem origem francesa e significa 'mulher de Deus'. O nome está associado a alguém com grande força e caráter, inspirando aqueles ao seu redor com uma fé inabalável e uma vida dedicada à espiritualidade.", nacionalidade: "Francêsa"},
+    {nome: "Edna", significado: "Rejuvenescida, prazenteira. Edna é de origem hebraica e significa 'rejuvenescida'. Este nome é associado a uma pessoa que traz alegria, frescor e jovialidade aos outros, criando um ambiente de paz e felicidade ao seu redor.", nacionalidade: "Hebraica"},
+    {nome: "Mónica", significado: "Conselheira, aquela que aconselha. Mónica é de origem espanhola e significa 'conselheira'. Este nome está relacionado à sabedoria, à empatia e à capacidade de orientar aqueles ao seu redor com bom senso e carinho.", nacionalidade: "Espanhola"},
+    {nome: "Fatou", significado: "Abençoada, jovem mãe. Fatou tem origem africana e significa 'abençoada'. Este nome simboliza a bênção da maternidade e a juventude, refletindo a pureza e a graça de uma mulher que é fonte de amor e proteção para aqueles ao seu redor.", nacionalidade: "Africano"},
+    {nome: "Anoushka", significado: "Cheia de graça, graciosa. Anoushka é de origem russa e significa 'cheia de graça'. Este nome está associado a uma pessoa encantadora e elegante, que exibe graça em seus gestos, palavras e ações, sendo admirada por sua beleza natural.", nacionalidade: "Russa"},
+    {nome: "Carine", significado: "Pura, amada. Carine tem origem francesa e significa 'pura'. O nome remete à ideia de uma pessoa amada, com um coração puro e uma natureza gentil, irradiando amor e positividade em todos os aspectos da vida.", nacionalidade: "Francêsa"},
+    {nome: "Ylva", significado: "Loba, força e poder. Ylva é de origem sueca e significa 'loba'. Este nome está associado à força, coragem e determinação, simbolizando uma pessoa com grande poder interior e capacidade de enfrentar desafios com bravura e sabedoria.", nacionalidade: "Sueca"},
+    {nome: "Ariadna", significado: "Puríssima, castíssima. Ariadna tem origem espanhola e significa 'puríssima'. Este nome simboliza uma pessoa com uma moral elevada e uma pureza imaculada, sendo respeitada por sua integridade e virtude em todas as situações.", nacionalidade: "Espanhola"},
+    {nome: "Miranda", significado: "Admirável, digna de ser admirada. Miranda é de origem latina e significa 'admirável'. Este nome está associado a uma pessoa digna de ser admirada, que possui características de grandeza e respeito, inspirando os outros com sua presença e sabedoria.", nacionalidade: "Latina"},
+    {nome: "Rosalia", significado: "Bela como uma rosa. Rosalia é de origem espanhola e significa 'bela como uma rosa'. Este nome é associado à delicadeza, beleza e feminilidade, simbolizando uma pessoa encantadora e graciosa que se destaca pela sua presença luminosa.", nacionalidade: "Espanhola"},
+    {nome: "Kaede", significado: "Folha de bordo, flor do outono. Kaede é de origem japonesa e significa 'folha de bordo'. Este nome está associado ao outono e à beleza da natureza, refletindo a serenidade e as mudanças da vida, como as folhas que caem com a estação.", nacionalidade: "Japonêsa"},
+    {nome: "Ivory", significado: "Marfim, pureza. Ivory é de origem inglesa e significa 'marfim'. Este nome está associado à pureza e à beleza rara, simbolizando algo precioso e delicado, com uma luminosidade única que se destaca entre as outras coisas.", nacionalidade: "Inglêsa"},
+    {nome: "Noemi", significado: "Doce, agradável. Noemi tem origem hebraica e significa 'doce'. Este nome transmite a ideia de uma pessoa gentil, amável e agradável, com um coração acolhedor e uma presença que traz conforto e paz.", nacionalidade: "Hebraica"},
+    {nome: "Talitha", significado: "Menina jovem. Talitha tem origem aramaica e significa 'menina jovem'. Este nome evoca frescor, juventude e pureza, simbolizando a energia e a vitalidade da juventude, bem como a alegria e a beleza da infância.", nacionalidade: "Aramaico"},
+    {nome: "Silke", significado: "Celestial, do céu. Silke tem origem alemã e significa 'celestial'. O nome está associado à divindade e à beleza do céu, refletindo uma pessoa com uma presença angelical, cheia de luz e serenidade.", nacionalidade: "Alemã"},
+    {nome: "Linda", significado: "Bela, graciosa. Linda tem origem espanhola e significa 'bela'. Este nome é diretamente associado à beleza física e à elegância, simbolizando uma mulher graciosa, encantadora e cheia de charme.", nacionalidade: "Espanhola"},
+    {nome: "Prisca", significado: "Antiga, ancestral. Prisca tem origem latina e significa 'antiga'. O nome remete à sabedoria adquirida com o tempo, à experiência e ao respeito pelas tradições e pelas raízes familiares.", nacionalidade: "Latina"},
+    {nome: "Berta", significado: "Ilustre, brilhante. Berta tem origem alemã e significa 'ilustre'. Este nome simboliza uma pessoa notável, com grande destaque e respeito por sua inteligência, caráter ou habilidades, sempre se destacando entre os outros.", nacionalidade: "Alemã"},
+    {nome: "Zahira", significado: "Luminosa, clara. Zahira tem origem árabe e significa 'luminosa'. O nome está associado a alguém que brilha intensamente, que se destaca pela sua beleza e pelo seu espírito radiante, iluminando todos ao seu redor.", nacionalidade: "Árabe"},
+    {nome: "Patricia", significado: "Nobre, senhora de honra. Patricia tem origem latina e significa 'nobre'. Este nome está associado à honra, dignidade e respeito, simbolizando uma pessoa com grande caráter e liderança, respeitada por todos ao seu redor.", nacionalidade: "Latina"},
+    {nome: "Yvonne", significado: "Arco de teixo, guerreira. Yvonne tem origem francesa e significa 'arco de teixo'. O nome é associado à força, coragem e determinação, simbolizando uma mulher guerreira e poderosa que não teme desafios.", nacionalidade: "Francêsa"},
+    {nome: "Eliette", significado: "Deus é pleno, juramento de Deus. Eliette tem origem francesa e significa 'juramento de Deus'. O nome reflete uma conexão profunda com a espiritualidade, simbolizando alguém com fé e dedicação à sua missão divina.", nacionalidade: "Francêsa"},
+    {nome: "Moira", significado: "Destinada, sorte. Moira tem origem irlandesa e significa 'destinada'. Este nome está associado ao destino e à sorte, representando uma pessoa que segue seu caminho com confiança e coragem, sempre guiada por uma força superior.", nacionalidade: "Irlandêsa"},
+    {nome: "Chavela", significado: "Consagrada a Deus. Chavela tem origem espanhola e significa 'consagrada a Deus'. Este nome carrega consigo um significado de devoção, pureza e uma conexão direta com o divino, simbolizando uma mulher de fé e coragem.", nacionalidade: "Espanhola"},
+    {nome: "Maeve", significado: "Aquela que intoxica, rainha. Maeve tem origem irlandesa e significa 'rainha'. Este nome está associado a poder, liderança e charme, simbolizando uma mulher imponente, de personalidade forte e irresistível.", nacionalidade: "Irlandêsa"},
+    {nome: "Eléa", significado: "Reluzente, brilhante como o sol. Eléa tem origem francesa e significa 'reluzente'. O nome simboliza alguém com uma presença radiante, cuja luz interior brilha intensamente, como o sol iluminando o mundo ao seu redor.", nacionalidade: "Francêsa"},
+    {nome: "Gioconda", significado: "Alegre, sorridente. Gioconda tem origem italiana e significa 'alegre'. Este nome está associado a uma pessoa com uma personalidade encantadora e sempre sorridente, irradiando felicidade e bom humor a todos ao seu redor.", nacionalidade: "Italiana"},
+    {nome: "Dalva", significado: "Da alvorada, da manhã. Dalva tem origem portuguesa e significa 'da alvorada'. Este nome está associado ao começo do dia, à renovação e à esperança, representando alguém que traz luz e frescor para todos ao seu redor.", nacionalidade: "Portuguêsa"},
+    {nome: "Leandra", significado: "Mulher-leoa, forte. Leandra tem origem grega e significa 'mulher-leoa'. O nome remete à força e coragem, simbolizando uma mulher guerreira, destemida e cheia de poder, sempre disposta a lutar por seus ideais.", nacionalidade: "Grega"},
+    {nome: "Noelle", significado: "Nascida no Natal. Noelle tem origem francesa e significa 'nascida no Natal'. Este nome está associado ao nascimento, à renovação e à celebração da vida, simbolizando a alegria e a esperança que o Natal traz para o mundo.", nacionalidade: "Francêsa"},
+    {nome: "Branca", significado: "Pura, branca. Branca tem origem portuguesa e significa 'pura'. Este nome é frequentemente associado à limpeza, à inocência e à beleza imaculada, simbolizando uma pessoa de caráter irrepreensível e espírito sereno.", nacionalidade: "Portuguêsa"},
+    {nome: "Alda", significado: "Gentil, nobre. Alda tem origem germânica e significa 'gentil' ou 'nobre'. Este nome está associado a qualidades de nobreza e gentileza, simbolizando uma pessoa bondosa e de coração generoso, com uma grande dignidade interior.", nacionalidade: "Germânica"},
+    {nome: "Doroteia", significado: "Presente de Deus. Doroteia tem origem grega e significa 'presente de Deus'. O nome é associado à dádiva divina, refletindo uma pessoa que é considerada uma bênção para os outros, com uma vida dedicada ao serviço e à fé.", nacionalidade: "Grega"},
+    {nome: "Yasmina", significado: "Flor de jasmim. Yasmina tem origem árabe e significa 'flor de jasmim'. Este nome está relacionado à beleza delicada e ao perfume suave da flor de jasmim, simbolizando uma pessoa graciosa, encantadora e cheia de charme.", nacionalidade: "Árabe"},
+    {nome: "Floriana", significado: "Flor, cheia de flores. Floriana tem origem latina e significa 'flor'. Este nome evoca a ideia de uma pessoa florescente, cheia de vida e vitalidade, sempre cercada de beleza e frescor, como um campo florido na primavera.", nacionalidade: "Latina"},
+    {nome: "Ivanya", significado: "Deus é graciosa. Ivanya tem origem russa e significa 'Deus é graciosa'. Este nome simboliza uma pessoa abençoada, com uma beleza interior que reflete a bondade e a graça divina, sendo uma fonte de luz e amor para os outros.", nacionalidade: "Russa"},
+    {nome: "Sibila", significado: "Profetisa, oráculo. Sibila tem origem grega e significa 'profetisa'. Este nome está associado à sabedoria e à visão sobrenatural, simbolizando uma pessoa com habilidades para prever o futuro ou oferecer conselhos valiosos com uma profunda intuição.", nacionalidade: "Grega"},
+    {nome: "Ginevra", significado: "Branca suave, doce espírito. Ginevra tem origem italiana e significa 'branca suave'. Este nome remete à suavidade e à delicadeza, simbolizando uma pessoa com uma personalidade amável e uma presença serena que traz paz aos outros.", nacionalidade: "Italiana"},
+    {nome: "Zuleika", significado: "Brilhante, encantadora. Zuleika tem origem árabe e significa 'brilhante'. O nome evoca a ideia de uma pessoa radiante, cheia de charme e encanto, que conquista todos ao seu redor com sua beleza e luz interior.", nacionalidade: "Árabe"},
+    {nome: "Rosamaria", significado: "Rosa e Maria, beleza sagrada. Rosamaria tem origem italiana e é a junção dos nomes Rosa e Maria, significando 'beleza sagrada'. Este nome reflete a união de pureza e graça, sendo associado a uma mulher de grande espiritualidade e beleza inata.", nacionalidade: "Italiana"},
+    {nome: "Mariella", significado: "Senhora soberana, pequena Maria. Mariella tem origem italiana e significa 'senhora soberana'. Este nome é uma forma diminutiva de Maria, simbolizando uma pessoa de grande dignidade, humildade e realeza interior, com um espírito gentil e forte.", nacionalidade: "Italiana"},
+    {nome: "Tulipa", significado: "Flor vibrante, elegante. Tulipa tem origem latina e significa 'flor vibrante'. Este nome está associado à elegância e à beleza simples, simbolizando uma pessoa cheia de energia e vida, com uma natureza graciosa e encantadora.", nacionalidade: "Latina"},
+    {nome: "Sofie", significado: "Sabedoria, sapiência. Sofie tem origem alemã e significa 'sabedoria'. Este nome é associado à inteligência e à compreensão profunda, simbolizando uma pessoa sábia, com uma mente aguçada e um espírito elevado.", nacionalidade: "Alemã"},
+    {nome: "Elise", significado: "Deus é promessa. Elise tem origem francesa e significa 'Deus é promessa'. O nome reflete uma conexão espiritual, simbolizando uma pessoa que acredita firmemente nas promessas divinas e vive sua vida com fé e dedicação à espiritualidade.", nacionalidade: "Francêsa"},
+    {nome: "Shira", significado: "Canção, melodia. Shira tem origem hebraica e significa 'canção' ou 'melodia'. Este nome é frequentemente associado à harmonia e à música, simbolizando uma pessoa cuja presença é como uma canção suave e inspiradora, que eleva o espírito dos outros.", nacionalidade: "Hebraica"},
+    {nome: "Cecile", significado: "Cega para seus defeitos, humilde. Cecile tem origem francesa e significa 'cega para seus defeitos'. Este nome está relacionado à humildade e à aceitação, refletindo uma pessoa que vê o melhor nos outros e não se prende a julgamentos negativos, vivendo com uma grande serenidade e sabedoria interior.", nacionalidade: "Francêsa"},
+    {nome: "Queren", significado: "Raio de luz, luminosa. Queren tem origem hebraica e significa 'raio de luz'. Este nome evoca a ideia de uma pessoa radiante, cheia de energia positiva e que ilumina o caminho dos outros com sua presença vibrante e cheia de luz.", nacionalidade: "Hebraica"},
+    {nome: "Sabrine", significado: "Princesinha, do rio Severn. Sabrine tem origem francesa e significa 'princesinha do rio Severn'. Este nome está associado a uma figura delicada, de espírito gentil e nobre, simbolizando uma pessoa com uma personalidade serena e encantadora, digna de ser admirada.", nacionalidade: "Francêsa"},
+    {nome: "Federica", significado: "Protetora da paz. Federica tem origem italiana e significa 'protetora da paz'. Este nome reflete uma pessoa com uma grande habilidade para manter a harmonia e resolver conflitos de maneira sábia e equilibrada, sendo um símbolo de proteção e serenidade.", nacionalidade: "Italiana"},
+    {nome: "Aline", significado: "Linda, graciosa. Aline tem origem francesa e significa 'linda' ou 'graciosa'. Este nome é frequentemente associado à beleza interior e exterior, refletindo uma pessoa charmosa e cativante, com uma presença doce e encantadora.", nacionalidade: "Francêsa"},
+    {nome: "Déa", significado: "Deusa, divina. Déa tem origem grega e significa 'deusa'. Este nome simboliza uma pessoa com uma aura divina, poderosa e serena, que irradia sabedoria e possui uma presença quase celestial que inspira respeito e admiração.", nacionalidade: "Grega"},
+    {nome: "Raysa", significado: "Rosa, rainha. Raysa tem origem russa e significa 'rosa, rainha'. Este nome está relacionado à beleza sublime da rosa, associada à feminilidade, e à realeza, simbolizando uma pessoa forte, majestosa e cativante.", nacionalidade: "Russa"},
+    {nome: "Maite", significado: "Amada, querida. Maite tem origem basca e significa 'amada' ou 'querida'. Este nome é associado à afeição e ao carinho, simbolizando uma pessoa profundamente amada por todos ao seu redor, com um coração generoso e cheio de bondade.", nacionalidade: "Basco"},
+    {nome: "Glauce", significado: "Brilhante, reluzente como a água. Glauce tem origem grega e significa 'brilhante'. Este nome evoca uma pessoa com uma personalidade radiante, como as águas reluzentes à luz do sol, representando uma pessoa serena, graciosa e iluminada por dentro e por fora.", nacionalidade: "Grega"},
+    {nome: "Elsie", significado: "Prometida de Deus, juramento. Elsie tem origem inglesa e significa 'prometida de Deus'. Este nome é associado a uma pessoa que carrega consigo um grande propósito espiritual, com um compromisso profundo com sua fé e com as promessas divinas.", nacionalidade: "Inglêsa"},
+    {nome: "Lorene", significado: "Honorável, coroada de louro. Lorene tem origem inglesa e significa 'honorável'. Este nome está relacionado a uma pessoa de grande dignidade, cuja presença transmite respeito e honra, sendo uma figura de destaque em sua comunidade.", nacionalidade: "Inglêsa"},
+    {nome: "Evangelina", significado: "Portadora da boa nova. Evangelina tem origem grega e significa 'portadora da boa nova'. Este nome simboliza uma pessoa que leva esperança e boas notícias, alguém que transmite luz e alegria, anunciando boas novas de maneira inspiradora.", nacionalidade: "Grega"},
+    {nome: "Mariel", significado: "Estrela do mar, pura. Mariel tem origem hebraica e significa 'estrela do mar'. Este nome evoca a imagem de uma estrela brilhante e pura que guia e ilumina, simbolizando uma pessoa que traz direção e serenidade aos outros com sua presença tranquila.", nacionalidade: "Hebraica"},
+    {nome: "Amina", significado: "Honesta, digna de confiança. Amina tem origem árabe e significa 'honesta', 'digna de confiança'. Este nome é associado a uma pessoa com um caráter íntegro e confiável, alguém que sempre pode ser contado para ser leal e verdadeira em suas ações e palavras.", nacionalidade: "Árabe"},
+    {nome: "Jehanne", significado: "Deus é graciosa. Jehanne tem origem francesa e significa 'Deus é graciosa'. Este nome evoca a imagem de uma pessoa abençoada, cheia de graça divina, com uma presença que reflete a bondade e a misericórdia de Deus.", nacionalidade: "Francêsa"},
+    {nome: "Adina", significado: "Delicada, refinada. Adina tem origem romena e significa 'delicada', 'refinada'. Este nome transmite a ideia de uma pessoa com uma natureza graciosa e elegante, que irradia suavidade e charme em todas as suas ações e atitudes.", nacionalidade: "Romena"},
+    {nome: "Lucerne", significado: "Brilhante, reluzente. Lucerne tem origem francesa e significa 'brilhante', 'reluzente'. Este nome é associado à luz e ao brilho, refletindo uma pessoa que ilumina os caminhos dos outros com sua energia positiva e radiante.", nacionalidade: "Francêsa"},
+    {nome: "Rania", significado: "Rainha, encantadora. Rania tem origem árabe e significa 'rainha', 'encantadora'. Este nome está relacionado à nobreza e à majestade, evocando uma imagem de uma pessoa com uma presença imponente e cativante, como uma verdadeira líder ou monarca.", nacionalidade: "Árabe"},
+    {nome: "Shaima", significado: "Graciosa, de beleza notável. Shaima tem origem árabe e significa 'graciosa', 'de beleza notável'. Este nome é associado a uma pessoa com uma beleza cativante, que se destaca pela sua presença encantadora e natureza doce e agradável.", nacionalidade: "Árabe"},
+    {nome: "Gemma", significado: "Jóia, pedra preciosa. Gemma tem origem italiana e significa 'jóia' ou 'pedra preciosa'. Este nome simboliza algo raro e valioso, refletindo uma pessoa que é considerada uma verdadeira preciosidade entre seus amigos e familiares.", nacionalidade: "Italiana"},
+    {nome: "Elsa", significado: "Consagrada a Deus. Elsa tem origem germânica e significa 'consagrada a Deus'. Este nome está relacionado à pureza espiritual e ao compromisso com a fé, representando uma pessoa com uma dedicação sincera à sua espiritualidade e aos seus princípios." , nacionalidade: "Germânica"},
+    {nome: "Rosália", significado: "Cheia de rosas, bela como uma rosa. Rosália tem origem latina e significa 'cheia de rosas' ou 'bela como uma rosa'. Este nome evoca a beleza delicada da flor rosa, simbolizando uma pessoa com uma natureza gentil, graciosa e encantadora.", nacionalidade: "Latina"},
+    {nome: "Inés", significado: "Pura, casta. Inés tem origem espanhola e significa 'pura', 'casta'. Este nome está relacionado à virtude e à pureza, representando uma pessoa com um caráter imaculado e uma alma cheia de bondade e integridade.", nacionalidade: "Espanhola"},
+    {nome: "Thais", significado: "Aquela que é admirada. Thais tem origem grega e significa 'aquela que é admirada'. Este nome simboliza uma pessoa que atrai a admiração dos outros pela sua beleza, inteligência e virtude, sendo uma figura de respeito e inspiração.", nacionalidade: "Grega"},
+    {nome: "Sheila", significado: "Cega, descida de Céu. Sheila tem origem irlandesa e significa 'cega', 'descida de Céu'. Este nome pode ser interpretado como uma pessoa que busca a verdade e a sabedoria divina, sendo vista como alguém com uma visão mais profunda e iluminada da vida.", nacionalidade: "Irlandêsa"},
+    {nome: "Irene", significado: "Paz, tranquilidade. Irene tem origem grega e significa 'paz'. Este nome está associado à serenidade e à calma, representando uma pessoa que traz harmonia e equilíbrio ao seu redor, com uma personalidade pacífica e conciliadora.", nacionalidade: "Grega"},
+    {nome: "Luciene", significado: "Luminosa, cheia de luz. Luciene tem origem francesa e significa 'luminosa'. Este nome reflete uma pessoa radiante, que ilumina o caminho dos outros com sua presença alegre e cheia de energia positiva, sendo uma verdadeira fonte de luz para aqueles ao seu redor.", nacionalidade: "Francêsa"},
+    {nome: "Pauline", significado: "Pequena, modesta. Pauline tem origem francesa e significa 'pequena', 'modesta'. Este nome é associado a uma pessoa humilde, simples e com uma beleza discreta, mas cheia de qualidades que a tornam valiosa e admirada pelos outros.", nacionalidade: "Francêsa"},
+    {nome: "Dalila", significado: "Delicada, frágil. Dalila tem origem hebraica e significa 'delicada'. Este nome evoca uma pessoa com uma personalidade suave e gentil, que tem uma grande capacidade de tocar os corações com sua doçura e empatia.", nacionalidade: "Hebraica"},
+    {nome: "Iolanda", significado: "Flor violeta, riqueza eterna. Iolanda tem origem italiana e significa 'flor violeta'. Este nome é associado à beleza delicada e à elegância da flor violeta, representando uma pessoa de beleza clássica e riqueza interior eterna." , nacionalidade: "Italiana"},
+    {nome: "Oriana", significado: "Dourada, radiante, do oriente. Oriana tem origem latina e significa 'dourada', 'radiante'. Este nome evoca a imagem de uma pessoa brilhante e cheia de energia, como o sol nascente, com uma presença luminosa que ilumina os caminhos por onde passa.", nacionalidade: "Latina"},
+    {nome: "Rosalinda", significado: "Bela como uma rosa. Rosalinda tem origem espanhola e significa 'bela como uma rosa'. Este nome reflete a suavidade e beleza delicada da flor rosa, representando uma pessoa com uma beleza graciosa e encantadora, tanto por dentro quanto por fora.", nacionalidade: "Espanhola"},
+    {nome: "Aya", significado: "Milagre, sinal, maravilhosa. Aya tem origem árabe e significa 'milagre', 'sinal', ou 'maravilhosa'. Este nome está associado a algo extraordinário, algo que surge como uma dádiva, representando uma pessoa de grande importância e beleza, como um presente do universo.", nacionalidade: "Árabe"},
+    {nome: "Alícia", significado: "De linhagem nobre. Alícia tem origem espanhola e significa 'de linhagem nobre'. Este nome transmite a ideia de uma pessoa com origem em uma família de prestígio, alguém com dignidade, honra e grande respeito, tanto no passado quanto no presente.", nacionalidade: "Espanhola"},
+    {nome: "Noémie", significado: "Agradável, doce. Noémie tem origem francesa e significa 'agradável', 'doce'. Este nome reflete a suavidade e a graciosidade de uma pessoa que é conhecida por sua doçura, gentileza e capacidade de agradar aos outros com sua presença calorosa e afetuosa.", nacionalidade: "Francêsa"},
+    {nome: "Vittoria", significado: "Vitória, triunfadora. Vittoria tem origem italiana e significa 'vitória', 'triunfadora'. Este nome é associado a conquistas e sucesso, representando uma pessoa que supera obstáculos, alcançando suas metas com determinação e força, sempre triunfante nas batalhas da vida.", nacionalidade: "Italiana"},
+    {nome: "Liliane", significado: "Flor de lírio, linda. Liliane tem origem francesa e significa 'flor de lírio', ou 'linda'. Este nome evoca uma imagem de pureza, beleza e elegância, refletindo a delicadeza de uma flor, com uma personalidade graciosa e encantadora.", nacionalidade: "Francêsa"},
+    {nome: "Céleste", significado: "Celestial, dos céus. Céleste tem origem francesa e significa 'celestial', 'dos céus'. Este nome está associado à beleza divina e à pureza do céu, simbolizando uma pessoa com uma aura iluminada e uma natureza etérea, como se fosse de outra dimensão celestial.", nacionalidade: "Francêsa"},
+    {nome: "Marika", significado: "Estrela do mar, variante de Maria. Marika tem origem húngara e significa 'estrela do mar'. Este nome é frequentemente associado ao brilho e à beleza, representando alguém que traz luz e orientação, assim como uma estrela que guia os navegantes no mar.", nacionalidade: "Húngaro"},
+    {nome: "Hilary", significado: "Alegre, cheio de alegria. Hilary tem origem inglesa e significa 'alegre', 'cheio de alegria'. Este nome reflete uma pessoa com um espírito otimista e radiante, que traz felicidade e leveza a todos ao seu redor, sendo a fonte de alegria onde quer que esteja.", nacionalidade: "Inglêsa"},
+    {nome: "Yulia", significado: "Juvenil, juvenil. Yulia tem origem russa e significa 'juvenil', ou 'cheia de juventude'. Este nome transmite a energia e a vitalidade de uma pessoa jovem, fresca e cheia de vigor, com um espírito alegre e radiante, como a juventude em sua forma mais pura.", nacionalidade: "Russa"},
+    {nome: "Tatjana", significado: "Altamente louvada. Tatjana tem origem eslava e significa 'altamente louvada'. Este nome é associado a uma pessoa digna de grandes elogios e respeito, alguém cuja virtude e caráter são constantemente admirados e reconhecidos.", nacionalidade: "Eslava"},
+    {nome: "Danica", significado: "Estrela da manhã. Danica tem origem eslava e significa 'estrela da manhã'. Este nome evoca a beleza e a serenidade da estrela que aparece no início do dia, simbolizando alguém que traz luz, esperança e clareza para o mundo ao seu redor.", nacionalidade: "Eslava"},
+    {nome: "Annelise", significado: "Cheia de graça, devota. Annelise tem origem alemã e significa 'cheia de graça', 'devota'. Este nome reflete uma pessoa com um coração puro e gentil, dedicada aos outros, sempre com uma postura humilde e graciosa em tudo o que faz.", nacionalidade: "Alemã"},
+    {nome: "Samia", significado: "Sublime, exaltada. Samia tem origem árabe e significa 'sublime', 'exaltada'. Este nome é associado a uma pessoa que se destaca por sua grandeza, beleza e caráter nobre, alguém que está sempre em busca da excelência e que inspira os outros com sua força e resiliência.", nacionalidade: "Árabe"},
+    {nome:"Ysabel",significado:"Consagrada a Deus. Ysabel é uma variação de Isabel, com origem no hebraico, significando 'Deus é juramento'. Este nome está associado a uma pessoa devota, que se entrega ao serviço divino e é considerada pura e abençoada, com uma conexão espiritual forte.", nacionalidade:"Espanhola"},
+    {nome:"Consuela",significado:"Consolação, consolo. Consuela tem origem espanhola e está relacionado com o ato de dar conforto, alívio e consolo aos outros. Este nome reflete uma pessoa que tem o dom de acalmar, apoiar e trazer paz, especialmente em tempos difíceis.", nacionalidade:"Espanhola"},
+    {nome:"Silvia",significado:"Da floresta, selvagem. Silvia é um nome de origem latina que significa 'da floresta' ou 'selvagem'. Este nome está relacionado à natureza, representando uma pessoa com uma conexão profunda com o mundo natural, e simboliza liberdade e vitalidade.", nacionalidade:"Italiana"},
+    {nome:"Daria",significado:"Possuidora de bens, riqueza. Daria tem origem persa e significa 'possuidora de bens', 'rica'. Este nome evoca uma imagem de uma pessoa com grande prosperidade e poder, alguém que tem a capacidade de conquistar o que deseja e vive com abundância.", nacionalidade:"Persa"},
+    {nome:"Vivian",significado:"Viva, cheia de vida. Vivian tem origem latina e significa 'viva', 'cheia de vida'. Este nome é associado à energia vibrante, ao entusiasmo e à alegria. Reflete uma pessoa que é cheia de energia, dinâmica e tem uma atitude positiva diante da vida.", nacionalidade:"Latina"},
+    {nome:"Isabella",significado:"Consagrada a Deus. Isabella tem origem italiana e é uma variação de Isabel, significando 'Deus é juramento'. Este nome é associado a uma pessoa que é devota, honrada e dedicada a causas espirituais e divinas, com uma presença nobre e respeitável.", nacionalidade:"Italiana"},
+    {nome:"Grecia",significado:"Do país da Grécia, nobreza clássica. Grecia é um nome de origem espanhola que está associado à Grécia, um país conhecido por sua história rica e cultura clássica. O nome remete à grandeza e à nobreza da civilização grega antiga, simbolizando elegância e tradição.", nacionalidade:"Espanhola"},
+    {nome:"Berenice",significado:"Portadora da vitória. Berenice tem origem grega e significa 'portadora da vitória'. Este nome é associado a uma pessoa que traz triunfos, uma vencedora, alguém que traz sucesso e realizações a todos ao seu redor, cheia de força e determinação.", nacionalidade:"Grega"},
+    {nome:"Saara",significado:"Princesa, mulher de poder. Saara tem origem hebraica e significa 'princesa' ou 'mulher de poder'. Este nome reflete uma pessoa com grande autoridade e dignidade, uma líder natural que comanda respeito e influencia positivamente aqueles ao seu redor.", nacionalidade:"Hebraica"},
+    {nome:"Libânia",significado:"De Libano, pura. Libânia tem origem portuguesa e é associada ao Líbano, um país do Oriente Médio. O nome simboliza pureza, beleza e a conexão com a natureza, representando uma pessoa que é pura e cheia de virtude, com um espírito sereno e harmonioso.", nacionalidade:"Portuguêsa"},
+    {nome:"Tess",significado:"Colheita, verão. Tess tem origem inglesa e significa 'colheita' ou 'verão'. Este nome é associado à abundância e ao crescimento, simbolizando uma pessoa com grande vitalidade, energia e um espírito próspero, como a colheita abundante do verão.", nacionalidade:"Inglêsa"},
+    {nome:"Lívia",significado:"Azulada, invejada. Lívia tem origem latina e é associado à cor azul ou inveja, simbolizando uma pessoa com um caráter forte e admirado. Este nome é frequentemente relacionado com a nobreza e à beleza, algo que cativa e chama a atenção de outros.", nacionalidade:"Latina"},
+    {nome:"Leocádia",significado:"De pureza branca. Leocádia tem origem grega e significa 'de pureza branca'. Este nome evoca uma imagem de uma pessoa pura, inocente e imaculada, com uma personalidade que reflete virtude, elegância e uma beleza radiante e delicada.", nacionalidade:"Grega"},
+    {nome:"Afra",significado:"Nasceu na África, mulher africana. Afra tem origem latina e é um nome associado à origem africana, representando uma pessoa com raízes profundas na cultura africana e uma ligação com a terra e tradições antigas. Este nome também reflete beleza e força.", nacionalidade:"Latina"},
+    {nome:"Jasmina",significado:"Flor de jasmim, perfumada. Jasmina tem origem sérvia e é derivada da flor de jasmim, que é conhecida por sua fragrância doce e encantadora. Este nome reflete uma pessoa com uma presença suave, mas impactante, alguém que deixa um perfume marcante por onde passa.", nacionalidade:"Sérvia"},
+    {nome:"Talita",significado:"Menina jovem. Talita tem origem aramaica e significa 'menina jovem'. Este nome está associado à juventude, frescor e energia, representando uma pessoa jovem e cheia de vida, com um espírito alegre e uma visão otimista do mundo.", nacionalidade:"Aramaico"},
+    {nome:"Capucine",significado:"Flor de capuchinha. Capucine tem origem francesa e significa 'flor de capuchinha'. Este nome é associado à flor que cresce com cores vibrantes e é conhecida por sua beleza simples e encantadora, representando uma pessoa vibrante e cheia de vida.", nacionalidade:"Francêsa"},
+    {nome:"Eve",significado:"Aquela que vive, viva. Eve tem origem no hebraico e é associada à vida e à vivacidade. Este nome reflete uma pessoa cheia de energia, com uma personalidade vibrante e uma presença que traz renovação e vitalidade aos outros. É um nome com um profundo simbolismo de início e origem, como a primeira mulher na Bíblia.", nacionalidade:"Inglêsa"},
+    {nome:"Florinda",significado:"Cheia de flores. Florinda tem origem espanhola e é um nome que evoca a imagem de uma pessoa exuberante e cheia de vida. Está relacionado com a beleza das flores e simboliza uma mulher graciosa, delicada e cheia de charme, com uma presença perfumada e radiante como uma flor.", nacionalidade:"Espanhola"},
+    {nome:"Isis",significado:"Deusa egípcia, mulher poderosa. Isis é o nome de uma das divindades mais reverenciadas da mitologia egípcia, conhecida por sua sabedoria, poder e influência. Este nome simboliza uma mulher forte, com grande capacidade de liderança, que transcende obstáculos com força e sabedoria.", nacionalidade:"Egípcia"},
+    {nome:"Charis",significado:"Graça, beleza, bondade. Charis tem origem grega e significa graça ou beleza, tanto no sentido físico quanto no moral. Este nome está associado à bondade e à generosidade, refletindo uma pessoa que é encantadora, graciosa e que cativa todos ao seu redor com sua bondade natural.", nacionalidade:"Grega"},
+    {nome:"Romina",significado:"De Roma, mulher romana. Romina tem origem italiana e é um nome associado à nobreza e cultura da Roma antiga. Representa uma mulher com uma forte identidade cultural e histórica, com qualidades de honra e respeito pela tradição, simbolizando força e dignidade.", nacionalidade:"Italiana"},
+    {nome:"Pia",significado:"Devota, piedosa. Pia tem origem latina e significa 'devota', 'piedosa'. Este nome é associado à virtude religiosa e espiritual, refletindo uma pessoa com uma alma pura, que vive de acordo com seus princípios morais e com uma fé inabalável.", nacionalidade:"Espanhola"},
+    {nome:"Meline",significado:"Mel, suave. Meline tem origem francesa e está associada ao mel, uma substância doce e suave. Este nome reflete uma pessoa doce, charmosa e encantadora, com um caráter gentil e uma personalidade que transmite calma e acolhimento a todos ao seu redor.", nacionalidade:"Francêsa"},
+    {nome:"Kalena",significado:"Pura, luz clara. Kalena tem origem havaiana e significa 'pura', 'luz clara'. Este nome está associado à simplicidade e à beleza natural, refletindo uma pessoa com uma energia positiva e iluminada, que traz luz aos ambientes em que está presente.", nacionalidade:"Havaiana"},
+    {nome:"Malena",significado:"Elevada, torre marítima. Malena tem origem espanhola e simboliza uma torre forte e imponente, com uma conexão profunda ao mar. Este nome está associado à elevação, à força interior e à estabilidade, refletindo uma pessoa que é firme e segura em suas crenças e valores.", nacionalidade:"Espanhola"},
+    {nome:"Ricarda",significado:"Corajosa, poderosa. Ricarda tem origem alemã e significa 'corajosa' ou 'poderosa'. Este nome está associado a uma pessoa com uma grande força interior, que é capaz de enfrentar desafios com determinação e coragem, sendo uma líder natural em qualquer situação.", nacionalidade:"Alemã"},
+    {nome:"Hermínia",significado:"Mulher guerreira, soldado. Hermínia tem origem germânica e é associada a mulheres guerreiras, aquelas que lutam com coragem e tenacidade. Este nome reflete uma pessoa forte, determinada, que enfrenta dificuldades de cabeça erguida e não se deixa abalar pelos desafios da vida.", nacionalidade:"Germânica"},
+    {nome:"Drusila",significado:"Forte, poderosa. Drusila tem origem latina e significa 'forte', 'poderosa'. Este nome é associado a mulheres de grande influência, com caráter firme e inabalável. Representa uma pessoa que tem a capacidade de lidar com situações difíceis com confiança e determinação.", nacionalidade:"Latina"},
+    {nome:"Mirela",significado:"Admirável, maravilhosa. Mirela tem origem romena e é um nome associado a uma pessoa maravilhosa e digna de admiração. Este nome transmite a imagem de alguém com uma personalidade encantadora, que se destaca pela beleza interior e exterior, sendo admirada por sua bondade e caráter.", nacionalidade:"Romena"},
+    {nome:"Laureana",significado:"Coroada de louros, vitoriosa. Laureana tem origem latina e significa 'coroada de louros', simbolizando a vitória e o reconhecimento. Este nome reflete uma pessoa que alcança grandes conquistas e é honrada por sua dedicação e esforço, sendo uma figura admirada por todos.", nacionalidade:"Latina"},
+    {nome:"Gemima",significado:"Pomba, símbolo da paz. Gemima tem origem hebraica e significa 'pomba'. Este nome é associado à paz, simbolizando uma pessoa serena, tranquila e compassiva, que transmite harmonia e tranquilidade para todos ao seu redor, assim como a pomba é um símbolo de paz.", nacionalidade:"Hebraica"},
+    {nome:"Samya",significado:"Altiva, sublime. Samya tem origem árabe e significa 'altiva', 'sublime'. Este nome é associado a uma pessoa de grande dignidade e elegância, que se destaca pela sua postura e graça. Reflete alguém com uma visão elevada da vida e uma grande confiança em si mesma.", nacionalidade:"Árabe"},
+    {nome:"Massima",significado:"A maior, grandiosa. Massima tem origem italiana e significa 'a maior', 'grandiosa'. Este nome está associado a uma pessoa de grande estatura, tanto física quanto simbólica, refletindo uma pessoa que se destaca, que lidera e que tem uma presença marcante e respeitável.", nacionalidade:"Italiana"},
+    {nome:"Aysun",significado:"Bela como a lua. Aysun tem origem turca e é associado à beleza suave e etérea da lua. O nome transmite a ideia de uma pessoa com uma presença encantadora, iluminada e cheia de graça, como o brilho suave da lua à noite.", nacionalidade:"Turca"},
+    {nome:"Gina",significado:"Bem nascida, nobre. Gina tem origem italiana e é uma variante de nomes como Regina ou Georgina. Esse nome é associado a uma pessoa com uma linhagem de respeito, com qualidades de nobreza, prestígio e dignidade.", nacionalidade:"Italiana"},
+    {nome:"Yrsa",significado:"Ursa, força animal. Yrsa é um nome de origem sueca, associado ao símbolo da ursa, um animal que simboliza força e proteção. Esse nome reflete uma pessoa com uma grande força interior e uma capacidade de liderar e proteger os outros.", nacionalidade:"Sueca"},
+    {nome:"Fátima",significado:"Mulher jovem, destemida. Fátima é um nome árabe de forte significado cultural e religioso. Este nome simboliza uma mulher cheia de coragem, que enfrenta a vida com determinação e ousadia, sendo associada à figura da juventude e da força feminina.", nacionalidade:"Árabe"},
+    {nome:"Janna",significado:"Jardim do paraíso. Janna é de origem árabe e está relacionado ao paraíso. Esse nome evoca uma sensação de beleza e harmonia, simbolizando um lugar de paz e alegria, refletindo a pureza e serenidade de um jardim celestial.", nacionalidade:"Árabe"},
+    {nome:"Désirée",significado:"Desejada, amada. Désirée tem origem francesa e é associado ao significado de ser altamente desejada e amada. Este nome reflete uma pessoa que é altamente apreciada, com qualidades que atraem os outros, sendo uma figura adorada por todos.", nacionalidade:"Francêsa"},
+    {nome:"Muna",significado:"Desejo, aspiração. Muna tem origem árabe e significa desejo ou aspiração. Este nome é associado a uma pessoa que tem grandes sonhos e desejos, uma alma ambiciosa e com um forte desejo de alcançar seus objetivos e superar desafios.", nacionalidade:"Árabe"},
+    {nome:"Tamara",significado:"Palmeira, dádiva de Deus. Tamara tem origem hebraica e simboliza a palmeira, uma árvore que representa força e resistência. Além disso, é associado a um presente divino, como uma bênção, refletindo uma pessoa abençoada e com grande estabilidade emocional.", nacionalidade:"Hebraica"},
+    {nome:"Calypso",significado:"Aquela que esconde, ninfa mitológica. Calypso tem origem grega e é o nome de uma ninfa da mitologia, conhecida por seu poder de encantamento. Esse nome transmite uma aura de mistério e beleza, simbolizando alguém que guarda segredos ou vive com uma energia enigmática e fascinante.", nacionalidade:"Grega"},
+    {nome:"Andromeda",significado:"Aquela que pensa como homem. Andromeda tem origem grega e está associada à mitologia grega. Esse nome simboliza uma mulher forte, com grande poder de reflexão e ação, muitas vezes associada a qualidades de independência e sabedoria estratégica.", nacionalidade:"Grega"},
+    {nome:"Hedvig",significado:"Guerra, batalhadora. Hedvig tem origem sueca e é um nome que simboliza força e coragem. Esse nome é associado a uma mulher guerreira, que enfrenta os desafios da vida com tenacidade e determinação, muitas vezes se destacando em momentos de luta.", nacionalidade:"Sueca"},
+    {nome:"Damaris",significado:"Mansa, gentil. Damaris tem origem grega e é associado à suavidade e à bondade. Esse nome simboliza uma pessoa que é pacífica e gentil, com uma natureza mansa e um coração compassivo, sendo muito apreciada pela sua doçura e paciência.", nacionalidade:"Grega"},
+    {nome:"Sharifa",significado:"Nobre, distinta, honrosa. Sharifa é um nome árabe que significa nobre e honrosa. Este nome reflete uma pessoa com grande dignidade e respeito, alguém que é venerada por sua postura e caráter impecáveis, tendo uma forte posição na sociedade.", nacionalidade:"Árabe"},
+    {nome:"Bibiana",significado:"Viva, cheia de vida. Bibiana tem origem latina e é associada à vitalidade e energia. Este nome transmite a imagem de uma pessoa que está cheia de vida e entusiasmo, sempre animada e com uma personalidade contagiante.", nacionalidade:"Latina"},
+    {nome:"Alicia",significado:"De linhagem nobre. Alicia tem origem espanhola e está associada à nobreza e à alta linhagem. Este nome reflete uma pessoa com uma forte herança cultural e familiar, com qualidades de dignidade e respeito, possuindo uma posição elevada na sociedade.", nacionalidade:"Espanhola"},
+    {nome:"Soraya",significado:"Estrela, constelação das Plêiades. Soraya tem origem persa e está associado a uma das estrelas mais brilhantes do céu, pertencente à constelação das Plêiades. Este nome simboliza uma pessoa que brilha intensamente, sendo uma figura de grande beleza e inspiração.", nacionalidade:"Persa"},
+    {nome:"Palmina",significado:"Palmeira, delicada. Palmina tem origem italiana e é associado à palmeira, uma planta que simboliza resiliência e força. Este nome também transmite a ideia de suavidade e delicadeza, refletindo uma pessoa com grande gentileza e uma presença acolhedora.", nacionalidade:"Italiana"},
+    {nome:"Katia",significado:"Pura, casta. Katia tem origem russa e significa pura ou casta. Este nome é associado a uma pessoa de caráter imaculado, com uma natureza simples e virtuosa, alguém que possui grande pureza interior e que é respeitada por sua honestidade e sinceridade.", nacionalidade:"Russa"},
+    {nome:"Nahia",significado:"Desejo, aspiração. Nahia é um nome de origem basca que significa desejo ou aspiração. Este nome é associado a uma pessoa com grandes sonhos e ambições, que busca alcançar seus objetivos com determinação e foco, simbolizando a força interior de quem busca sempre melhorar e conquistar mais na vida.", nacionalidade:"Basco"},
+    {nome:"Marta",significado:"Senhora do lar, patroa. Marta tem origem portuguesa e está ligada à imagem de uma mulher responsável, sábia e diligente, com a habilidade de gerenciar e cuidar da casa e da família. Esse nome evoca qualidades de liderança e organização, sendo considerado o nome de uma mulher forte e protetora.", nacionalidade:"Portuguêsa"},
+    {nome:"Josefa",significado:"Deus acrescenta. Josefa tem origem espanhola e significa literalmente 'Deus acrescenta'. Esse nome é simbólico de bênçãos e prosperidade, refletindo uma pessoa que traz crescimento e abundância ao seu redor, muitas vezes vista como uma fonte de graça e generosidade divina.", nacionalidade:"Espanhola"},
+    {nome:"Cecília",significado:"Cega, protetora dos humildes. Cecília tem origem latina e é associada a uma pessoa cega de nascimento, mas que com sua alma pura se torna a protetora dos humildes e vulneráveis. Este nome tem uma conotação de virtude, humildade e compaixão, sendo um símbolo de uma pessoa com coração generoso e de grande bondade.", nacionalidade:"Latina"},
+    {nome:"Eudora",significado:"Bom presente. Eudora é um nome de origem grega que significa 'bom presente'. Este nome está associado a uma pessoa que é vista como um presente precioso para os outros, trazendo alegria e boas novas a todos ao seu redor, simbolizando a generosidade e a graça divina.", nacionalidade:"Grega"},
+    {nome:"Lilian",significado:"Flor de lírio, linda. Lilian tem origem latina e significa flor de lírio. Esse nome está associado à beleza, pureza e graça, simbolizando uma pessoa com uma presença delicada e encantadora, muitas vezes vista como uma flor desabrochando na primavera, com uma energia positiva e luminosa.", nacionalidade:"Latina"},
+    {nome:"Iná",significado:"Mãe ancestral. Iná é um nome de origem tupi e significa mãe ancestral. Este nome é ligado à figura materna, às raízes da família e à conexão com a tradição e os ancestrais. Ele carrega um significado profundo de sabedoria, força e sabedoria herdada das gerações anteriores.", nacionalidade:"Tupi"},
+    {nome:"Odete",significado:"Riqueza, fortuna, felicidade. Odete é um nome de origem portuguesa que significa riqueza e felicidade. Esse nome é associado à ideia de uma pessoa próspera, que traz consigo uma aura de bem-estar, satisfação e abundância, simbolizando alguém que possui uma vida cheia de alegrias e realizações.", nacionalidade:"Portuguêsa"},
+    {nome:"Sina",significado:"Destino, marcada pelo destino. Sina tem origem alemã e está ligada à ideia de destino ou algo que é predestinado. Este nome é simbólico de uma pessoa que tem um destino único e poderoso, uma trajetória que não pode ser evitada ou alterada, marcada por grandes desafios ou acontecimentos importantes na vida.", nacionalidade:"Alemã"},
+    {nome:"Lana",significado:"Cheia de serenidade ou lã. Lana tem origem havaiana e significa cheia de serenidade ou lã. Este nome está associado à calma, tranquilidade e suavidade, sendo uma pessoa que transmite paz e harmonia para os outros, ao mesmo tempo em que é forte e resiliente, como a lã macia e durável.", nacionalidade:"Havaiana"},
+    {nome:"Isaura",significado:"Da região da Isáuria. Isaura tem origem portuguesa e faz referência à uma região histórica da Anatólia, chamada Isáuria. Este nome evoca uma sensação de nobreza e antiguidade, simbolizando uma pessoa com raízes profundas, ligada à história e à cultura do seu povo, com qualidades de honra e respeito.", nacionalidade:"Portuguêsa"},
+    {nome:"Suelen",significado:"Cheia de vida e graça. Suelen tem origem brasileira e é associado a uma pessoa cheia de energia e graça, sempre animada e com um sorriso radiante. Esse nome transmite uma personalidade encantadora, com uma energia positiva que contagia todos ao seu redor.", nacionalidade:"Brasileira"},
+    {nome:"Malvina",significado:"Amiga, gentil. Malvina tem origem escocesa e significa amiga ou gentil. Este nome é associado a uma pessoa que é amigável, acolhedora e tem uma natureza suave e amável, sendo uma amiga leal e uma presença sempre agradável para os outros.", nacionalidade:"Escocês"},
+    {nome:"Dina",significado:"Justiça, julgada por Deus. Dina tem origem hebraica e significa justiça ou julgada por Deus. Este nome reflete uma pessoa com um senso de justiça muito forte, que busca sempre a verdade e a equidade em todas as situações, muitas vezes vista como alguém imparcial e sábio nas suas decisões.", nacionalidade:"Hebraica"},
+    {nome:"Veena",significado:"Instrumento musical, graciosa. Veena tem origem indiana e se refere a um instrumento musical tradicional da Índia, conhecido por sua beleza e melodia suave. Este nome é associado a uma pessoa graciosa, com grande sensibilidade artística e uma beleza que encanta a todos ao seu redor.", nacionalidade:"Indiana"},
+    {nome:"Olga",significado:"Santa, abençoada. Olga tem origem russa e é um nome que carrega um forte significado religioso, associando-se à santidade e à bênção divina. Este nome é frequentemente dado a mulheres com grande bondade, sabedoria e uma força interior imensa, sendo admiradas por sua pureza e virtude.", nacionalidade:"Russa"},
+    {nome:"Aroa",significado:"Boa vontade, favor. Aroa é um nome de origem espanhola que significa boa vontade ou favor. Este nome é associado a uma pessoa com um coração generoso, sempre disposta a ajudar os outros, simbolizando um espírito de bondade e empatia, alguém que oferece ajuda sem esperar nada em troca.", nacionalidade:"Espanhola"},
+    {nome:"Luzia",significado:"Iluminada, brilhante. Luzia tem origem portuguesa e significa iluminada ou brilhante. Este nome simboliza uma pessoa com uma personalidade radiante, que traz luz e positividade para os outros, sendo uma fonte de inspiração e clareza, frequentemente associada a virtudes como a sabedoria e a serenidade.", nacionalidade:"Portuguêsa"},
+    {nome:"Eleri",significado:"Rio galês; brilho de ouro. Eleri tem origem galês e se refere ao rio galês ou ao brilho de ouro. Este nome carrega uma conotação de natureza pura e energia radiante, simbolizando uma pessoa que é forte como a corrente de um rio e brilhante como o ouro, com um caráter vibrante e valioso.", nacionalidade:"Galêsa"},
+    {nome:"Amália",significado:"Trabalhadora, esforçada. Amália é um nome de origem germânica e significa trabalhadora ou esforçada. Este nome é associado a pessoas dedicadas e perseverantes, que estão sempre dispostas a colocar esforço e dedicação em tudo o que fazem, sendo admiradas pela sua força de vontade e capacidade de alcançar objetivos difíceis.", nacionalidade:"Germânica"},
+    {nome:"Sarai",significado:"Princesa, nobre. Sarai tem origem hebraica e significa princesa ou nobre. Este nome evoca uma imagem de uma mulher de grande dignidade e sabedoria, que possui uma presença marcante e uma aura de respeito. É um nome associado a liderança e nobreza de caráter.", nacionalidade:"Hebraica"},
+    {nome:"Shantal",significado:"Canto, cântico. Shantal tem origem francesa e é um nome associado ao som doce e melódico do canto ou cântico. Este nome carrega uma conotação de harmonia e beleza, representando uma pessoa que traz música e alegria para a vida das pessoas ao seu redor.", nacionalidade:"Francêsa"},
+    {nome:"Constanza",significado:"Constância, perseverança. Constanza tem origem italiana e significa constância ou perseverança. Este nome está associado a uma pessoa que é firme e resiliente, capaz de manter o foco e a determinação, mesmo nas adversidades, simbolizando alguém que nunca desiste e sempre busca alcançar seus objetivos com persistência.", nacionalidade:"Italiana"},
+    {nome:"Thalita",significado:"Menina jovem, donzela. Thalita tem origem aramaica e significa menina jovem ou donzela. Este nome simboliza a pureza e inocência da juventude, sendo frequentemente associado à delicadeza e à beleza natural, com uma aura de frescor e novos começos.", nacionalidade:"Aramaico"},
+    {nome:"Anabela",significado:"Graciosa e bela. Anabela é um nome de origem portuguesa e significa graciosa e bela. Este nome está associado à harmonia e à elegância, refletindo uma pessoa de grande beleza tanto interior quanto exterior, sempre encantadora e com uma personalidade suave e cativante.", nacionalidade:"Portuguêsa"},
+    {nome:"Zhanna",significado:"Deus é graciosa. Zhanna tem origem russa e significa 'Deus é graciosa'. Este nome evoca a ideia de uma pessoa abençoada, que é grata pelas dádivas da vida e que transmite uma graça divina através de suas ações e palavras. É um nome associado à bondade e à fé.", nacionalidade:"Russa"},
+    {nome:"Maïa",significado:"Tempo, mês de maio. Maïa tem origem francesa e significa tempo ou mês de maio. Este nome é associado à primavera, simbolizando renovação, frescor e novos começos. Ele evoca uma sensação de crescimento e vida, representando alguém que traz vitalidade e energia positiva para todos ao seu redor.", nacionalidade:"Francêsa"},
+    {nome:"Bernadete",significado:"Corajosa como um urso. Bernadete tem origem francesa e significa corajosa como um urso. Este nome está associado a uma pessoa forte e valente, alguém com um espírito indomável que enfrenta desafios com coragem e determinação, simbolizando a força e a proteção do urso em sua forma mais heroica.", nacionalidade:"Francêsa"},
+    {nome:"Samar",significado:"Conversação noturna. Samar tem origem árabe e significa conversação noturna. Este nome está associado a uma pessoa que gosta de longas conversas profundas, especialmente à noite, quando o mundo está em silêncio. Ele evoca uma natureza tranquila e reflexiva, pronta para o diálogo e o entendimento mútuo.", nacionalidade:"Árabe"},
+    {nome:"Dulcina",significado:"Doce, meiga. Dulcina tem origem espanhola e significa doce ou meiga. Este nome é associado a uma pessoa com uma personalidade gentil, doce e afetuosa, que espalha carinho e ternura por onde passa. Ele simboliza a suavidade e a bondade de uma alma pura e amável.", nacionalidade:"Espanhola"},
+    {nome:"Henrietta",significado:"Governanta do lar. Henrietta é um nome de origem inglesa e significa 'governanta do lar'. Este nome evoca uma pessoa forte, com habilidades de liderança dentro de sua casa, simbolizando a habilidade de cuidar do ambiente doméstico com sabedoria e dedicação.", nacionalidade:"Inglêsa"},
+    {nome:"Gutiana",significado:"Do povo dos gutianos. Gutiana tem origem suméria e refere-se ao povo dos gutianos, uma antiga tribo mencionada nas civilizações da Mesopotâmia. O nome carrega consigo uma forte conexão histórica e é associado ao legado e à coragem de um povo antigo.", nacionalidade:"Suméria"},
+    {nome:"Stefania",significado:"Coroada, homenageada. Stefania tem origem italiana e significa 'coroada' ou 'homenageada'. Este nome simboliza uma pessoa que é digna de respeito e reconhecimento, alguém que merece ser celebrada por sua virtude e realizações, sendo uma líder admirada em sua comunidade.", nacionalidade:"Italiana"},
+    {nome:"Blanca",significado:"Branca, pura. Blanca tem origem espanhola e significa 'branca' ou 'pura'. Este nome está associado à pureza e à beleza imaculada, representando uma pessoa que é virtuosa, limpa de coração e cheia de luz, refletindo a ideia de clareza e inocência.", nacionalidade:"Espanhola"},
+    {nome:"Clorinda",significado:"Dourada, florescente. Clorinda tem origem italiana e significa 'dourada' ou 'florescente'. Este nome evoca uma pessoa radiante e vibrante, como a cor dourada ou uma flor que está sempre em pleno florescimento, simbolizando vitalidade, beleza e prosperidade.", nacionalidade:"Italiana"},
+    {nome:"Tamira",significado:"Palmeira, originária do oásis. Tamira tem origem hebraica e significa 'palmeira', especialmente a que cresce em oásis, trazendo à mente a ideia de algo que cresce em um ambiente abundante e refrescante, representando resistência e beleza natural.", nacionalidade:"Hebraica"},
+    {nome:"Raisa",significado:"Leve, princesa. Raisa tem origem árabe e significa 'leve' ou 'princesa'. Este nome simboliza a leveza de espírito e a graciosidade de uma pessoa de alta classe, que é nobre não só por sua linhagem, mas também por sua atitude e comportamentos refinados.", nacionalidade:"Árabe"},
+    {nome:"Jalila",significado:"Majestosa, nobre. Jalila tem origem árabe e significa 'majestosa' ou 'nobre'. Este nome é associado a uma pessoa que exala autoridade e dignidade, sendo admirada por sua grandeza e caráter nobre. Uma pessoa que está à altura de grandes responsabilidades e respeito.", nacionalidade:"Árabe"},
+    {nome:"Liesel",significado:"Deus é plenitude; juramento de Deus. Liesel tem origem alemã e significa 'Deus é plenitude' ou 'juramento de Deus'. Este nome carrega consigo um forte senso de fé e compromisso, evocando uma pessoa que vive em total harmonia com seus valores espirituais e compromisso com a verdade.", nacionalidade:"Alemã"},
+    {nome:"Amal",significado:"Esperança, aspiração. Amal tem origem árabe e significa 'esperança' ou 'aspiração'. Este nome simboliza uma pessoa otimista e cheia de sonhos, sempre voltada para um futuro melhor, carregando consigo a capacidade de inspirar os outros com sua visão positiva e suas metas." , nacionalidade:"Árabe"},
+    {nome:"Vanessa",significado:"Borboleta, cheia de graça. Vanessa tem origem inglesa e significa 'borboleta', simbolizando transformação e liberdade. Este nome é associado a uma pessoa que é graciosa e livre, como uma borboleta que voa com leveza, cheia de beleza e delicadeza.", nacionalidade:"Inglêsa"},
+    {nome:"Ornella",significado:"Flor de freixo, ornamento. Ornella tem origem italiana e significa 'flor de freixo' ou 'ornamento'. Este nome traz à mente uma pessoa que é valiosa e ornamentada de forma natural, alguém que embeleza a vida de quem está ao redor, sendo um símbolo de graça e leveza.", nacionalidade:"Italiana"},
+    {nome:"Maysa",significado:"Andar gracioso, passos delicados. Maysa tem origem árabe e significa 'andar gracioso' ou 'passos delicados'. Este nome é associado a uma pessoa que caminha com elegância e suavidade, refletindo uma personalidade que é ao mesmo tempo encantadora e refinada.", nacionalidade:"Árabe"},
+    {nome:"Daliana",significado:"Linda como dalia, florida. Daliana tem origem francesa e significa 'linda como dalia', uma flor florida e radiante. Este nome evoca uma pessoa que é bela, cheia de vitalidade, e com uma presença que traz alegria e frescor aos ambientes ao seu redor.", nacionalidade:"Francêsa"},
+    {nome:"Romilda",significado:"Batalhadora gloriosa. Romilda tem origem germânica e significa 'batalhadora gloriosa'. Este nome está associado a uma pessoa forte e determinada, alguém que é capaz de lutar pelas suas crenças e que alcança grandes conquistas com coragem e honra.", nacionalidade:"Germânica"},
+    {nome:"Priscila",significado:"Antiga, primitiva. Priscila tem origem portuguesa e significa 'antiga' ou 'primitiva'. Este nome evoca uma figura de sabedoria e experiência, alguém que traz consigo a história e a tradição de tempos antigos. Representa uma pessoa respeitada pela sua profundidade e conhecimento acumulado ao longo dos anos.", nacionalidade:"Portuguêsa"},
+    {nome:"Yunuen",significado:"Meio da lua, princesa. Yunuen tem origem Maia e significa 'meio da lua' ou 'princesa'. Este nome está associado à mística e à beleza da lua, simbolizando uma figura nobre, cheia de luz e encanto, que exerce uma influência serena e poderosa em seu meio, como uma princesa lunar." , nacionalidade:"Maia"},
+    {nome:"Tamires",significado:"Rainha, afortunada. Tamires tem origem tupi e significa 'rainha' ou 'afortunada'. Este nome é associado à grandeza e ao poder, evocando uma figura régia que está rodeada de bênçãos e sorte, alguém que governa com sabedoria e graça, recebendo bênçãos do universo.", nacionalidade:"Tupi"},
+    {nome:"Liandra",significado:"Mulher leoa, valente. Liandra tem origem portuguesa e significa 'mulher leoa', simbolizando a coragem e a força de uma leoa. Este nome está associado a uma mulher de espírito indomável, cheia de coragem, força interior e determinação, pronta para enfrentar qualquer desafio com bravura.", nacionalidade:"Portuguêsa"},
+    {nome:"Silene",significado:"Flor do campo. Silene tem origem latina e significa 'flor do campo'. Este nome é associado à delicadeza e à beleza natural das flores selvagens que crescem nos campos, simbolizando a simplicidade, a beleza pura e a liberdade de viver sem restrições.", nacionalidade:"Latina"},
+    {nome:"Katell",significado:"Pura, casta. Katell tem origem francesa e significa 'pura' ou 'casta'. Este nome simboliza alguém que é íntegro e imaculado, associado à virtude e à pureza, refletindo uma personalidade forte e cheia de princípios, com uma conexão profunda com a moralidade e a verdade.", nacionalidade:"Francêsa"},
+    {nome:"Sorina",significado:"Luz do sol. Sorina tem origem romena e significa 'luz do sol'. Este nome traz consigo a ideia de uma pessoa radiante, cheia de brilho e energia, capaz de iluminar a vida das pessoas ao seu redor, trazendo calor, clareza e vitalidade para os outros." , nacionalidade:"Romena"},
+    {nome:"Hind",significado:"Rica, próspera. Hind tem origem árabe e significa 'rica' ou 'próspera'. Este nome está associado à riqueza material e espiritual, simbolizando uma pessoa que é abençoada com abundância em todos os aspectos da vida, sendo uma fonte de prosperidade para si mesma e para os outros.", nacionalidade:"Árabe"},
+    {nome:"Gaëlle",significado:"Generosa, alegre. Gaëlle tem origem francesa e significa 'generosa' ou 'alegre'. Este nome representa uma pessoa que compartilha sua alegria e bondade com o mundo ao seu redor, irradiando felicidade e um espírito de generosidade que toca a vida de todos ao seu redor." , nacionalidade:"Francêsa"},
+    {nome:"Renée",significado:"Renascida, renovada. Renée tem origem francesa e significa 'renascida' ou 'renovada'. Este nome carrega a simbologia de transformação e recomeço, associando uma pessoa que passou por mudanças significativas em sua vida, voltando com mais força, frescor e energia positiva.", nacionalidade:"Francêsa"},
+    {nome:"Thamara",significado:"Palmeira, doce fruta. Thamara tem origem hebraica e significa 'palmeira', uma árvore que simboliza força e resistência, e 'doce fruta', simbolizando abundância e doçura. Este nome evoca a ideia de uma pessoa forte e doce, com raízes profundas e uma presença acolhedora e generosa.", nacionalidade:"Hebraica"},
+    {nome:"Seu",significado:"Rosa, flor. Seu tem origem coreana e significa 'rosa' ou 'flor'. Este nome simboliza a beleza delicada e a graça de uma flor, com a conotação de uma pessoa que exala suavidade, elegância e beleza, sendo uma presença delicada que encanta a todos ao seu redor.", nacionalidade:"Coreana"},
+    {nome:"Adira",significado:"Forte, poderosa. Adira tem origem hebraica e significa 'forte' ou 'poderosa'. Este nome é associado a uma pessoa de grande força interior, com uma capacidade notável de enfrentar adversidades e superar desafios, refletindo coragem, determinação e liderança.", nacionalidade:"Hebraica"},
+    {nome:"Noélia",significado:"Nascimento, nascida no Natal. Noélia tem origem francesa e significa 'nascimento' ou 'nascida no Natal'. Este nome está intimamente ligado ao simbolismo do Natal, evocando a chegada de uma nova vida cheia de luz e esperança, com o significado de renovação e alegria." , nacionalidade:"Francêsa"},
+    {nome:"Ottilia",significado:"Rica em batalhas. Ottilia tem origem alemã e significa 'rica em batalhas'. Este nome é associado a uma pessoa que enfrenta as lutas da vida com grande coragem e destreza, superando obstáculos e alcançando vitórias através de sua força e perseverança." , nacionalidade:"Alemã"},
+    {nome:"Délia",significado:"Da ilha de Delos. Délia tem origem grega e significa 'da ilha de Delos'. Este nome evoca uma pessoa que está ligada à mitologia grega e à ilha de Delos, conhecida como o local de nascimento de Apolo e Ártemis, simbolizando um nascimento sagrado e de grande importância.", nacionalidade:"Grega"},
+    {nome:"Yvone",significado:"Arqueira, árvore de teixo. Yvone tem origem francesa e significa 'arqueira' ou 'árvore de teixo'. Este nome remete a uma figura de força, habilidade e resistência, assim como o teixo, uma árvore conhecida pela sua flexibilidade e durabilidade, e à arqueira, uma mulher que é habilidosa e determinada em seu objetivo.", nacionalidade:"Francêsa"},
+    {nome:"Melyssa",significado:"Abelha, doce como mel. Melyssa tem origem grega e significa 'abelha' ou 'doce como mel'. Este nome evoca a ideia de uma pessoa trabalhadora e doce, semelhante a uma abelha, que colhe os frutos do seu trabalho com dedicação, e cujo comportamento reflete a suavidade e a doçura do mel.", nacionalidade:"Grega"},
+    {nome:"Carmelita",significado:"Jardim, vinha de Deus. Carmelita tem origem portuguesa e significa 'jardim' ou 'vinha de Deus'. Este nome carrega consigo uma forte ligação com a natureza, simbolizando uma pessoa frutífera e abençoada por Deus, como um jardim fértil ou uma vinha que dá bons frutos espirituais.", nacionalidade:"Portuguêsa"},
+    {nome:"Annika",significado:"Graciosa, cheia de graça. Annika tem origem alemã e significa 'graciosa' ou 'cheia de graça'. Este nome reflete uma pessoa que é encantadora, cheia de charme e graça, com uma personalidade que cativa e traz alegria a todos ao seu redor, simbolizando a pureza e a suavidade de uma flor.", nacionalidade:"Alemã"},
+    {nome:"Vivika",significado:"Cheia de vida. Vivika tem origem sueca e significa 'cheia de vida'. Este nome simboliza uma pessoa energética, cheia de vitalidade e entusiasmo pela vida. Ela é alguém que traz luz e alegria por onde passa, irradiando uma energia positiva e contagiante.", nacionalidade:"Sueca"},
+    {nome:"Olena",significado:"Radiante, luminosa. Olena tem origem ucraniana e significa 'radiante' ou 'luminosa'. Este nome está associado a uma pessoa que brilha, seja pela sua beleza interior ou exterior, iluminando o caminho dos outros com sua presença e sabedoria.", nacionalidade:"Ucraniana"},
+    {nome:"Lorelei",significado:"Rochedo do Reno, canto encantador. Lorelei tem origem alemã e significa 'rochedo do Reno' ou 'canto encantador'. Este nome é inspirado pela famosa lenda alemã, em que Lorelei era uma mulher cujo canto mágico atraía marinheiros ao perigo. É associado a uma pessoa de grande poder de atração e encantamento.", nacionalidade:"Alemã"},
+    {nome:"Djamila",significado:"Linda, graciosa. Djamila tem origem árabe e significa 'linda' ou 'graciosa'. Este nome remete à beleza física e espiritual de uma pessoa, com uma beleza que vai além da aparência, refletindo uma personalidade encantadora e adorável, que atrai amor e admiração de todos ao seu redor.", nacionalidade:"Árabe"},
+    {nome:"Sinaí",significado:"Montanha sagrada, divina. Sinaí tem origem hebraica e significa 'montanha sagrada'. Este nome está ligado à montanha onde Moisés recebeu os Dez Mandamentos, sendo um símbolo de revelação divina e espiritualidade, representando alguém com forte conexão com o sagrado e a espiritualidade.", nacionalidade:"Hebraica"},
+    {nome:"Araceli",significado:"Altar do céu, celestial. Araceli tem origem espanhola e significa 'altar do céu' ou 'celestial'. Este nome evoca a ideia de uma pessoa que é vista como uma figura elevada, com uma natureza pura e celestial, representando a presença divina ou um anjo em forma humana.", nacionalidade:"Espanhola"},
+    {nome:"Aude",significado:"Riqueza, fortuna. Aude tem origem francesa e significa 'riqueza' ou 'fortuna'. Este nome simboliza uma pessoa abençoada com abundância, prosperidade e sucesso, seja em termos materiais ou espirituais, sendo associada à boa sorte e à generosidade.", nacionalidade:"Francêsa"},
+    {nome:"Jeanne",significado:"Deus é graciosa. Jeanne tem origem francesa e significa 'Deus é graciosa'. Este nome tem uma forte ligação com a graça divina, refletindo uma pessoa abençoada por Deus com qualidades de bondade, compaixão e força espiritual, sempre agindo com misericórdia e amor ao próximo.", nacionalidade:"Francêsa"},
+    {nome:"Mafalda",significado:"Mulher forte na batalha. Mafalda tem origem portuguesa e significa 'mulher forte na batalha'. Este nome está associado a uma mulher destemida, com grande coragem e determinação, pronta para enfrentar qualquer adversidade e lutar por seus ideais, simbolizando força e resistência.", nacionalidade:"Portuguêsa"},
+    {nome:"Isadora",significado:"Presente de Ísis. Isadora tem origem portuguesa e significa 'presente de Ísis'. Este nome remete à deusa egípcia Ísis, que simboliza a maternidade e a magia. A mulher chamada Isadora é vista como alguém abençoado, com uma natureza misteriosa e poderosa, semelhante à deusa que lhe dá o nome. O significado evoca graça, beleza e força feminina.", nacionalidade:"Portuguêsa"},
+    {nome:"Emanuelle",significado:"Deus está conosco. Emanuelle tem origem francesa e significa 'Deus está conosco'. Este nome é profundamente espiritual, associando-se à presença divina, à proteção e ao amor incondicional. É um nome que transmite conforto, fé e a sensação de que alguém nunca está sozinho, mas sempre guiado pela luz de Deus.", nacionalidade:"Francêsa"},
+    {nome:"Surya",significado:"Sol, iluminação feminina. Surya tem origem indiana e significa 'sol' ou 'iluminação feminina'. Este nome está associado ao deus do sol na mitologia hindu, representando luz, vitalidade e poder. É um nome que sugere uma pessoa cheia de energia e brilho, iluminando os outros com sua presença radiante e calorosa.", nacionalidade:"Indiana"},
+    {nome:"Celie",significado:"Celestial, dos céus. Celie tem origem francesa e significa 'celestial' ou 'dos céus'. Este nome remete a algo divino, puro e etéreo, associado a uma pessoa com uma natureza angelical e graciosa. É um nome que evoca uma conexão espiritual e transcendente, como se a pessoa fosse um ser enviado do céu para espalhar bondade e luz.", nacionalidade:"Francêsa"},
+    {nome:"Fara",significado:"Aliada, linda. Fara tem origem árabe e significa 'aliada' ou 'linda'. Este nome está associado à força feminina, à amizade e à beleza, tanto interna quanto externa. A mulher chamada Fara é vista como alguém com grande lealdade e beleza, sendo um pilar de apoio e confiança para aqueles ao seu redor.", nacionalidade:"Árabe"},
+    {nome:"Arlene",significado:"Promessa, juramento. Arlene tem origem inglesa e significa 'promessa' ou 'juramento'. Este nome carrega consigo um forte significado de compromisso, fidelidade e seriedade. A pessoa chamada Arlene é associada a alguém que faz promessas com grande seriedade e cumpre seus compromissos com honra.", nacionalidade:"Inglêsa"},
+    {nome:"Mirabella",significado:"Maravilhosa, linda. Mirabella tem origem italiana e significa 'maravilhosa' ou 'linda'. Este nome é associado à beleza exterior e interior, transmitindo a ideia de uma pessoa que encanta a todos ao seu redor. A mulher chamada Mirabella é admirada por sua graça, charme e caráter inspirador.", nacionalidade:"Italiana"},
+    {nome:"Ondina",significado:"Ninfa da água, espírito do rio. Ondina tem origem latina e significa 'ninfa da água' ou 'espírito do rio'. Este nome remete às figuras mitológicas das águas, simbolizando fluidez, serenidade e mistério. A pessoa chamada Ondina é associada à beleza natural e à conexão com os elementos da água, representando harmonia e tranquilidade.", nacionalidade:"Latina"},
+    {nome:"Sybille",significado:"Profetisa, oráculo. Sybille tem origem alemã e significa 'profetisa' ou 'oráculo'. Este nome evoca a sabedoria ancestral e a habilidade de ver além do que é visível, associando-se a uma pessoa com grande intuição e capacidade de prever o futuro. A mulher chamada Sybille é vista como alguém com grande poder espiritual e conhecimento profundo.", nacionalidade:"Alemã"},
+    {nome:"Viktorija",significado:"Vitoriosa, conquistadora. Viktorija tem origem eslava e significa 'vitoriosa' ou 'conquistadora'. Este nome é associado à ideia de vitória, coragem e determinação. A pessoa chamada Viktorija é vista como alguém que nunca desiste e sempre alcança seus objetivos, sendo uma fonte de inspiração para os outros.", nacionalidade:"Eslava"},
+    {nome:"Minerva",significado:"Deusa da sabedoria. Minerva tem origem latina e significa 'deusa da sabedoria'. Este nome remete à deusa romana da sabedoria, da estratégia e da guerra justa. A mulher chamada Minerva é associada ao conhecimento, à inteligência e à habilidade de tomar decisões sábias e estratégicas, sendo uma líder natural.", nacionalidade:"Latina"},
+    {nome:"Deridre",significado:"Mulher triste, lendária. Deridre tem origem irlandesa e significa 'mulher triste'. Este nome está associado a uma figura lendária da mitologia celta, conhecida por sua história de sofrimento e perda, mas também por sua força interior. A mulher chamada Deridre é vista como alguém com grande profundidade emocional, capaz de enfrentar adversidades com coragem.", nacionalidade:"Irlandêsa"},
+    {nome:"Alethea",significado:"Verdade, sincera. Alethea tem origem grega e significa 'verdade' ou 'sincera'. Este nome está associado à honestidade, transparência e autenticidade. A pessoa chamada Alethea é vista como alguém que valoriza a verdade acima de tudo, sempre agindo com integridade e sendo um exemplo de sinceridade e clareza para os outros.", nacionalidade:"Grega"},
+    {nome:"Haifa",significado:"Delicada, esbelta. Haifa tem origem árabe e significa 'delicada' ou 'esbelta'. Este nome é associado à beleza graciosa, à leveza e à elegância. A mulher chamada Haifa é vista como alguém que possui uma beleza natural, serena e refinada, com uma personalidade suave e encantadora.", nacionalidade:"Árabe"},
+    {nome:"Rafaella",significado:"Deus curou, abençoada. Rafaella tem origem portuguesa e significa 'Deus curou'. Este nome carrega consigo um significado profundamente espiritual, associado à cura divina e ao cuidado de Deus. A pessoa com esse nome é vista como abençoada, com uma natureza reconfortante e curadora, trazendo alívio e paz para os outros.", nacionalidade:"Portuguêsa"},
+    {nome:"Blanche",significado:"Branca, pura. Blanche tem origem francesa e significa 'branca', 'pura'. Este nome remete à pureza, à inocência e à simplicidade. A pessoa chamada Blanche é associada à elegância e ao brilho da simplicidade, com uma aura de serenidade e leveza. Representa alguém com uma beleza sem adornos e de caráter nobre.", nacionalidade:"Francêsa"},
+    {nome:"Irie",significado:"Paz, alegria suprema. Irie tem origem jamaicana e significa 'paz' ou 'alegria suprema'. Este nome está intimamente ligado à filosofia de vida jamaicana, que valoriza a paz interior, a felicidade e a harmonia com os outros. A pessoa chamada Irie é vista como alguém que irradia felicidade, tranquilidade e boas energias ao seu redor.", nacionalidade:"Jamaicana"},
+    {nome:"Marlisa",significado:"Combinação de Maria + Elisa. Marlisa tem origem portuguesa e é uma combinação dos nomes Maria e Elisa. Maria significa 'senhora soberana' e Elisa significa 'Deus é abundância'. Portanto, Marlisa é associada a uma mulher que carrega em si as qualidades da realeza e da generosidade divina. Uma pessoa digna de confiança, com uma aura de bondade e realeza.", nacionalidade:"Portuguêsa"},
+    {nome:"Emília",significado:"Rival, trabalhadora. Emília tem origem latina e significa 'rival', 'trabalhadora'. Este nome está associado à persistência, à dedicação e ao esforço contínuo para alcançar objetivos. A mulher chamada Emília é vista como alguém que luta incansavelmente, seja em sua vida pessoal ou profissional, e tem uma energia invencível, sempre se destacando em suas empreitadas.", nacionalidade:"Latina"},
+    {nome:"Shakira",significado:"Agradecida, cheia de graça. Shakira tem origem árabe e significa 'agradecida' ou 'cheia de graça'. Este nome está associado à beleza interior e à gratidão profunda. A pessoa chamada Shakira é conhecida por sua atitude positiva, sempre grata pelas bênçãos recebidas e transmitindo uma energia de alegria e charme por onde passa.", nacionalidade:"Árabe"},
+    {nome:"Jin",significado:"Ouro, preciosa. Jin tem origem chinesa e significa 'ouro' ou 'preciosa'. Este nome carrega o significado de valor inestimável e beleza rara. A pessoa chamada Jin é associada a uma grande estima, com qualidades preciosas que encantam a todos ao seu redor. Além disso, representa riqueza tanto material quanto espiritual.", nacionalidade:"Chinêsa"},
+    {nome:"Fabíola",significado:"Agricultora, cultivadora de feijões. Fabíola tem origem portuguesa e significa 'agricultora', referindo-se à mulher que cultiva e semeia a terra. Este nome é associado ao trabalho árduo, à dedicação e ao sustento das famílias. A mulher chamada Fabíola é vista como alguém com forte conexão à terra e com um espírito trabalhador e generoso.", nacionalidade:"Portuguêsa"},
+    {nome:"Sabrine",significado:"Princesa do rio Severn. Sabrine tem origem francesa e significa 'princesa do rio Severn'. Este nome remete a uma figura nobre e majestosa, associada à realeza e à tranquilidade das águas. A pessoa chamada Sabrine é vista como uma líder natural, com uma energia calma e serena que é admirada por todos ao seu redor.", nacionalidade:"Francêsa"},
+    {nome:"Tânia",significado:"Altamente louvada. Tânia tem origem portuguesa e significa 'altamente louvada'. Este nome está associado a uma pessoa que é digna de adoração e reconhecimento, com grande respeito e admiração de todos ao seu redor. A mulher chamada Tânia é vista como alguém que transmite grande confiança e respeito, sendo um exemplo de força e liderança.", nacionalidade:"Portuguêsa"},
+    {nome:"Mona",significado:"Nobre, distinta. Mona tem origem espanhola e significa 'nobre' ou 'distinta'. Este nome evoca a ideia de uma mulher de grande dignidade e classe. A pessoa chamada Mona é associada à realeza, com uma presença imponente e elegante, sendo uma líder natural em qualquer ambiente.", nacionalidade:"Espanhola"},
+    {nome:"Evita",significado:"Vida, vivaz. Evita tem origem espanhola e significa 'vida' ou 'vivaz'. Este nome transmite a ideia de energia, alegria e vigor. A pessoa chamada Evita é vista como alguém que vive a vida intensamente, com uma personalidade vibrante e apaixonada pela existência.", nacionalidade:"Espanhola"},
+    {nome:"Melisande",significado:"Força trabalhadora. Melisande tem origem francesa e significa 'força trabalhadora'. Este nome é associado à dedicação incansável e ao espírito trabalhador. A mulher chamada Melisande é vista como alguém com grande resistência e coragem, sempre pronta para superar os desafios da vida com determinação e força.", nacionalidade:"Francêsa"},
+    {nome:"Taísa",significado:"Aquela que se sobressai. Taísa tem origem grega e significa 'aquela que se sobressai'. Este nome está associado à grandeza, à superioridade e ao destaque em qualquer área da vida. A pessoa chamada Taísa é vista como alguém com habilidades excepcionais e um espírito competitivo, sempre se destacando em suas ações.", nacionalidade:"Grega"},
+    {nome:"Elga",significado:"Santa, abençoada. Elga tem origem alemã e significa 'santa', 'abençoada'. Este nome carrega uma forte conotação de pureza, graça e uma ligação especial com o divino. A pessoa chamada Elga é vista como alguém com uma aura de santidade, possuindo uma energia protetora e curadora.", nacionalidade:"Alemã"},
+    {nome:"Samanta",significado:"Aquela que ouve, ouvinte atenta. Samanta tem origem aramaica e significa 'aquela que ouve' ou 'ouvinte atenta'. Este nome está associado à empatia, à sabedoria e à capacidade de ouvir as necessidades dos outros. A pessoa chamada Samanta é vista como alguém com grande sensibilidade e um ouvido atento para as preocupações dos outros.", nacionalidade:"Aramaico"},
+    {nome:"Teresina",significado:"Veraneio, pequena Teresa. Teresina é uma variação do nome Teresa e tem origem portuguesa. A palavra 'Teresina' está associada àqueles que representam a paz, a generosidade e o cuidado. Este nome remete à serenidade e ao caráter acolhedor de quem é capaz de criar um ambiente harmonioso. Como um nome derivado de Teresa, que significa 'a caçadora' ou 'a que colhe frutos', Teresina é um nome cheio de energia tranquila e amável.", nacionalidade:"Portuguêsa"},
+    {nome:"Maila",significado:"Querida, amável. Maila tem origem finlandesa e é associado a um significado carinhoso e afetuoso, que reflete a suavidade, amabilidade e um espírito acolhedor. A pessoa com esse nome é vista como alguém doce, que exala bondade e simpatia, tornando-se querida por todos ao seu redor.", nacionalidade:"Finlandêsa"},
+    {nome:"Gricelda",significado:"Aquela que tece a paz. Gricelda tem origem germânica e significa 'aquela que tece a paz'. Este nome está profundamente associado à harmonia e à sabedoria, simbolizando uma pessoa que atua como mediadora, ajudando a resolver conflitos e espalhar tranquilidade onde quer que vá.", nacionalidade:"Germânica"},
+    {nome:"Saffron",significado:"Flor de açafrão, amarela. Saffron tem origem inglesa e significa 'flor de açafrão'. Este nome traz consigo a simbologia da cor dourada e do valor, refletindo a preciosidade do açafrão, uma das especiarias mais valiosas do mundo. A pessoa chamada Saffron pode ser associada a uma presença vibrante e significativa, alguém que tem um brilho único e que se destaca em qualquer situação.", nacionalidade:"Inglêsa"},
+    {nome:"Liuba",significado:"Amorosa, cheia de ternura. Liuba tem origem russa e significa 'amorosa', 'cheia de ternura'. Este nome está associado à doçura, à empatia e ao cuidado com os outros. A pessoa chamada Liuba é vista como alguém de coração generoso, capaz de espalhar carinho e afeto por onde passa.", nacionalidade:"Russa"},
+    {nome:"Monique",significado:"Conselheira, aquela que aconselha. Monique tem origem francesa e significa 'conselheira'. Este nome é associado a sabedoria e discernimento, representando uma pessoa que tem o dom de aconselhar os outros com clareza e equilíbrio, sendo uma guia confiável para quem busca orientações e soluções.", nacionalidade:"Francêsa"},
+    {nome:"Evania",significado:"Bela, graciosa. Evania tem origem grega e significa 'bela', 'graciosa'. Este nome é associado à beleza e à leveza, refletindo uma pessoa cuja presença é marcada por uma beleza natural e uma graça encantadora, que transmite harmonia e equilíbrio a todos ao seu redor.", nacionalidade:"Grega"},
+    {nome:"Azeneth",significado:"Pertencer a Ísis. Azeneth tem origem egípcia e significa 'pertencer a Ísis', a deusa egípcia da magia e da sabedoria. Este nome carrega consigo um profundo significado espiritual, refletindo uma pessoa com uma conexão com as forças cósmicas e um grande poder de transformação e cura.", nacionalidade:"Egípcio"},
+    {nome:"Narda",significado:"Forte, destemida; aromática. Narda tem origem espanhola e significa 'forte', 'destemida', sendo também associada a uma planta aromática. Este nome transmite a imagem de uma pessoa com grande resiliência, coragem e vitalidade, capaz de enfrentar desafios com determinação e força.", nacionalidade:"Espanhola"},
+    {nome:"Karlina",significado:"Mulher livre. Karlina tem origem alemã e significa 'mulher livre'. Este nome carrega consigo a simbologia de independência e autonomia, refletindo uma pessoa que não se deixa prender por normas e que segue seu próprio caminho, com confiança e liberdade de espírito.", nacionalidade:"Alemã"},
+    {nome:"Hannelore",significado:"Deus é graça + reluzente. Hannelore tem origem alemã e significa 'Deus é graça' ou 'reluzente'. Este nome reflete uma pessoa cuja presença irradia luz e que traz consigo a graça divina, sendo uma fonte de inspiração e positividade para todos ao seu redor.", nacionalidade:"Alemã"},
+    {nome:"Zaira",significado:"Florzinha, brilhante. Zaira tem origem árabe e significa 'florzinha', 'brilhante'. Este nome está associado à beleza delicada e ao brilho natural, representando uma pessoa cuja presença é suave e luminosa, trazendo leveza e encanto por onde passa.", nacionalidade:"Árabe"},
+    {nome:"Ellinor",significado:"Luz, radiante. Ellinor tem origem inglesa e significa 'luz', 'radiante'. Este nome evoca a ideia de alguém que ilumina os outros com sua presença, sendo uma pessoa cheia de vitalidade e energia positiva, sempre irradiando brilho e inspiração.", nacionalidade:"Inglêsa"},
+    {nome:"Lisandra",significado:"Libertadora, defensora da humanidade. Lisandra tem origem grega e significa 'libertadora', 'defensora da humanidade'. Este nome está profundamente associado ao poder de transformação e à luta por justiça e liberdade. A pessoa chamada Lisandra é vista como uma líder corajosa, pronta para defender os direitos dos outros e lutar por um mundo melhor.", nacionalidade:"Grega"},
+    {nome:"Sahana",significado:"Paciência, tolerância. Sahana tem origem indiana e significa 'paciência', 'tolerância'. Este nome é associado à serenidade e à capacidade de suportar dificuldades com calma e dignidade. A pessoa chamada Sahana é vista como alguém com grande autocontrole e compreensão, sempre pronta para lidar com desafios com sabedoria e compaixão.", nacionalidade:"Indiana"},
+    {nome:"Jaslyn",significado:"Mistura de Jasmine + Lynn. Jaslyn tem origem inglesa e é uma combinação dos nomes Jasmine e Lynn. Jasmine significa 'flor perfumada' e Lynn é associado a 'linda', 'maravilhosa'. Este nome representa uma pessoa com uma personalidade doce, encantadora e graciosa, que traz beleza e frescor por onde passa.", nacionalidade:"Inglêsa"},
+    {nome: "Valéria", significado: "Forte, corajosa. Valéria tem origem latina e é derivado do nome Valerius, que significa 'forte' ou 'saudável'. O nome é frequentemente associado à coragem e à força interior, representando uma pessoa que enfrenta desafios com determinação e persistência. Valéria transmite uma imagem de alguém com grande vigor e poder, tanto físico quanto emocional.", nacionalidade: "Portuguêsa"},
+    {nome: "Noor", significado: "Luz, radiante. Noor tem origem árabe e significa 'luz' ou 'radiante'. Este nome está intimamente ligado à iluminação espiritual e à clareza. A pessoa chamada Noor é vista como alguém que traz luz para os outros, irradiando uma energia positiva e brilhante, iluminando o caminho daqueles ao seu redor.", nacionalidade: "Árabe"},
+    {nome: "Roxane", significado: "Aurora, brilhante. Roxane tem origem persa e significa 'aurora' ou 'brilhante'. O nome evoca a ideia de uma pessoa que traz a luz ao amanhecer, alguém com uma personalidade vibrante e cheia de vida. Roxane é associada a uma energia cativante e uma beleza radiante que encanta todos ao seu redor.", nacionalidade: "Francêsa"},
+    {nome: "Arianne", significado: "Castíssima, muito pura. Arianne tem origem francesa e é uma variação do nome Ariana, que significa 'pura' ou 'casta'. O nome evoca a imagem de uma pessoa com uma alma pura, sendo associada à virtude e à bondade. Arianne é frequentemente vista como alguém com grande integridade e bondade interior.", nacionalidade: "Francêsa"},
+    {nome: "Medea", significado: "Planejadora, consultora esperta. Medea tem origem grega e é associada à personagem mitológica famosa pela sua sabedoria e habilidades mágicas. O nome significa 'aquela que planeja' ou 'consultora esperta', refletindo uma pessoa que possui grande inteligência e capacidade para resolver problemas com astúcia e habilidade.", nacionalidade: "Grega"},
+    {nome: "Laverne", significado: "Primavera, alvorecer. Laverne tem origem francesa e significa 'primavera' ou 'alvorecer', evocando as imagens de novos começos e da renovação da natureza. Este nome é associado à juventude, ao crescimento e à energia vibrante, representando uma pessoa cheia de otimismo e disposição para novas aventuras.", nacionalidade: "Francêsa"},
+    {nome: "Tuva", significado: "Familiar, do povo da Tuvá. Tuva tem origem sueca e está associada ao povo da Tuvá, região da Sibéria, conhecida por sua herança nômade e forte conexão com a natureza. O nome transmite uma sensação de pertencimento e conexão com as raízes familiares e culturais, sendo um símbolo de estabilidade e tradição.", nacionalidade: "Sueca"},
+    {nome: "Janelle", significado: "Deus é graciosa. Janelle tem origem inglesa e é uma variação do nome Jane, que significa 'Deus é graciosa'. O nome transmite uma sensação de dignidade e sabedoria, representando uma pessoa com um caráter nobre e gentil. Janelle é associada à bondade e à generosidade, sendo vista como uma pessoa que distribui amor e compaixão.", nacionalidade: "Inglêsa"},
+    {nome: "Olimpia", significado: "Do monte Olimpo, celestial. Olimpia tem origem grega e significa 'do monte Olimpo' ou 'celestial', em referência ao lar dos deuses na mitologia grega. Este nome transmite uma sensação de grandeza e de conexão com o divino, representando uma pessoa com uma presença impressionante e uma personalidade digna de admiração.", nacionalidade: "Grega"},
+    {nome: "Lejla", significado: "Noite, nascida à noite. Lejla tem origem sérvia e significa 'noite' ou 'nascida à noite'. Este nome é frequentemente associado à tranquilidade e ao mistério da noite, evocando a ideia de uma pessoa serena, introspectiva e cheia de profundidade emocional, como a beleza silenciosa da escuridão.", nacionalidade: "Sérvia"},
+    {nome: "Rosely", significado: "Variante de Rosa, bela como a rosa. Rosely tem origem portuguesa e é uma variação do nome Rosa, que significa 'flor', 'bela como a rosa'. Este nome está associado à beleza, à delicadeza e à feminilidade, refletindo uma pessoa com uma aparência encantadora e uma personalidade doce e acolhedora.", nacionalidade: "Portuguêsa"},
+    {nome: "Yedidah", significado: "Amada, querida. Yedidah tem origem hebraica e significa 'amada' ou 'querida'. Este nome transmite a sensação de carinho e afeto, representando uma pessoa com uma natureza amorosa, que conquista facilmente o coração dos outros por sua bondade e generosidade.", nacionalidade: "Hebraica"},
+    {nome: "Sorrel", significado: "Flor, avermelhada. Sorrel tem origem inglesa e significa 'flor', mais especificamente associada à planta de flores avermelhadas. Este nome simboliza uma pessoa com uma personalidade vibrante e energética, refletindo a beleza e a frescor das flores, com uma forte conexão à natureza.", nacionalidade: "Inglêsa"},
+    {nome: "Ivânia", significado: "Deus é graciosa. Ivânia tem origem portuguesa e significa 'Deus é graciosa'. Este nome reflete a ideia de uma pessoa que é abençoada e amada, com uma forte conexão espiritual e uma personalidade que irradia bondade e graça. Ivânia é vista como alguém com um coração puro e cheio de amor.", nacionalidade: "Portuguêsa"},
+    {nome: "Phoebe", significado: "Radiante, brilhante. Phoebe tem origem grega e significa 'radiante' ou 'brilhante'. Este nome é associado à luminosidade e ao brilho, refletindo uma pessoa que se destaca pelo seu caráter vibrante, com uma energia positiva que ilumina os outros ao seu redor. Phoebe é frequentemente associada à deusa da lua e à sabedoria.", nacionalidade: "Grega"},
+    {nome: "Cláudia", significado: "Manca, aquela que claudica. Cláudia tem origem latina e é associada ao termo 'manca', que significa 'aquela que claudica' ou 'aquela que não anda direito'. Apesar de sua origem ter um significado negativo, o nome Cláudia evoluiu para um símbolo de força e perseverança, refletindo alguém que supera obstáculos com dignidade.", nacionalidade: "Latina"},
+    {nome: "Elzira", significado: "Prometida a Deus, consagrada. Elzira tem origem portuguesa e significa 'prometida a Deus' ou 'consagrada'. Este nome transmite a ideia de uma pessoa com um forte vínculo espiritual, alguém que se dedica a causas elevadas e tem uma missão divina a cumprir, com um caráter puro e dedicado.", nacionalidade: "Portuguêsa"},
+    {nome: "Viola", significado: "Flor violeta, musicalidade. Viola tem origem latina e significa 'flor violeta'. Este nome é associado tanto à beleza delicada da flor quanto à musicalidade, refletindo uma pessoa com uma natureza suave e harmoniosa, assim como o som de uma música suave. Viola também transmite a ideia de criatividade e sensibilidade artística.", nacionalidade: "Latina"},
+    {nome: "Léia", significado: "Portadora de boas notícias. Léia tem origem hebraica e significa 'portadora de boas notícias'. Este nome é associado a alguém que traz alegria e boas novas aos outros, uma pessoa que irradia felicidade e boa sorte. Léia transmite uma sensação de otimismo e generosidade, sendo vista como um símbolo de esperança e positividade.", nacionalidade: "Hebraica"},
+    {nome: "Grete", significado: "Pérola, valiosa. Grete tem origem alemã e é uma forma abreviada do nome Margarete, que significa 'pérola'. O nome Grete simboliza algo raro e precioso, como uma pérola, refletindo uma pessoa de grande valor e elegância. Este nome também está associado a pureza e beleza, com uma aura de sofisticação e delicadeza.", nacionalidade: "Alemã"},
+    {nome: "Antonella", significado: "Valiosa, digna de apreço. Antonella tem origem italiana e significa 'valiosa' ou 'digna de apreço'. Este nome transmite a ideia de uma pessoa com grande valor, seja pelo seu caráter, habilidades ou personalidade. Antonella é vista como alguém que merece ser admirada e respeitada, representando uma figura forte e digna.", nacionalidade: "Italiana"},
+    {nome: "Marjory", significado: "Pérola, rara. Marjory tem origem inglesa e significa 'pérola'. Este nome está associado à raridade e ao valor, refletindo uma pessoa rara e preciosa, como uma pérola, com uma personalidade única e encantadora. Marjory é também um símbolo de pureza e elegância, sendo um nome associado a uma figura distinta e de grande valor.", nacionalidade: "Inglêsa"},
+    {nome: "Yoana", significado: "Deus é graciosa. Yoana tem origem búlgara e é uma variação do nome Johanna, que significa 'Deus é graciosa'. Este nome reflete uma pessoa com grande conexão espiritual e uma natureza cheia de graça e bondade. Yoana é associada à beleza, não apenas física, mas também interior, irradiando amor e generosidade.", nacionalidade: "Búlgaro"},
+    {nome: "Dayane", significado: "Deusa da caça, originária de Diana. Dayane tem origem no nome Diana, que na mitologia romana é a deusa da caça. Este nome é associado à força, liberdade e independência. Dayane representa uma pessoa determinada e focada, com uma energia dinâmica e uma conexão com a natureza e o selvagem, semelhante à deusa Diana.", nacionalidade: "Brasileira"},
+    {nome: "Eulália", significado: "Bem-falante, eloquente. Eulália tem origem espanhola e significa 'bem-falante' ou 'eloquente'. Este nome é associado a uma pessoa que possui grande habilidade para se comunicar, com uma oratória fluente e encantadora. Eulália é vista como alguém persuasiva, com a capacidade de cativar e convencer os outros com suas palavras.", nacionalidade: "Espanhola"},
+    {nome: "Tereza", significado: "Caçadora, veraneio. Tereza tem origem portuguesa e é associada à palavra 'caçadora'. Este nome também é ligado ao verão, refletindo uma pessoa cheia de energia, vibrante e alegre, como os dias ensolarados. Tereza simboliza uma pessoa que busca alcançar seus objetivos com força e determinação, explorando novos horizontes e superando desafios.", nacionalidade: "Portuguêsa"},
+    {nome: "Mália", significado: "Variação havaiana de Maria, desejo de criança. Mália tem origem havaiana e é uma variação do nome Maria. O nome Mália também está associado ao desejo de uma criança, simbolizando a pureza e a inocência. Este nome reflete a suavidade e a beleza, representando alguém delicado, mas com grande força interior.", nacionalidade: "Havaiana"},
+    {nome: "Carmen", significado: "Poema, canção. Carmen tem origem espanhola e significa 'poema' ou 'canção'. Este nome transmite a ideia de uma pessoa que é como uma música ou poesia, com uma presença encantadora e uma personalidade artística. Carmen é associada à beleza e à arte, sendo uma pessoa que expressa seus sentimentos de maneira única e criativa.", nacionalidade: "Espanhola"},
+    {nome: "Galene", significado: "Calma, serenidade marinha. Galene tem origem grega e significa 'calma' ou 'serenidade', especialmente associada ao mar. Este nome evoca a paz e a tranquilidade, como as águas serenas do oceano. Galene é vista como uma pessoa calma, equilibrada e com grande controle emocional, que consegue transmitir serenidade aos outros ao seu redor.", nacionalidade: "Grega"},
+    {nome: "Zinara", significado: "Dourada, luz intensa. Zinara tem origem persa e significa 'dourada' ou 'luz intensa'. Este nome transmite a ideia de uma pessoa brilhante e radiante, com uma personalidade forte e cativante. Zinara simboliza alguém que se destaca pela sua energia positiva e pela luz que irradia para os outros, como o brilho do ouro.", nacionalidade: "Persa"},
+    {nome: "Neusa", significado: "Força, energia; origem indígena. Neusa tem origem tupi e significa 'força' ou 'energia'. Este nome está associado a uma pessoa com grande vigor e determinação, capaz de superar obstáculos e enfrentar desafios. Neusa é vista como uma pessoa com uma grande conexão com suas raízes e uma energia contagiante.", nacionalidade: "Tupi"},
+    {nome: "Ghita", significado: "Pérola, valiosa. Ghita tem origem romena e significa 'pérola'. Este nome simboliza a beleza e o valor, associando a pessoa a algo raro e precioso, como uma pérola. Ghita reflete a ideia de alguém que é valiosa, com uma personalidade encantadora e uma presença luminosa que cativa a todos ao seu redor.", nacionalidade: "Romena"},
+    {nome: "Indira", significado: "Deusa Lakshmi, senhora da beleza. Indira tem origem indiana e é associada à deusa Lakshmi, a deusa da beleza, riqueza e prosperidade. Este nome simboliza a beleza radiante e a harmonia, refletindo uma pessoa com grande charme, atraente não só fisicamente, mas também por sua energia positiva e aura de serenidade.", nacionalidade: "Indiana"},
+    {nome: "Teodora", significado: "Presente de Deus. Teodora tem origem portuguesa e significa 'presente de Deus'. Este nome está associado a alguém que é um presente divino para o mundo, simbolizando uma pessoa especial, escolhida para trazer luz e bondade. Teodora é vista como uma bênção, refletindo uma alma pura e dedicada.", nacionalidade: "Portuguêsa"},
+    {nome: "Milenka", significado: "Amável, graciosa. Milenka tem origem eslava e significa 'amável' ou 'graciosa'. Este nome é associado a uma pessoa de natureza gentil e carinhosa, sempre pronta para ajudar os outros com um sorriso. Milenka transmite a ideia de uma pessoa com grande empatia, calorosa e adorável em sua essência.", nacionalidade: "Eslava"},
+    {nome: "Jordana", significado: "Descendente do rio Jordão. Jordana tem origem portuguesa e significa 'descendente do rio Jordão'. Este nome tem conotações bíblicas, evocando uma conexão com a espiritualidade e a purificação, como o próprio rio Jordão. Jordana é vista como uma pessoa com raízes profundas, simbolizando renovação e fé.", nacionalidade: "Portuguêsa"},
+    {nome: "Djenane", significado: "Pequeno paraíso, jardim florido. Djenane tem origem árabe e significa 'pequeno paraíso' ou 'jardim florido'. Este nome evoca a imagem de um lugar sereno e belo, cheio de vida e cores, simbolizando uma pessoa com uma alma encantadora, capaz de criar um ambiente harmonioso e agradável ao seu redor.", nacionalidade: "Árabe"},
+    {nome: "Merle", significado: "Pássaro, melro. Merle tem origem francesa e significa 'pássaro' ou 'melro'. Este nome está associado a liberdade, leveza e harmonia, assim como o melro, que é conhecido por seu canto melodioso. Merle reflete uma pessoa que se destaca por sua independência e natureza encantadora.", nacionalidade: "Francêsa"},
+    {nome: "Guadalupe", significado: "Vale dos lobos. Guadalupe tem origem espanhola e significa 'vale dos lobos'. Este nome está associado à proteção e à força da natureza, evocando imagens de lugares selvagens e sagrados. Guadalupe transmite a ideia de uma pessoa com grande resiliência e espírito protetor, representando uma figura de fé e força.", nacionalidade: "Espanhola"},
+    {nome: "Elienai", significado: "Deus é meu Senhor. Elienai tem origem hebraica e significa 'Deus é meu Senhor'. Este nome carrega um forte vínculo espiritual, simbolizando uma pessoa com profunda conexão religiosa e fé inabalável. Elienai é uma pessoa que segue com confiança os ensinamentos de Deus, refletindo devoção e humildade.", nacionalidade: "Hebraica"},
+    {nome: "Tayná", significado: "Estrela, brilhante. Tayná tem origem tupi e significa 'estrela' ou 'brilhante'. Este nome simboliza uma pessoa com uma presença luminosa, alguém que se destaca por sua energia positiva e radiante. Tayná é associada à liderança, orientação e um brilho especial que ilumina a vida dos outros.", nacionalidade: "Tupi"},
+    {nome: "Nurit", significado: "Margarida, flor. Nurit tem origem hebraica e significa 'margarida' ou 'flor'. Este nome é associado à beleza natural e à simplicidade, refletindo uma pessoa pura e encantadora, com uma alma gentil e flor de esperança. Nurit transmite a ideia de alguém com grande bondade e doçura, assim como uma flor delicada.", nacionalidade: "Hebraica"},
+    {nome: "Giuseppina", significado: "Deus acrescenta. Giuseppina tem origem italiana e significa 'Deus acrescenta'. Este nome é associado à fé e à bênção divina, simbolizando uma pessoa com grandes dons e virtudes que são dados por Deus. Giuseppina reflete uma figura de fé, esperança e generosidade, com grande presença espiritual.", nacionalidade: "Italiana"},
+    {nome: "Félicité", significado: "Felicidade, alegria. Félicité tem origem francesa e significa 'felicidade' ou 'alegria'. Este nome simboliza uma pessoa radiante e cheia de otimismo, com uma personalidade contagiante que espalha felicidade e boas energias. Félicité é associada a momentos de felicidade plena e harmonia, sendo uma pessoa leve e sempre sorridente.", nacionalidade: "Francêsa"},
+    {nome: "Anoush", significado: "Doce, graciosa. Anoush tem origem armênia e significa 'doce' ou 'graciosa'. Este nome reflete uma pessoa com grande doçura e bondade, alguém que conquista corações com sua presença serena e encantadora. Anoush é uma figura que emana gentileza e amor, sendo um símbolo de ternura e afeto.", nacionalidade: "Armênio"},
+    {nome: "Dominika", significado: "Pertence ao Senhor. Dominika tem origem eslava e significa 'pertence ao Senhor'. Este nome carrega um forte significado religioso, representando uma pessoa com uma profunda conexão espiritual e uma vida dedicada ao serviço divino. Dominika reflete devoção e uma natureza abnegada, sempre disposta a servir aos outros com bondade e generosidade.", nacionalidade: "Eslava"},
+    {nome: "Chenoa", significado: "Pomba branca. Chenoa tem origem nativo americana e significa 'pomba branca'. Este nome simboliza paz, harmonia e pureza, refletindo uma pessoa com uma alma tranquila e serena. Chenoa é associada à liberdade e à serenidade, sendo vista como alguém que transmite calma e apoio emocional aos outros.", nacionalidade: "Nativo Americano"},
+    {nome: "Atena", significado: "Deusa da sabedoria, protetora. Atena tem origem grega e é o nome da deusa da sabedoria, das artes e da estratégia. Este nome simboliza inteligência, proteção e força interior. Atena reflete uma pessoa com grande sabedoria e capacidade de resolver problemas de maneira prática e eficaz, sendo também um símbolo de proteção e liderança justa.", nacionalidade: "Grega"},
+    {nome: "Andressa", significado: "Corajosa, valente. Andressa tem origem portuguesa e significa 'corajosa' ou 'valente'. Este nome simboliza uma pessoa com grande determinação e coragem para enfrentar os desafios da vida. Andressa reflete força e perseverança, sendo alguém que inspira confiança e liderança, sempre disposta a lutar pelo que acredita.", nacionalidade: "Portuguêsa"},
+    {nome: "Celina", significado: "Celestial, pura. Celina tem origem latina e significa 'celestial' ou 'pura'. Este nome evoca a ideia de uma pessoa com uma alma pura, serena e luminosa, como uma estrela no céu. Celina é associada à tranquilidade e ao equilíbrio, refletindo uma personalidade pacífica e espiritualizada.", nacionalidade: "Latina"},
+    {nome: "Pietra", significado: "Pedra, firmeza. Pietra tem origem italiana e significa 'pedra' ou 'firmeza'. Este nome simboliza estabilidade, força e resistência. Pietra é associada à solidez e à confiabilidade, refletindo uma pessoa firme em seus princípios e com uma natureza sólida, que mantém a calma mesmo nas adversidades.", nacionalidade: "Italiana"},
+    {nome: "Dione", significado: "Rainha divina, mitológica. Dione tem origem grega e significa 'rainha divina'. Na mitologia grega, Dione é considerada a mãe de Afrodite e uma figura central no panteão, associada ao amor e à beleza. Este nome carrega consigo uma aura de poder divino e graça majestosa.", nacionalidade: "Grega"},
+    {nome: "Mirielle", significado: "Admirável, maravilhosa. Mirielle tem origem francesa e significa 'admirável' ou 'maravilhosa'. Este nome simboliza uma pessoa que se destaca pela sua beleza interior e exterior, alguém que é reverenciado e admirado por sua presença e caráter.", nacionalidade: "Francêsa"},
+    {nome: "Myriam", significado: "Senhora soberana, pura. Myriam tem origem hebraica e significa 'senhora soberana' ou 'pura'. Este nome é frequentemente associado a uma pessoa de grande dignidade, virtude e força interior, refletindo uma mulher com uma liderança natural e uma pureza em suas ações e pensamentos.", nacionalidade: "Hebraica"},
+    {nome: "Ruveyda", significado: "Caminhante dos campos, delgada. Ruveyda tem origem turca e significa 'caminhante dos campos'. O nome simboliza uma pessoa de alma livre e natureza suave, que transita pela vida com graça e leveza, como uma flor delicada que cresce nos campos.", nacionalidade: "Turca"},
+    {nome: "Anahi", significado: "Linda flor do céu. Anahi tem origem guarani e significa 'linda flor do céu'. Este nome é associado à beleza pura e celestial, evocando uma imagem de uma flor que desabrocha no céu, trazendo consigo beleza e serenidade ao mundo ao seu redor.", nacionalidade: "Guarani"},
+    {nome: "Sofia", significado: "Sabedoria. Sofia tem origem grega e significa 'sabedoria'. Este nome está profundamente associado ao conhecimento, compreensão e insight. Sofias são vistas como mulheres de grande discernimento, capazes de refletir sobre a vida com profundidade e clareza.", nacionalidade: "Grega"},
+    {nome: "Enya", significado: "Pequeno fogo, fonte de inspiração. Enya tem origem irlandesa e significa 'pequeno fogo'. Este nome simboliza uma pessoa vibrante e cheia de energia, alguém que inspira os outros com sua paixão e determinação, trazendo calor e luz onde quer que vá.", nacionalidade: "Irlandêsa"},
+    {nome: "Inka", significado: "Princesa, rainha. Inka tem origem quechua e significa 'princesa' ou 'rainha'. Este nome evoca imagens de uma pessoa majestosa, digna de respeito e admiração, como uma monarca que governa com sabedoria, justiça e coragem.", nacionalidade: "Quechua"},
+    {nome: "Valeska", significado: "Gloriosa, triunfante. Valeska tem origem eslava e significa 'gloriosa' ou 'triunfante'. Este nome é associado a uma pessoa que alcança grandes vitórias na vida, alguém que é admirada por suas conquistas e pela forma como supera desafios com coragem e determinação.", nacionalidade: "Eslava"},
+    {nome: "Isolde", significado: "A desejada, amante fiel. Isolde tem origem germânica e significa 'a desejada' ou 'amante fiel'. Este nome é associado a figuras mitológicas e literárias de amor incondicional, sendo uma pessoa que é profundamente amada e fiel ao seu parceiro, com um amor que transcende o tempo.", nacionalidade: "Germânica"},
+    {nome: "Maelys", significado: "Princesa, chefe. Maelys tem origem francesa e significa 'princesa' ou 'chefe'. Este nome é relacionado à liderança e poder, simbolizando uma pessoa com grande autoridade, sabedoria e a capacidade de guiar os outros com compaixão e empatia.", nacionalidade: "Francêsa"},
+    {nome: "Elisabeta", significado: "Consagrada a Deus. Elisabeta tem origem romena e significa 'consagrada a Deus'. Este nome carrega consigo um profundo significado espiritual, simbolizando uma pessoa que dedica sua vida ao serviço divino e à missão de espalhar bondade e luz ao seu redor.", nacionalidade: "Romena"},
+    {nome: "Cármen", significado: "Canção, poema. Cármen tem origem espanhola e significa 'canção' ou 'poema'. Este nome simboliza a beleza das palavras e da música, refletindo uma pessoa que é encantadora, com uma natureza melodiosa e uma alma artística que ressoa no coração dos outros.", nacionalidade: "Espanhola"},
+    {nome: "Ranya", significado: "Encantadora, olhar cativante. Ranya tem origem árabe e significa 'encantadora' ou 'olhar cativante'. Este nome reflete uma pessoa de beleza magnética e encantadora, com um olhar que consegue capturar a atenção e o coração daqueles ao seu redor, sendo uma fonte constante de inspiração e adoração.", nacionalidade: "Árabe"},
+    {nome: "Noemia", significado: "Agradável, doce. Noemia tem origem portuguesa e significa 'agradável' ou 'doce'. Este nome simboliza uma pessoa com uma personalidade encantadora, cuja presença transmite suavidade e harmonia, sendo alguém com grande capacidade de agradar e cativar os outros com sua gentileza.", nacionalidade: "Portuguêsa"},
+    {nome: "Michal", significado: "Quem é como Deus? Michal tem origem hebraica e significa 'quem é como Deus?'. Este nome evoca uma figura de grande poder espiritual, refletindo uma pessoa com uma conexão profunda com a divindade, sempre buscando seguir os ensinamentos e a vontade de Deus em sua vida.", nacionalidade: "Hebraica"},
+    {nome: "Isolina", significado: "Pequena ilha, graciosa. Isolina tem origem espanhola e significa 'pequena ilha' ou 'graciosa'. Este nome simboliza a serenidade e a beleza tranquila, evocando a imagem de uma ilha isolada e pacífica, onde a harmonia e a graça são abundantes, refletindo uma personalidade suave e encantadora.", nacionalidade: "Espanhola"},
+    {nome: "Nereida", significado: "Ninfa do mar, marinha. Nereida tem origem grega e significa 'ninfa do mar'. Este nome é associado às criaturas mitológicas do mar, sendo uma pessoa com uma natureza serena e profunda, conectada com as forças da natureza e dotada de uma beleza mística e intangível, como as ninfas do mar.", nacionalidade: "Grega"},
+    {nome: "Cybelle", significado: "Deusa-mãe, protetora. Cybelle tem origem grega e significa 'deusa-mãe'. Este nome é associado à figura mitológica de uma deusa protetora, simbolizando uma pessoa que cuida e nutre os outros com grande amor e dedicação, sempre pronta para proteger e amparar aqueles que estão sob sua responsabilidade.", nacionalidade: "Grega"},
+    {nome: "Laurinda", significado: "Coroada de louros, vitoriosa. Laurinda tem origem portuguesa e significa 'coroada de louros'. Este nome está associado a pessoas vitoriosas, reconhecidas por suas conquistas. A planta de louro, símbolo de honra e sucesso, representa quem alcança grandes feitos e é celebrada por suas vitórias.", nacionalidade: "Portuguêsa"},
+    {nome: "Veira", significado: "Fé, esperança. Veira tem origem espanhola e significa 'fé' e 'esperança'. Este nome é associado à crença em algo maior, simbolizando uma pessoa que traz otimismo e confiança aos outros, sempre acreditando que as coisas podem melhorar através da fé e da esperança.", nacionalidade: "Espanhola"},
+    {nome: "Dalinda", significado: "Linda como um dalia, florida. Dalinda tem origem germânica e significa 'linda como uma dalia'. O nome é associado à beleza e elegância das flores, especialmente a dalia, que simboliza a prosperidade e a beleza encantadora de uma pessoa.", nacionalidade: "Germânica"},
+    {nome: "Amira", significado: "Princesa, líder. Amira tem origem árabe e significa 'princesa' ou 'líder'. Este nome transmite uma sensação de nobreza, liderança e grandeza, associado a uma pessoa com autoridade natural, capaz de guiar os outros com sabedoria e graça.", nacionalidade: "Árabe"},
+    {nome: "Sienna", significado: "Laranja avermelhado, cidade italiana. Sienna tem origem italiana e é uma referência à cor laranja avermelhada, além de ser o nome de uma cidade italiana famosa. Este nome evoca imagens de uma cidade histórica e cheia de vida, além de ser associado a uma cor vibrante e quente.", nacionalidade: "Italiana"},
+    {nome: "Naama", significado: "Agradável, bela. Naama tem origem hebraica e significa 'agradável' ou 'bela'. Este nome está associado a pessoas que irradiam simpatia e beleza, tanto física quanto espiritual, proporcionando uma sensação de harmonia e tranquilidade ao seu redor.", nacionalidade: "Hebraica"},
+    {nome: "Eurídice", significado: "Justa, filha da justiça. Eurídice tem origem grega e significa 'justa' ou 'filha da justiça'. Este nome é associado à mitologia grega e simboliza uma pessoa que busca a justiça em todas as situações, sendo fiel aos seus princípios e valores.", nacionalidade: "Grega"},
+    {nome: "Samira", significado: "Companheira da noite, amiga. Samira tem origem árabe e significa 'companheira da noite'. Este nome é associado a uma pessoa que se destaca pela sua capacidade de ser amiga e companheira, trazendo luz e alegria até nas horas mais escuras da noite.", nacionalidade: "Árabe"},
+    {nome: "Arabela", significado: "Linda altar. Arabela tem origem latina e significa 'linda altar'. Este nome evoca uma imagem de uma pessoa pura e cheia de graça, como um altar sagrado, refletindo beleza e uma conexão espiritual profunda.", nacionalidade: "Latina"},
+    {nome: "Danuta", significado: "Deus é meu juiz. Danuta tem origem polonesa e significa 'Deus é meu juiz'. Este nome carrega um forte significado espiritual, representando uma pessoa que confia na justiça divina e acredita que Deus é o maior juiz e guia em sua vida.", nacionalidade: "Polonêsa"},
+    {nome: "Emer", significado: "Rapidez, agilidade. Emer tem origem irlandesa e significa 'rapidez' ou 'agilidade'. Este nome é associado à ação rápida e eficiente, simbolizando uma pessoa com habilidades para lidar com as situações de maneira dinâmica e eficiente.", nacionalidade: "Irlandêsa"},
+    {nome: "Melusina", significado: "Fada das águas, protetora dos rios. Melusina tem origem francesa e significa 'fada das águas'. Este nome está ligado a mitos e lendas, representando uma figura protetora dos rios e águas, com uma presença mística e de proteção natural.", nacionalidade: "Francêsa"},
+    {nome: "Idalina", significado: "Trabalho e prosperidade. Idalina tem origem portuguesa e significa 'trabalho' e 'prosperidade'. Este nome reflete uma pessoa determinada e trabalhadora, cujo esforço resulta em sucesso e crescimento em diversas áreas da vida.", nacionalidade: "Portuguesa"},
+    {nome: "Vania", significado: "Deus é graciosa. Vania tem origem russa e significa 'Deus é graciosa'. Este nome transmite uma forte conexão espiritual, representando uma pessoa que é abençoada e agraciada pela presença divina, trazendo bondade e paz aos outros.", nacionalidade: "Russa"},
+    {nome: "Véronique", significado: "Portadora da vitória. Véronique tem origem francesa e significa 'portadora da vitória'. Este nome é associado a uma pessoa que traz sucesso e conquistas, alguém que simboliza a vitória, perseverança e superação em todos os aspectos da vida.", nacionalidade: "Francêsa"},
+    {nome: "Marisol", significado: "Mar e sol, alegre. Marisol tem origem espanhola e significa 'mar' e 'sol'. Este nome evoca imagens de uma pessoa radiante e cheia de vida, como o sol brilhando sobre o mar, trazendo calor e alegria onde quer que vá.", nacionalidade: "Espanhola"},
+    {nome: "Fayola", significado: "Sortuda, abençoada com riqueza. Fayola tem origem africana e significa 'sortuda' ou 'abençoada com riqueza'. Este nome é associado a uma pessoa que possui grande sorte e é abençoada com riquezas, tanto materiais quanto espirituais, trazendo prosperidade e felicidade ao seu redor.", nacionalidade: "Africano"},
+    {nome: "Ester", significado: "Estrela, brilhante. Ester tem origem hebraica e significa 'estrela' ou 'brilhante'. Este nome está associado à luz e à orientação, simbolizando uma pessoa que ilumina os caminhos dos outros e é vista como uma fonte de inspiração e sabedoria.", nacionalidade: "Hebraica"},
+    {nome: "Andine", significado: "Mulher das montanhas dos Andes. Andine tem origem francesa e é derivado das palavras 'andes' e 'mulher'. Este nome simboliza a força e a beleza da natureza das montanhas, associando a pessoa a uma figura forte e majestosa, com grande conexão com a terra e a natureza.", nacionalidade: "Francêsa"},
+    {nome: "Loretta", significado: "Coroada de louros, notável. Loretta tem origem italiana e significa 'coroada de louros'. Este nome evoca uma pessoa notável e digna de reconhecimento, simbolizando conquistas, honras e vitórias na vida, sendo associada à grandeza e à notoriedade.", nacionalidade: "Italiana"},
+    {nome: "Dulcinea", significado: "Doce, graciosa. Dulcinea tem origem espanhola e significa 'doce' ou 'graciosa'. Este nome é associado à delicadeza, suavidade e charme, simbolizando uma pessoa que irradia bondade e beleza, trazendo prazer e harmonia aos outros.", nacionalidade: "Espanhola"},
+    {nome: "Roselia", significado: "Bela como uma rosa. Roselia tem origem espanhola e significa 'bela como uma rosa'. Este nome é associado à beleza natural e à delicadeza, evocando a imagem de uma pessoa graciosa e cheia de charme, como uma rosa que floresce em seu esplendor.", nacionalidade: "Espanhola"},
+    {nome: "Eliska", significado: "Consagrada a Deus. Eliska tem origem tcheca e significa 'consagrada a Deus'. Este nome transmite uma forte conexão espiritual, simbolizando uma pessoa dedicada e comprometida com os princípios divinos e com um caminho de devoção e fé.", nacionalidade: "Tcheca"},
+    {nome: "Yamila", significado: "Bela, graciosa. Yamila tem origem árabe e significa 'bela' ou 'graciosa'. Este nome é associado a pessoas de grande beleza e charme, cuja presença transmite suavidade, graça e uma energia positiva que encanta todos ao redor.", nacionalidade: "Árabe"},
+    {nome: "Adassa", significado: "Murta, aromática. Adassa tem origem hebraica e significa 'murta', que é uma planta aromática. Este nome simboliza a frescor, a beleza natural e a fragrância suave, associando a pessoa a uma essência delicada e perfumada, que deixa uma marca positiva por onde passa.", nacionalidade: "Hebraica"},
+    {nome: "Fiorella", significado: "Florzinha. Fiorella tem origem italiana e significa 'florzinha'. Este nome é associado a uma pessoa delicada e adorável, simbolizando uma flor pequena e bonita, que traz alegria e leveza para todos ao seu redor.", nacionalidade: "Italiana"},
+    {nome: "Naila", significado: "Vitoriosa, conquistadora. Naila tem origem árabe e significa 'vitoriosa' ou 'conquistadora'. Este nome é associado a uma pessoa que alcança grandes conquistas e triunfa sobre desafios, refletindo força e perseverança.", nacionalidade: "Árabe"},
+    {nome: "Thayla", significado: "Jovem, variação moderna de Thalia. Thayla tem origem brasileira e é uma variação moderna do nome Thalia, que significa 'jovem' ou 'flor'. Este nome simboliza frescor e juventude, associado a uma pessoa cheia de vida e energia, com grande potencial para crescer e florescer.", nacionalidade: "Brasileira"},
+    {nome: "Mireille", significado: "Admirável, digna de apreciação. Mireille tem origem francesa e significa 'admirável' ou 'digna de apreciação'. Este nome é associado a uma pessoa que inspira respeito e admiração, destacando-se por suas qualidades excepcionais e sua personalidade encantadora.", nacionalidade: "Francêsa"},
+    {nome: "Raissa", significado: "Princesa, leveza. Raissa tem origem árabe e significa 'princesa' ou 'leveza'. Este nome é associado à nobreza e à elegância, representando uma pessoa que exala graça e leveza, digna de realeza e admiração.", nacionalidade: "Árabe"},
+    {nome: "Ivone", significado: "Arco de teixo, perseverante. Ivone tem origem francesa e significa 'arco de teixo'. Este nome está associado à força, perseverança e à resistência. Pessoas com este nome são frequentemente vistas como determinadas e firmes, com uma grande capacidade de superar obstáculos, tal como a flexibilidade do arco de teixo.", nacionalidade: "Francêsa"},
+    {nome: "Véronica", significado: "Portadora da vitória. Véronica tem origem espanhola e significa 'portadora da vitória'. Este nome está ligado à ideia de sucesso e superação, simbolizando uma pessoa capaz de alcançar suas metas e triunfar em seus desafios com força e coragem.", nacionalidade: "Espanhola"},
+    {nome: "Willka", significado: "Sagrado, deusa-sol. Willka tem origem quíchua e significa 'sagrado' ou 'deusa-sol'. Este nome está associado ao poder divino e à energia solar, simbolizando uma pessoa com grande luz interior e força, sempre em sintonia com as forças superiores da natureza.", nacionalidade: "Quíchua"},
+    {nome: "Elenice", significado: "Luz, radiante. Elenice tem origem portuguesa e significa 'luz', 'radiante'. Este nome transmite a ideia de alguém que brilha com intensidade, uma pessoa iluminada que traz clareza e luz para todos ao seu redor, destacando-se pela sua positividade e energia contagiante.", nacionalidade: "Portuguêsa"},
+    {nome: "Felícia", significado: "Feliz, afortunada. Felícia tem origem latina e significa 'feliz', 'afortunada'. Este nome é associado à alegria, prosperidade e boa sorte, refletindo uma pessoa abençoada com felicidade e uma natureza otimista, sempre buscando o bem e o prazer em tudo o que faz.", nacionalidade: "Latina"},
+    {nome: "Zuleima", significado: "Pacífica, tranquila. Zuleima tem origem árabe e significa 'pacífica', 'tranquila'. Este nome simboliza calma e serenidade, sendo atribuído a pessoas que irradiam paz e que possuem uma personalidade suave e gentil, capazes de trazer harmonia onde quer que estejam.", nacionalidade: "Árabe"},
+    {nome: "Lene", significado: "Luminosa, tocha. Lene tem origem dinamarquesa e significa 'luminosa', 'tocha'. Este nome está associado à luz e à clareza, simbolizando uma pessoa que traz orientação e clareza nos momentos de escuridão, sendo uma fonte de inspiração e liderança natural.", nacionalidade: "Dinamarquêsa"},
+    {nome: "Patrícia", significado: "Nobre, patrícia. Patrícia tem origem portuguesa e significa 'nobre' ou 'patrícia'. Este nome é associado à realeza, simbolizando uma pessoa de alta classe, com dignidade e respeito por si mesma e pelos outros, sempre mantendo um alto padrão de moralidade e ética.", nacionalidade: "Portuguêsa"},
+    {nome: "Catalina", significado: "Pura, íntegra. Catalina tem origem espanhola e significa 'pura', 'íntegra'. Este nome simboliza a honestidade, a sinceridade e a integridade, sendo atribuído a pessoas com uma alma limpa e um caráter inabalável, sempre fiel aos seus princípios e valores.", nacionalidade: "Espanhola"},
+    {nome: "Sibelle", significado: "Profetisa, mulher sábia. Sibelle tem origem francesa e significa 'profetisa', 'mulher sábia'. Este nome está associado à sabedoria ancestral e à capacidade de prever o futuro, simbolizando uma pessoa com grande intuição e conhecimento profundo, capaz de orientar e ensinar os outros.", nacionalidade: "Francêsa"},
+    {nome: "Jasira", significado: "Corajosa, determinada. Jasira tem origem árabe e significa 'corajosa', 'determined'. Este nome simboliza a força interior, a coragem e a capacidade de enfrentar desafios com determinação, representando alguém que nunca desiste e sempre segue em frente apesar das dificuldades.", nacionalidade: "Árabe"},
+    {nome: "Sabina", significado: "Da tribo dos sabinos. Sabina tem origem latina e significa 'da tribo dos sabinos'. Este nome evoca a conexão com os antigos sabinos, um povo considerado forte e respeitado na Roma antiga, simbolizando uma pessoa com raízes profundas e uma personalidade determinada.", nacionalidade: "Latina"},
+    {nome: "Hortênsia", significado: "Flor hortênsia, elegante. Hortênsia tem origem portuguesa e significa 'flor hortênsia', uma planta conhecida por sua elegância e variedade de cores. Este nome é associado à beleza, graciosidade e à delicadeza, refletindo uma pessoa com uma beleza única e encantadora.", nacionalidade: "Portuguêsa"},
+    {nome: "Sapphira", significado: "Safira, preciosa. Sapphira tem origem hebraica e significa 'safira', uma das pedras preciosas mais valiosas. Este nome simboliza a beleza rara e a preciosidade, representando uma pessoa única, de grande valor e importância para os outros ao seu redor.", nacionalidade: "Hebraica"},
+    {nome: "Dália", significado: "Flor dália, viva e colorida. Dália tem origem espanhola e é o nome de uma flor vibrante e cheia de cores. Este nome está associado à energia, vitalidade e a uma pessoa que é cheia de vida, sempre trazendo cor e alegria para os outros.", nacionalidade: "Espanhola"},
+    {nome: "Viviane", significado: "Cheia de vida, vibrante. Viviane tem origem francesa e significa 'cheia de vida', 'vibrante'. Este nome é associado à juventude, ao dinamismo e à energia, representando uma pessoa que está sempre cheia de vitalidade, com uma presença marcante e cheia de entusiasmo pela vida.", nacionalidade: "Francêsa"},
+    {nome: "Tabita", significado: "Gazela, graciosa. Tabita tem origem hebraica e significa 'gazela', um animal símbolo de agilidade e graça. Este nome é atribuído a pessoas graciosas, ágeis e com grande sensibilidade, com uma presença que é tanto suave quanto forte, delicada mas poderosa.", nacionalidade: "Hebraica"},
+    {nome: "Melina", significado: "Dolce como mel, suave. Melina tem origem grega e significa 'doce como mel'. Este nome está associado à suavidade, à doçura e à harmonia, representando uma pessoa que traz conforto e tranquilidade aos outros com sua personalidade doce e acolhedora.", nacionalidade: "Grega"},
+    {
+        nome: "Lourdes",
+        significado: "Lugar sagrado, milagroso. Lourdes é um nome de origem francesa e significa 'lugar sagrado, milagroso'. Este nome remete a um local de grande importância religiosa, associado ao culto à Virgem Maria. Lourdes simboliza uma pessoa de grande pureza, conexão espiritual e de fé inabalável.",
+        nacionalidade: "Francêsa"
+    },
+    {
+        nome: "Narumi",
+        significado: "Bela e ondulante, harmonia. Narumi tem origem japonesa e significa 'bela e ondulante'. Este nome é associado à delicadeza e à harmonia natural. Narumi simboliza uma pessoa com grande beleza e fluidez, trazendo equilíbrio e paz para os ambientes onde está.",
+        nacionalidade: "Japonêsa"
+    },
+    {
+        nome: "Tuane",
+        significado: "Iluminada, reluzente. Tuane tem origem brasileira e significa 'iluminada, reluzente'. Este nome é frequentemente associado à luz interior e à clareza. Tuane simboliza uma pessoa que brilha com intensidade, irradiando energia positiva e iluminando os outros ao seu redor.",
+        nacionalidade: "Brasileira"
+    },
+    {
+        nome: "Heloisa",
+        significado: "Saudável, famosa em batalhas. Heloisa é um nome de origem portuguesa e significa 'saudável, famosa em batalhas'. Este nome está relacionado à força e à resistência, simbolizando uma pessoa de espírito forte, determinada e capaz de superar dificuldades com coragem.",
+        nacionalidade: "Portuguêsa"
+    },
+    {
+        nome: "Iria",
+        significado: "Paz, pacífica. Iria tem origem espanhola e significa 'paz', 'pacífica'. Este nome é atribuído a pessoas com uma personalidade tranquila e serena, capazes de trazer calma e harmonia para os ambientes em que vivem.",
+        nacionalidade: "Espanhola"
+    },
+    {
+        nome: "Clarice",
+        significado: "Ilustre, brilhante. Clarice tem origem latina e significa 'ilustre, brilhante'. Este nome é associado à inteligência e à sabedoria, representando uma pessoa que se destaca em sua área de atuação pela sua clareza de pensamento e ações brilhantes.",
+        nacionalidade: "Latina"
+    },
+    {
+        nome: "Edilene",
+        significado: "Nobre, graciosa. Edilene tem origem portuguesa e significa 'nobre, graciosa'. Este nome simboliza uma pessoa com grande classe, elegância e bondade, sempre agindo com generosidade e nobreza de espírito.",
+        nacionalidade: "Portuguêsa"
+    },
+    {
+        nome: "Rosana",
+        significado: "Cheia de rosas, graciosa. Rosana tem origem latina e significa 'cheia de rosas, graciosa'. Este nome está relacionado à beleza e à doçura das flores, simbolizando uma pessoa com uma personalidade suave e encantadora, tal como uma rosa.",
+        nacionalidade: "Latina"
+    },
+    {
+        nome: "Jessika",
+        significado: "Ele contempla, observa. Jessika tem origem hebraica e significa 'ele contempla, observa'. Este nome está associado à introspecção e à capacidade de observar o mundo ao redor de forma profunda e sensível.",
+        nacionalidade: "Hebraica"
+    },
+    {
+        nome: "Evelina",
+        significado: "Pequena ave, doce. Evelina tem origem latina e significa 'pequena ave, doce'. Este nome está associado à leveza, graça e beleza suave, simbolizando uma pessoa delicada, encantadora e com um espírito alegre e amável.",
+        nacionalidade: "Latina"
+    },
+    {
+        nome: "Fiama",
+        significado: "Chama, fogo. Fiama tem origem italiana e significa 'chama, fogo'. Este nome remete à intensidade, paixão e energia. Fiama simboliza uma pessoa vibrante, cheia de vida e capaz de acender as emoções e paixões dos outros.",
+        nacionalidade: "Italiana"
+    },
+    {
+        nome: "Itzel",
+        significado: "Aurora, arco-íris. Itzel tem origem maia e significa 'aurora, arco-íris'. Este nome é associado à beleza das cores do amanhecer e à esperança que surge com um novo dia. Itzel simboliza uma pessoa com uma energia renovadora e colorida, sempre trazendo luz e harmonia.",
+        nacionalidade: "Maia"
+    },
+    {
+        nome: "Viviana",
+        significado: "Cheia de vida, jovial. Viviana tem origem latina e significa 'cheia de vida, jovial'. Este nome simboliza uma pessoa com uma energia contagiante e uma abordagem alegre da vida, sempre trazendo vitalidade e otimismo para aqueles ao seu redor.",
+        nacionalidade: "Latina"
+    }
+      ]
+      };
+
+      const normalized = normalize(nomesFixos);
+      setAllNames(normalized);
+    } catch (err) {
+      console.error('Falha ao carregar nomes embutidos:', err);
+      setAllNames([]);
+    }
+
+    try {
+      const saved = localStorage.getItem('nomebebe_doubts');
+      if (saved) setDoubts(JSON.parse(saved));
+    } catch (e) {
+      console.warn('Não foi possível ler dúvidas do localStorage', e);
+    }
+  }, []);
+
+  useEffect(() => {
+    try { localStorage.setItem('nomebebe_doubts', JSON.stringify(doubts)); }
+    catch (e) { console.warn('Falha ao salvar dúvidas', e); }
+  }, [doubts]);
+
+  useEffect(() => { applyFilters(); }, [allNames, gender, nationality, initial]);
+
+  function normalize(data) {
+    let list = [];
+    if (!data) return [];
+    if (Array.isArray(data)) list = data;
+    else if (data.masculinos || data.femininos) {
+      const m = Array.isArray(data.masculinos) ? data.masculinos.map(i => ({ ...i, _gender: 'm' })) : [];
+      const f = Array.isArray(data.femininos) ? data.femininos.map(i => ({ ...i, _gender: 'f' })) : [];
+      list = [].concat(m, f);
+    } else {
+      Object.keys(data).forEach(k => { if (Array.isArray(data[k])) list = list.concat(data[k]); });
+    }
+
+    return list.map((it, idx) => {
+      const rawName = it && (it.nome || it.name) ? (it.nome || it.name) : '';
+      const name = String(rawName).trim();
+      return {
+        id: (it && it.id) !== undefined ? it.id : `${idx}-${name}`,
+        name,
+        meaning: it && (it.significado || it.meaning) ? String(it.significado || it.meaning).trim() : '',
+        nationality: it && (it.nacionalidade || it.nationality || it.origem) ? String(it.nacionalidade || it.nationality || it.origem).trim() : '',
+        gender: it && it._gender ? String(it._gender).toLowerCase() : (it && (it.genero || it.gender) ? String(it.genero || it.gender).toLowerCase() : '')
+      };
+    }).filter(x => x.name && x.name.length);
+  }
+
+function applyFilters() {
+  const out = allNames.filter(n => {
+    if (gender !== 'any') {
+      const g = (n.gender || '').toLowerCase();
+      if (gender === 'm' && !g.startsWith('m')) return false;
+      if (gender === 'f' && !g.startsWith('f')) return false;
+    }
+    if (nationality !== 'any') {
+      if (!((n.nationality || '').toLowerCase().includes(nationality.toLowerCase()))) return false;
+    }
+    if (initial !== 'any') {
+      if (!n.name.toLowerCase().startsWith(initial.toLowerCase())) return false;
+    }
+    return true;
+  });
+
+  const sorted = out.slice().sort((a, b) => {
+    const na = (a.name || '').normalize('NFD');
+    const nb = (b.name || '').normalize('NFD');
+    return na.localeCompare(nb, 'pt', { sensitivity: 'base', ignorePunctuation: true });
+  });
+
+  setFiltered(sorted);
+}
+
+
+
+function pickRandom() {
+  if (!filtered || !filtered.length) return;
+  setShuffling(true);
+  setShowPicked(false); 
+  const rounds = 14;
+  let i = 0;
+  if (shuffleRef.current) clearInterval(shuffleRef.current);
+  shuffleRef.current = setInterval(() => {
+    const idx = Math.floor(Math.random() * filtered.length);
+    setPicked(filtered[idx]);
+    i++;
+    if (i >= rounds) {
+      clearInterval(shuffleRef.current);
+      shuffleRef.current = null;
+      setShuffling(false);
+      setTimeout(() => setShowPicked(true), 120); 
+    }
+  }, 60);
+}
+
+function addDoubt(item) {
+  setDoubts(prev => {
+    if (!item || !item.id) return prev;
+    const exists = prev.some(p => p.id === item.id);
+    if (exists) {
+      setSaveMessage(`"${item.name}" já está na Lista de Dúvidas.`);
+      setTimeout(() => setSaveMessage(''), 1600);
+      return prev;
+    }
+    const updated = [item, ...prev];
+    setSaveMessage(`"${item.name}" foi salvo na Lista de Dúvidas!`);
+    setTimeout(() => setSaveMessage(''), 2000);
+    return updated;
+  });
+}
+
+
+  function removeDoubt(item) {
+  setDoubts(prev => {
+    const updated = prev.filter(p => p.id !== item.id);
+
+    setRemoveMessage(`"${item.name}" foi removido da Lista de Dúvidas.`);
+    setTimeout(() => setRemoveMessage(''), 2000);
+
+    return updated;
+  });
+}
+
+
+  const uniqueNats = useMemo(() => Array.from(new Set(allNames.map(n => n.nationality).filter(Boolean))).sort(), [allNames]);
+  const initials = useMemo(() => Array.from(new Set(allNames.map(n => (n.name || '')[0]).filter(Boolean))).sort(), [allNames]);
+
+  return (
+    <div className="app-root">
+      <div className="container">
+<header className="header">
+<img src={logo} alt="logo" className="logo header-logo" />
+
+
+<button className="doubts-btn header-doubts" onClick={() => setShowDoubts(true)}>
+  Lista de Dúvidas ({doubts.length})
+</button>
+
+
+    {saveMessage && (
+  <div className="save-toast">{saveMessage}</div>
+)}
+{removeMessage && (
+  <div className="remove-toast">{removeMessage}</div>
+)}
+
+
+  <div className="header-titles">
+    <h1>Descubra o Nome Perfeito</h1>
+    <p className="subtitle">Sorteie nomes especiais com significados únicos para o seu bebê</p>
+  </div>
+</header>
+
+
+        <section className="controls">
+          <div className="pills">
+            <button
+  className={gender==='any' ? 'pill active' : 'pill'}
+  onClick={() => { setGender('any'); setNationality('any'); setInitial('any'); }}
+>
+  Todos
+</button>
+
+            <button className={gender==='m' ? 'pill active blue' : 'pill'} onClick={() => setGender('m')}>Masculino</button>
+            <button className={gender==='f' ? 'pill active pink' : 'pill'} onClick={() => setGender('f')}>Feminino</button>
+
+            <select value={nationality} onChange={e => setNationality(e.target.value)} className="pill select">
+              <option value="any">Todas as nacionalidades</option>
+              {uniqueNats.map(n => <option key={n} value={n}>{n}</option>)}
+            </select>
+
+            <select value={initial} onChange={e => setInitial(e.target.value)} className="pill select">
+              <option value="any">Qualquer inicial</option>
+              {initials.map(i => <option key={i} value={i}>{i.toUpperCase()}</option>)}
+            </select>
+          </div>
+        </section>
+
+        <main className="main-card-area">
+<div className="card-preview">
+  <div className="placeholder">Clique em <strong>Sortear Novo Nome</strong></div>
+</div>
+
+{showPicked && picked && (
+  <div className="picked-modal">
+    <div className="picked-backdrop" onClick={() => setShowPicked(false)} />
+    <div className="picked-card">
+      <button className="picked-close" onClick={() => setShowPicked(false)}>✕</button>
+
+      <div className={`picked-badge ${picked.gender && picked.gender.startsWith('f') ? 'girl' : picked.gender && picked.gender.startsWith('m') ? 'boy' : 'neutral'}`}>
+        <div className="picked-name">{picked.name}</div>
+        <div className="picked-gender">{picked.gender && picked.gender.startsWith('f') ? 'Menina' : picked.gender && picked.gender.startsWith('m') ? 'Menino' : ''}</div>
+      </div>
+
+      <div className="picked-meaning">{picked.meaning || 'Significado não disponível.'}</div>
+      <div className="picked-meta">{picked.nationality || '—'}</div>
+
+      <div className="picked-actions">
+        <button className="action" onClick={() => addDoubt(picked)}>Salvar em Dúvidas</button>
+        <button
+          className="action"
+          onClick={() => {
+            if (navigator.share) { navigator.share({ title: 'Nome de bebê', text: picked.name }).catch(()=>{}); }
+            else if (navigator.clipboard) { navigator.clipboard.writeText(picked.name).catch(()=>{}); }
+          }}
+        >Compartilhar</button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+          <div className="controls-bottom">
+            <button className="shuffle-btn" onClick={pickRandom} disabled={shuffling || !filtered.length}>{shuffling ? 'Sorteando...' : 'Sortear Novo Nome'}</button>
+          </div>
+
+          <section className="results">
+            <h3>Resultados ({filtered.length})</h3>
+            <div className="grid">
+{filtered.slice(0, 60).map(n => (
+  <div key={n.id} className="result-card">
+    <div className="rc-inner">
+      <div className={`rc-top ${n.gender && n.gender.startsWith('f') ? 'rc-pink' : n.gender && n.gender.startsWith('m') ? 'rc-blue' : ''}`}>
+        <div className="rc-name">{n.name}</div>
+        <div className="rc-meta">{n.nationality || '—'}</div>
+      </div>
+
+      <div className="rc-meaning">{n.meaning || 'Significado não disponível.'}</div>
+
+      <div className="rc-actions">
+        <button onClick={() => { setPicked(n); setShowPicked(true); }} className="rc-btn">Ver</button>
+
+        <button onClick={() => addDoubt(n)} className="rc-btn rc-save">Salvar</button>
+      </div>
+    </div>
+  </div>
+))}
+
+            </div>
+          </section>
+        </main>
+
+        {showDoubts && (
+          <div className="modal">
+            <div className="modal-backdrop" onClick={() => setShowDoubts(false)}></div>
+            <div className="modal-card">
+              <div className="modal-header">
+                <h4>Lista de Dúvidas</h4>
+                <button className="close" onClick={() => setShowDoubts(false)}>✕</button>
+              </div>
+              <div className="modal-body">
+                {doubts.length ? doubts.map(d => (
+                  <div key={d.id} className="doubt-item">
+                    <div>
+                      <div className={`doubt-name ${d.gender && d.gender.startsWith('f') ? 'girl' : d.gender && d.gender.startsWith('m') ? 'boy' : ''}`}>{d.name}</div>
+                      <div className="doubt-meaning">{d.meaning}</div>
+                      <div className="doubt-nat">{d.nationality}</div>
+                    </div>
+                    <div className="doubt-actions">
+                      <button onClick={() => setPicked(d)} className="rc-btn">Ver</button>
+                      <button onClick={() => removeDoubt(d)} className="rc-btn">Remover</button>
+                    </div>
+                  </div>
+                )) : <div className="empty">Nenhum nome salvo ainda.</div>}
+              </div>
+
+              <div className="modal-footer">
+                <button onClick={() => setDoubts([])} className="clear">Limpar</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <footer className="footer">© 2025 NomeBebe | Todos os direitos reservados</footer>
+      </div>
+    </div>
+  );
+}
