@@ -467,3 +467,21 @@ body{margin:0;background:linear-gradient(180deg,#071017 0%, #0b1220 100%);font-f
     margin-top: 65px;
   }
 }
+
+/* Tema escuro (padrão) */
+.app-root.dark {
+  --bg: #060b14;
+  --card: #0f172a;
+  --text: #ffffff;
+  --subtext: #9ca3af;
+  --primary: #3b82f6;
+}
+
+/* Tema claro */
+.app-root.light {
+  --bg: #f4f6fa;
+  --card: #ffffff;
+  --text: #0f172a;
+  --subtext: #475569;
+  --primary: #2563eb;
+}

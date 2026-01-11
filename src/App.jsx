@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import './App.css';
-import logo from "./assets/logo_nomebebe.png";
+import logoDark from './assets/logo_nomebebe_dark.png';
+import logoLight from './assets/logo_nomebebe_light.png';
+
 
 
 export default function App() {
@@ -17,6 +19,8 @@ export default function App() {
   const shuffleRef = useRef(null);
   const [saveMessage, setSaveMessage] = useState('');
   const [removeMessage, setRemoveMessage] = useState('');
+  const [theme, setTheme] = useState('dark');
+
 
 
 
@@ -4834,10 +4838,22 @@ function addDoubt(item) {
   const initials = useMemo(() => Array.from(new Set(allNames.map(n => (n.name || '')[0]).filter(Boolean))).sort(), [allNames]);
 
   return (
-    <div className="app-root">
+    <div className={`app-root ${theme}`}>
+
       <div className="container">
 <header className="header">
-<img src={logo} alt="logo" className="logo header-logo" />
+<img
+  src={theme === 'dark' ? logoDark : logoLight}
+  alt="logo"
+  className="logo header-logo"
+/>
+<button
+  className="theme-toggle"
+  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+>
+  {theme === 'dark' ? '☀️ Claro' : '🌙 Escuro'}
+</button>
+
 
 
 <button className="doubts-btn header-doubts" onClick={() => setShowDoubts(true)}>
