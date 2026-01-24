@@ -3,8 +3,6 @@ import './App.css';
 import logoDark from './assets/logo_nomebebe_dark.png';
 import logoLight from './assets/logo_nomebebe_light.png';
 
-
-
 export default function App() {
   const [allNames, setAllNames] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -20,9 +18,7 @@ export default function App() {
   const [saveMessage, setSaveMessage] = useState('');
   const [removeMessage, setRemoveMessage] = useState('');
   const [theme, setTheme] = useState('dark');
-
-
-
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     try {
@@ -4731,7 +4727,10 @@ export default function App() {
     catch (e) { console.warn('Falha ao salvar dúvidas', e); }
   }, [doubts]);
 
-  useEffect(() => { applyFilters(); }, [allNames, gender, nationality, initial]);
+  useEffect(() => { 
+  applyFilters(); 
+}, [allNames, gender, nationality, initial, search]);
+
 
   function normalize(data) {
     let list = [];
@@ -4765,12 +4764,19 @@ function applyFilters() {
       if (gender === 'm' && !g.startsWith('m')) return false;
       if (gender === 'f' && !g.startsWith('f')) return false;
     }
+
     if (nationality !== 'any') {
       if (!((n.nationality || '').toLowerCase().includes(nationality.toLowerCase()))) return false;
     }
+
     if (initial !== 'any') {
       if (!n.name.toLowerCase().startsWith(initial.toLowerCase())) return false;
     }
+
+    if (search.trim() !== '') {
+      if (!n.name.toLowerCase().includes(search.toLowerCase())) return false;
+    }
+
     return true;
   });
 
@@ -4782,8 +4788,6 @@ function applyFilters() {
 
   setFiltered(sorted);
 }
-
-
 
 function pickRandom() {
   if (!filtered || !filtered.length) return;
@@ -4877,27 +4881,36 @@ function addDoubt(item) {
 
 
         <section className="controls">
-          <div className="pills">
-            <button
-  className={gender==='any' ? 'pill active' : 'pill'}
-  onClick={() => { setGender('any'); setNationality('any'); setInitial('any'); }}
->
-  Todos
-</button>
+<div className="pills">
+  <button
+    className={gender==='any' ? 'pill active' : 'pill'}
+    onClick={() => { setGender('any'); setNationality('any'); setInitial('any'); }}
+  >
+    Todos
+  </button>
 
-            <button className={gender==='m' ? 'pill active blue' : 'pill'} onClick={() => setGender('m')}>Masculino</button>
-            <button className={gender==='f' ? 'pill active pink' : 'pill'} onClick={() => setGender('f')}>Feminino</button>
+  <button className={gender==='m' ? 'pill active blue' : 'pill'} onClick={() => setGender('m')}>Masculino</button>
+  <button className={gender==='f' ? 'pill active pink' : 'pill'} onClick={() => setGender('f')}>Feminino</button>
 
-            <select value={nationality} onChange={e => setNationality(e.target.value)} className="pill select">
-              <option value="any">Todas as nacionalidades</option>
-              {uniqueNats.map(n => <option key={n} value={n}>{n}</option>)}
-            </select>
+  <select value={nationality} onChange={e => setNationality(e.target.value)} className="pill select">
+    <option value="any">Todas as nacionalidades</option>
+    {uniqueNats.map(n => <option key={n} value={n}>{n}</option>)}
+  </select>
 
-            <select value={initial} onChange={e => setInitial(e.target.value)} className="pill select">
-              <option value="any">Qualquer inicial</option>
-              {initials.map(i => <option key={i} value={i}>{i.toUpperCase()}</option>)}
-            </select>
-          </div>
+  <select value={initial} onChange={e => setInitial(e.target.value)} className="pill select">
+    <option value="any">Qualquer inicial</option>
+    {initials.map(i => <option key={i} value={i}>{i.toUpperCase()}</option>)}
+  </select>
+
+  <input
+    type="text"
+    placeholder="Buscar nome..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    className="pill search-input"
+  />
+</div>
+
         </section>
 
         <main className="main-card-area">
@@ -4941,7 +4954,7 @@ function addDoubt(item) {
           <section className="results">
             <h3>Resultados ({filtered.length})</h3>
             <div className="grid">
-{filtered.slice(0, 60).map(n => (
+{filtered.map(n => (
   <div key={n.id} className="result-card">
     <div className="rc-inner">
       <div className={`rc-top ${n.gender && n.gender.startsWith('f') ? 'rc-pink' : n.gender && n.gender.startsWith('m') ? 'rc-blue' : ''}`}>
