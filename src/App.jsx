@@ -4360,7 +4360,7 @@ export default function App() {
     {nome:"Saara",significado:"Princesa, mulher de poder. Saara tem origem hebraica e significa 'princesa' ou 'mulher de poder'. Este nome reflete uma pessoa com grande autoridade e dignidade, uma líder natural que comanda respeito e influencia positivamente aqueles ao seu redor.", nacionalidade:"Hebraica"},
     {nome:"Libânia",significado:"De Libano, pura. Libânia tem origem portuguesa e é associada ao Líbano, um país do Oriente Médio. O nome simboliza pureza, beleza e a conexão com a natureza, representando uma pessoa que é pura e cheia de virtude, com um espírito sereno e harmonioso.", nacionalidade:"Portuguêsa"},
     {nome:"Tess",significado:"Colheita, verão. Tess tem origem inglesa e significa 'colheita' ou 'verão'. Este nome é associado à abundância e ao crescimento, simbolizando uma pessoa com grande vitalidade, energia e um espírito próspero, como a colheita abundante do verão.", nacionalidade:"Inglêsa"},
-    {nome:"Lívia",significado:"Azulada, invejada. Lívia tem origem latina e é associado à cor azul ou inveja, simbolizando uma pessoa com um caráter forte e admirado. Este nome é frequentemente relacionado com a nobreza e à beleza, algo que cativa e chama a atenção de outros.", nacionalidade:"Latina"},
+    {nome:"Lívia",significado:"O nome Lívia tem origem no latim Livius e significa pálida, lívida, clara ou a que tem a pele clara. É um nome feminino associado à nobreza da Roma Antiga, simbolizando também delicadeza, luz e, por vezes, força e determinação. ", nacionalidade:"Latina"},
     {nome:"Leocádia",significado:"De pureza branca. Leocádia tem origem grega e significa 'de pureza branca'. Este nome evoca uma imagem de uma pessoa pura, inocente e imaculada, com uma personalidade que reflete virtude, elegância e uma beleza radiante e delicada.", nacionalidade:"Grega"},
     {nome:"Afra",significado:"Nasceu na África, mulher africana. Afra tem origem latina e é um nome associado à origem africana, representando uma pessoa com raízes profundas na cultura africana e uma ligação com a terra e tradições antigas. Este nome também reflete beleza e força.", nacionalidade:"Latina"},
     {nome:"Jasmina",significado:"Flor de jasmim, perfumada. Jasmina tem origem sérvia e é derivada da flor de jasmim, que é conhecida por sua fragrância doce e encantadora. Este nome reflete uma pessoa com uma presença suave, mas impactante, alguém que deixa um perfume marcante por onde passa.", nacionalidade:"Sérvia"},
@@ -4731,6 +4731,15 @@ export default function App() {
   applyFilters(); 
 }, [allNames, gender, nationality, initial, search]);
 
+const DIACRITICS_RE = /[\u0300-\u036f]/g;
+
+function foldText(value) {
+  return String(value ?? "")
+    .normalize("NFD")              
+    .replace(DIACRITICS_RE, "")  
+    .toLowerCase()
+    .trim();
+}
 
   function normalize(data) {
     let list = [];
@@ -4744,47 +4753,78 @@ export default function App() {
       Object.keys(data).forEach(k => { if (Array.isArray(data[k])) list = list.concat(data[k]); });
     }
 
-    return list.map((it, idx) => {
-      const rawName = it && (it.nome || it.name) ? (it.nome || it.name) : '';
-      const name = String(rawName).trim();
-      return {
-        id: (it && it.id) !== undefined ? it.id : `${idx}-${name}`,
-        name,
-        meaning: it && (it.significado || it.meaning) ? String(it.significado || it.meaning).trim() : '',
-        nationality: it && (it.nacionalidade || it.nationality || it.origem) ? String(it.nacionalidade || it.nationality || it.origem).trim() : '',
-        gender: it && it._gender ? String(it._gender).toLowerCase() : (it && (it.genero || it.gender) ? String(it.genero || it.gender).toLowerCase() : '')
-      };
-    }).filter(x => x.name && x.name.length);
+return list
+  .map((it, idx) => {
+    const rawName = it && (it.nome || it.name) ? (it.nome || it.name) : "";
+    const name = String(rawName).trim();
+
+    const meaningRaw = it && (it.significado || it.meaning) ? (it.significado || it.meaning) : "";
+    const meaning = String(meaningRaw).trim();
+
+    const natRaw = it && (it.nacionalidade || it.nationality || it.origem)
+      ? (it.nacionalidade || it.nationality || it.origem)
+      : "";
+    const nationality = String(natRaw).trim();
+
+    const gender =
+      it && it._gender
+        ? String(it._gender).toLowerCase()
+        : it && (it.genero || it.gender)
+          ? String(it.genero || it.gender).toLowerCase()
+          : "";
+
+    const nameFold = foldText(name);
+    const natFold = foldText(nationality);
+    const initialFold = nameFold ? nameFold[0] : "";
+
+    return {
+      id: (it && it.id) !== undefined ? it.id : `${idx}-${name}`,
+      name,
+      meaning,
+      nationality,
+      gender,
+
+      nameFold,
+      natFold,
+      initialFold,
+    };
+  })
+  .filter(x => x.name && x.name.length);
   }
 
 function applyFilters() {
+  const searchFold = foldText(search);
+  const nationalityFold = nationality === "any" ? "" : foldText(nationality);
+  const initialFold = initial === "any" ? "" : foldText(initial);
+
   const out = allNames.filter(n => {
-    if (gender !== 'any') {
-      const g = (n.gender || '').toLowerCase();
-      if (gender === 'm' && !g.startsWith('m')) return false;
-      if (gender === 'f' && !g.startsWith('f')) return false;
+    if (gender !== "any") {
+      const g = (n.gender || "").toLowerCase();
+      if (gender === "m" && !g.startsWith("m")) return false;
+      if (gender === "f" && !g.startsWith("f")) return false;
     }
 
-    if (nationality !== 'any') {
-      if (!((n.nationality || '').toLowerCase().includes(nationality.toLowerCase()))) return false;
+    if (nationality !== "any") {
+      if (!n.natFold.includes(nationalityFold)) return false;
     }
 
-    if (initial !== 'any') {
-      if (!n.name.toLowerCase().startsWith(initial.toLowerCase())) return false;
+    if (initial !== "any") {
+      if (n.initialFold !== initialFold) return false;
     }
 
-    if (search.trim() !== '') {
-      if (!n.name.toLowerCase().includes(search.toLowerCase())) return false;
+    if (searchFold !== "") {
+      if (!n.nameFold.includes(searchFold)) return false;
     }
 
     return true;
   });
 
-  const sorted = out.slice().sort((a, b) => {
-    const na = (a.name || '').normalize('NFD');
-    const nb = (b.name || '').normalize('NFD');
-    return na.localeCompare(nb, 'pt', { sensitivity: 'base', ignorePunctuation: true });
-  });
+  const sorted = out.slice().sort((a, b) =>
+    (a.name || "").localeCompare((b.name || ""), "pt-BR", {
+      sensitivity: "base",
+      ignorePunctuation: true,
+    })
+  );
 
   setFiltered(sorted);
 }
@@ -4839,7 +4879,10 @@ function addDoubt(item) {
 
 
   const uniqueNats = useMemo(() => Array.from(new Set(allNames.map(n => n.nationality).filter(Boolean))).sort(), [allNames]);
-  const initials = useMemo(() => Array.from(new Set(allNames.map(n => (n.name || '')[0]).filter(Boolean))).sort(), [allNames]);
+  const initials = useMemo(() => {
+  const set = new Set(allNames.map(n => n.initialFold).filter(Boolean));
+  return Array.from(set).sort();
+}, [allNames]);
 
   return (
     <div className={`app-root ${theme}`}>
