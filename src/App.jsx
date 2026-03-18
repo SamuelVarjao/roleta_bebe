@@ -24,6 +24,11 @@ export default function App() {
     try {
       const nomesFixos = {
     masculinos: [
+      {nome: "Leopoldo", significado: "Nome de origem germânica derivado de elementos que significam 'povo' e 'ousado' ou 'valente'. Representa a ideia de 'valente do povo' ou 'ousado em favor do povo'.", nacionalidade: "Germânica"},
+
+{nome: "Lúcio", significado: "Nome de origem latina derivado de 'Lucius', ligado a 'lux', que significa 'luz'. Carrega o sentido de 'luminoso' ou 'aquele que traz luz'.", nacionalidade: "Latina"},
+
+{nome: "Áquila", significado: "Nome de origem latina derivado de 'aquila', que significa 'águia'. Representa força, nobreza, visão e liberdade.", nacionalidade: "Latina"},
       {nome: "Cleberson", significado: "Variação de Cleber que tem origem germânica, significa 'aquele que é encarregado de pequenos terrenos' ou 'proprietário de terras'.", nacionalidade: "Alemã"},
       {nome: "Cleber", significado: "De origem germânica, significa 'aquele que é encarregado de pequenos terrenos' ou 'proprietário de terras'.", nacionalidade: "Alemã"},
       { nome: "Lorenzo", significado: "'Natural da cidade de Laurento' ou 'habitante de Laurento'. Também é associado a 'coroado de louros', simbolizando vitória e honra, já que o louro era usado para coroar heróis e poetas na Roma Antiga.", nacionalidade: "Italiana" },
@@ -3588,6 +3593,13 @@ export default function App() {
   {nome: "Baruch", significado: "Origem hebraica, significando 'abençoado' ou 'próspero'.", nacionalidade: "Hebraica"}
       ],
   femininos: [
+    {nome: "Núbia", significado: "Nome de origem egípcia, associado à antiga região da Núbia e possivelmente derivado de um termo ligado a 'ouro'. Simboliza algo como 'dourada' ou 'preciosa como o ouro'.", nacionalidade: "Egípcia"},
+
+{nome: "Danúbia", significado: "Nome geralmente associado ao latim 'Danubius', referência ao rio Danúbio. Evoca grandeza, fluidez e beleza natural.", nacionalidade: "Latina"},
+
+{nome: "Daiene", significado: "Nome de uso moderno, provavelmente relacionado a variantes como Daiane e Diana. Costuma ser interpretado como 'divina' ou 'luminosa'.", nacionalidade: "Latina"},
+
+{nome: "Darlene", significado: "Nome de origem inglesa formado a partir da palavra 'darling' com o sufixo '-lene', trazendo o sentido de 'querida' ou 'amada'.", nacionalidade: "Inglesa"},
     {nome: "Roseane", significado: "Nome originado do latim 'rosa', simbolizando beleza e amor eterno, uma das flores mais amadas mundialmente.", nacionalidade: "Latina"},
   {nome: "Suri", significado: "Nome de origem hebraica, variante de Sara, que significa 'princesa'. Também pode ter origem persa, significando 'rosa vermelha'.", nacionalidade: "Persa"},
   {nome: "Inaya", significado: "Nome de origem árabe que significa 'cuidado', 'proteção' ou 'atenção divina'. Representa a ideia de cuidar e apoiar os outros, uma característica valiosa na cultura árabe.", nacionalidade: "Árabe"},
